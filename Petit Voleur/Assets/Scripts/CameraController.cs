@@ -15,22 +15,20 @@ public partial class CameraController : MonoBehaviour
 	[Range(0, 1)] public float sensitivity = 0.1f;
 	[Tooltip("If input is inverted or not.")]
 	public bool inverted = false;
-	[Tooltip("Effects the minimum distance the camera can be to colliders")]
-	public float skin = 0;
 	[Tooltip("The layers that can obstruct the camera.")]
 	public LayerMask obstructionLayers;
 	[Tooltip("Camera movement speed.")]
-	public float followSpeed = 1;
+	public float followSpeed = 15;
 	[Tooltip("If rotation should be smoothed")]
 	public bool smoothCameraRotation = false;
 	[Tooltip("Camera orbit speed.")]
 	[HideInInspector] public float rotateSpeed = 1;
 
+	Camera cam;
+
 	//When inspector values are changed, check they are valid
 	void OnValidate()
 	{
-		if (skin < 0)
-			skin = 0;
 		if (maxFollowDistance < 0)
 			maxFollowDistance = 0;
 		if (rotateSpeed < 0)
@@ -55,7 +53,8 @@ public partial class CameraController : MonoBehaviour
 		orbitVector = Vector3.forward * maxFollowDistance;
 		currentPivotPosition = target.position;
 		transform.forward = -Vector3.forward;
-		
+
+		cam = GetComponent<Camera>();
 	}
 
     void LateUpdate()
@@ -72,13 +71,17 @@ public partial class CameraController : MonoBehaviour
 			transform.forward = -orbitVector;
 		}
 
-		float distance = Vector3.Distance(currentPivotPosition, target.position);
-		currentPivotPosition = Vector3.MoveTowards(currentPivotPosition, target.position, Time.deltaTime * followSpeed * distance);
-		currentPivotPosition = target.position;
+		
 		SetOrbitDistance();
 		//set camera position
 		transform.position = currentPivotPosition + orbitVector;
 
+	}
+
+	private void FixedUpdate()
+	{
+		float distance = Vector3.Distance(currentPivotPosition, target.position);
+		currentPivotPosition = Vector3.MoveTowards(currentPivotPosition, target.position, Time.fixedDeltaTime * followSpeed * distance);
 	}
 
 	//Called through unity input system
@@ -109,23 +112,33 @@ public partial class CameraController : MonoBehaviour
 	void SetOrbitDistance()
 	{
 		orbitVector.Normalize();
-
-				//check if camera is obstructed
-		//shape cast ensures the camera doesn't get too close to nuthin
-		Ray ray = new Ray(currentPivotPosition, orbitVector);
-		//if (Physics.SphereCast(ray, skin, out RaycastHit hit, maxFollowDistance, obstructionLayers.value))
-		//	orbitVector *= hit.distance;
-		//else
-		//	orbitVector *= maxFollowDistance;
-
-		Camera cam = GetComponent<Camera>();
+		
 		float yExtend = Mathf.Tan(cam.fieldOfView * Mathf.Deg2Rad) * cam.nearClipPlane;
-		Vector3 boxExtents = new Vector3(yExtend * cam.aspect + skin, yExtend + skin, cam.nearClipPlane + skin);
+		//regenerated every frame because it could change, could maybe optimise by only calling on camera change
+		Vector3 boxExtents = new Vector3(yExtend * cam.aspect, yExtend, cam.nearClipPlane);
 
-		if (Physics.BoxCast((cam.nearClipPlane / 2) * orbitVector + currentPivotPosition, boxExtents, orbitVector,
-			out RaycastHit hit, transform.rotation, maxFollowDistance, obstructionLayers.value))
-			orbitVector *= hit.distance;
+		//check if camera is obstructed
+		if (Physics.BoxCast(((cam.nearClipPlane) / 2) * orbitVector + currentPivotPosition, boxExtents, orbitVector,
+			out RaycastHit boxHit, transform.rotation, maxFollowDistance, obstructionLayers.value))
+			orbitVector *= boxHit.distance;
 		else
-			orbitVector *= maxFollowDistance;
+		{
+			//if box cast doesn't detect it, it might still be obstructed
+			//this should fix most cases of that happening
+			//will not fix if raycast origin is inside of obstruction collider
+			Ray ray = new Ray(currentPivotPosition, orbitVector);
+			if (Physics.Raycast(ray, out RaycastHit rayHit, maxFollowDistance, obstructionLayers.value))
+			{
+				orbitVector *= rayHit.distance;
+			}
+			else
+			{
+				orbitVector *= maxFollowDistance;
+			}
+		}
+		
+		
+
+		
 	}
 }
