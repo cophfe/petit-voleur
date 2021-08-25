@@ -2,7 +2,7 @@
     "name": "Input",
     "maps": [
         {
-            "name": "Movement",
+            "name": "Ferret",
             "id": "401b200c-2dca-45d3-a5cc-a02d7f47d520",
             "actions": [
                 {
@@ -25,6 +25,14 @@
                     "name": "Dash",
                     "type": "Button",
                     "id": "bb857e8f-8065-491c-9e95-572834a193b6",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": ""
+                },
+                {
+                    "name": "Grab",
+                    "type": "Button",
+                    "id": "32bf99da-b267-47c6-b00b-6ca53d5def90",
                     "expectedControlType": "Button",
                     "processors": "",
                     "interactions": ""
@@ -107,18 +115,29 @@
                     "action": "Dash",
                     "isComposite": false,
                     "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "1cfc093c-484e-46f9-84cc-b7cceef75c76",
+                    "path": "<Mouse>/rightButton",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "KBM",
+                    "action": "Grab",
+                    "isComposite": false,
+                    "isPartOfComposite": false
                 }
             ]
         },
         {
-            "name": "Interaction",
-            "id": "1bcd9e6b-298d-4d07-ada9-4521a80bd751",
+            "name": "Camera",
+            "id": "d5d0ef6a-0cda-48a6-82e3-004cf90dbed6",
             "actions": [
                 {
-                    "name": "Grab",
-                    "type": "Button",
-                    "id": "00644c1e-443a-4aae-8c60-bc548c7ee76d",
-                    "expectedControlType": "Button",
+                    "name": "Look",
+                    "type": "Value",
+                    "id": "0cfb69c1-45dd-46f8-9e4f-d8966b91faac",
+                    "expectedControlType": "Vector2",
                     "processors": "",
                     "interactions": ""
                 }
@@ -126,12 +145,12 @@
             "bindings": [
                 {
                     "name": "",
-                    "id": "266c67b7-3048-478a-9dfb-ec34440b95e1",
-                    "path": "<Mouse>/rightButton",
+                    "id": "38c657c2-064a-4e29-89eb-1a9cfe4cc28c",
+                    "path": "<Mouse>/delta",
                     "interactions": "",
                     "processors": "",
                     "groups": "KBM",
-                    "action": "Grab",
+                    "action": "Look",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }
