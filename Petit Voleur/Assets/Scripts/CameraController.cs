@@ -3,64 +3,86 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-public class CameraController : MonoBehaviour
+[RequireComponent(typeof(Camera))]
+public partial class CameraController : MonoBehaviour
 {
+	//INSPECTOR STUFF
 	[Tooltip("The target to orbit around.")]
-	[SerializeField] Transform target;
+	public Transform target;
 	[Tooltip("The maximum distance the camera can be away from the target.")]
-	[SerializeField] float maxFollowDistance = 10;
+	public float maxFollowDistance = 10;
 	[Tooltip("The camera sensitivity multiplier.")]
-	[SerializeField] float sensitivity = 1;
+	[Range(0, 1)] public float sensitivity = 0.1f;
 	[Tooltip("If input is inverted or not.")]
-	[SerializeField] bool inverted = false;
-	[Tooltip("The minimum distance the camera can be to colliders.")]
-	[SerializeField] float skin = 0.1f;
+	public bool inverted = false;
+	[Tooltip("Effects the minimum distance the camera can be to colliders")]
+	public float skin = 0;
 	[Tooltip("The layers that can obstruct the camera.")]
-	[SerializeField] LayerMask obstructionLayers;
-	//[Tooltip("Camera movement speed.")]
-	//[SerializeField] float followSpeed = 1;
+	public LayerMask obstructionLayers;
+	[Tooltip("Camera movement speed.")]
+	public float followSpeed = 1;
+	[Tooltip("If rotation should be smoothed")]
+	public bool smoothCameraRotation = false;
 	[Tooltip("Camera orbit speed.")]
-	[SerializeField] float rotateSpeed = 1;
-	
+	[HideInInspector] public float rotateSpeed = 1;
+
+	//When inspector values are changed, check they are valid
+	void OnValidate()
+	{
+		if (skin < 0)
+			skin = 0;
+		if (maxFollowDistance < 0)
+			maxFollowDistance = 0;
+		if (rotateSpeed < 0)
+			rotateSpeed = 0;
+	}
+
 	//The rotation of the targetQuaternion
 	Vector2 rotation = Vector2.zero;
 	//the offset from the target
 	Vector3 orbitVector;
 
-	Quaternion targetQuaternion;
-	Quaternion currentQuaternion = Quaternion.identity;
+	Quaternion targetOrbit;
+	Quaternion currentOrbit = Quaternion.identity;
+	Vector3 currentPivotPosition;
 
 	void Start()
     {
+		//show error in console if target is null
+		Debug.Assert(target != null);
+
 		//set default values for orbit vector
 		orbitVector = Vector3.forward * maxFollowDistance;
-		transform.position = target.position + orbitVector;
+		currentPivotPosition = target.position;
 		transform.forward = -Vector3.forward;
-
-		//should be in game manager
-		Cursor.lockState = CursorLockMode.Confined;
-		Cursor.visible = false;
+		
 	}
 
     void LateUpdate()
     {
-		//this is teeechnically an incorrect use of interpolation, but idk the alternitive for quaternions
-		//it's also not framerate independant
-		currentQuaternion = Quaternion.Slerp(currentQuaternion, targetQuaternion, Time.deltaTime * rotateSpeed);
-		
-		//currentQuaternion = Quaternion.RotateTowards(currentQuaternion, targetQuaternion, Time.deltaTime * rotateSpeed);
+		//smoothed camera movement
+		if (smoothCameraRotation)
+		{
+			float sphericalDistance = Quaternion.Angle(currentOrbit, targetOrbit);
 
+			currentOrbit = Quaternion.RotateTowards(currentOrbit, targetOrbit, sphericalDistance * Time.deltaTime * rotateSpeed);
 			//set the orbit vector 
-		orbitVector = currentQuaternion * Vector3.forward;
-		//the camera will look in the opposite direction of the orbit vector, toward the target position
-		transform.forward = -orbitVector;
-		
+			orbitVector = currentOrbit * Vector3.forward;
+			//the camera will look in the opposite direction of the orbit vector, toward the target position
+			transform.forward = -orbitVector;
+		}
+
+		float distance = Vector3.Distance(currentPivotPosition, target.position);
+		currentPivotPosition = Vector3.MoveTowards(currentPivotPosition, target.position, Time.deltaTime * followSpeed * distance);
+		currentPivotPosition = target.position;
 		SetOrbitDistance();
 		//set camera position
-		transform.position = target.position + orbitVector;
+		transform.position = currentPivotPosition + orbitVector;
+
 	}
 
-	public void OnLookAxis(InputValue value)
+	//Called through unity input system
+	public void OnLook(InputValue value)
 	{
 		//get input from look axis
 		Vector2 input = value.Get<Vector2>();
@@ -73,17 +95,35 @@ public class CameraController : MonoBehaviour
 		//y rotation is clamped
 		rotation.y = Mathf.Clamp(rotation.y, -88.0f, 88.0f);
 		//set target quaternion
-		targetQuaternion = Quaternion.Euler(rotation.y, rotation.x, 0);	
+		targetOrbit = Quaternion.Euler(rotation.y, rotation.x, 0);
+		
+		if (!smoothCameraRotation)
+		{
+			currentOrbit = targetOrbit;
+			orbitVector = currentOrbit * Vector3.forward;
+			transform.forward = -orbitVector;
+		}
 	}
 
 	//Sets the orbitVector's magnitude to the correct value (checks obstructions)
-	//requires orbitVector to be normalised first
 	void SetOrbitDistance()
 	{
-		//check if camera is obstructed
-		//sphere cast ensures the camera doesn't get too close to nuthin
-		Ray ray = new Ray(target.position, orbitVector);
-		if (Physics.SphereCast(ray, skin, out RaycastHit hit, maxFollowDistance, obstructionLayers.value))
+		orbitVector.Normalize();
+
+				//check if camera is obstructed
+		//shape cast ensures the camera doesn't get too close to nuthin
+		Ray ray = new Ray(currentPivotPosition, orbitVector);
+		//if (Physics.SphereCast(ray, skin, out RaycastHit hit, maxFollowDistance, obstructionLayers.value))
+		//	orbitVector *= hit.distance;
+		//else
+		//	orbitVector *= maxFollowDistance;
+
+		Camera cam = GetComponent<Camera>();
+		float yExtend = Mathf.Tan(cam.fieldOfView * Mathf.Deg2Rad) * cam.nearClipPlane;
+		Vector3 boxExtents = new Vector3(yExtend * cam.aspect + skin, yExtend + skin, cam.nearClipPlane + skin);
+
+		if (Physics.BoxCast((cam.nearClipPlane / 2) * orbitVector + currentPivotPosition, boxExtents, orbitVector,
+			out RaycastHit hit, transform.rotation, maxFollowDistance, obstructionLayers.value))
 			orbitVector *= hit.distance;
 		else
 			orbitVector *= maxFollowDistance;
