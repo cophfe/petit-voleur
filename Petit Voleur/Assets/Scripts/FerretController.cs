@@ -58,10 +58,14 @@ public class FerretController : MonoBehaviour
 		if (Physics.SphereCast(transform.position, characterController.radius * groundCheckRadiusFactor, -floorNormal, out rayhit, groundCheckDistance, groundCheckLayerMask))
 		{
 			//Don't consider surfaces that are too steep
-			if (Vector3.Dot(Vector3.up, rayhit.normal) > 0.6f)
+			if (Vector3.Angle(Vector3.up, rayhit.normal) <= characterController.slopeLimit)
 			{
 				floorNormal = rayhit.normal;
 				grounded = true;
+			}
+			else
+			{
+				grounded = false;
 			}
 		}
 		else
@@ -151,7 +155,7 @@ public class FerretController : MonoBehaviour
 							\--------------->
 		-----------------------------------------------------------------*/
 		
-		velocity -= Vector3.Dot(-hit.normal, velocity) * -hit.normal;
+		velocity +=  hit.normal * Mathf.Max(Vector3.Dot(-hit.normal, velocity), 0);
 	}
 
 	public void OnMoveAxis(InputValue value)

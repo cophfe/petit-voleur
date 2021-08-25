@@ -60,7 +60,7 @@ public class CameraController : MonoBehaviour
 		transform.position = target.position + orbitVector;
 	}
 
-	public void OnLookAxis(InputValue value)
+	public void OnLook(InputValue value)
 	{
 		//get input from look axis
 		Vector2 input = value.Get<Vector2>();
