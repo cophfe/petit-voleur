@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 
 [RequireComponent(typeof(CharacterController))]
-public class FerretController : MonoBehaviour
+public class FerretControllerTEMP : MonoBehaviour
 {
 	private CharacterController controller;
     public float speed;
