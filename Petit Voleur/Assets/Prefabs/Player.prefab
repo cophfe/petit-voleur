@@ -106,7 +106,7 @@ GameObject:
   - component: {fileID: 7983130785288538092}
   m_Layer: 8
   m_Name: Player
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1439,16 +1439,21 @@ MonoBehaviour:
     m_Bits: 55
   groundCheckRadiusFactor: 1
   groundCheckDistance: 0.3
-  gravity: 30
-  jumpForce: 20
-  acceleration: 50
+  acceleration: 60
   targetSpeed: 20
   friction: 80
   frictionMultiplier: 2
-  airControl: 0.4
-  maxSlopeFactor: 1
-  minSlopeFactor: 0.5
+  airControl: 0.6
   lookSpeed: 600
+  maxVerticalAngle: 0.9
+  gravity: 30
+  isJumping: 0
+  fallingArc:
+    height: 6
+    durationToPeak: 0.6
+  jumpArc:
+    height: 6
+    durationToPeak: 0.8
 --- !u!1 &7983130786950686225
 GameObject:
   m_ObjectHideFlags: 0

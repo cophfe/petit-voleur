@@ -13,21 +13,27 @@ public class FerretController : MonoBehaviour
 	public Vector3 floorNormal = Vector3.up;
 	public Vector3 lookDirection = Vector3.forward;
 	public Vector2 input;
+
 	[Header("Ground Checking")]
 	public LayerMask groundCheckLayerMask;
 	public float groundCheckRadiusFactor = 0.85f;
 	public float groundCheckDistance = 0.3f;
+
 	[Header("Ferret forces")]
-	public float gravity = 10;
-	public float jumpForce = 5;
 	public float acceleration = 50;
 	public float targetSpeed = 30;
 	public float friction = 80;
 	public float frictionMultiplier = 2;
 	public float airControl = 0.4f;
-	public float maxSlopeFactor = 1.0f;
-	public float minSlopeFactor = 0.0f;
 	public float lookSpeed = 600f;
+	//Measured in dot product
+	public float maxVerticalAngle = 0.9f;
+	public float gravity = 10;
+
+	[Header("Jumping")]
+	public bool isJumping = false;
+	public JumpArc fallingArc;
+	public JumpArc jumpArc;
 
 	private CharacterController characterController;
 	new private Rigidbody rigidbody;
@@ -42,19 +48,20 @@ public class FerretController : MonoBehaviour
 		rigidbody = GetComponent<Rigidbody>();
     }
 
-    // Update is called once per frame
+    // FixedUpdate is called once per physics step
     void FixedUpdate()
     {
+		//No need to run these if the player is ragdolled
 		if (isRagdolled)
 			return;
 		
+		//Reset these
 		targetVelocity = Vector3.zero;
 		frameAcceleration = Vector3.zero;
 		accelerationScaled = acceleration;
 
 		//Calculate floor normal and ground check
 		RaycastHit rayhit;
-
 		if (Physics.SphereCast(transform.position, characterController.radius * groundCheckRadiusFactor, -floorNormal, out rayhit, groundCheckDistance, groundCheckLayerMask))
 		{
 			//Don't consider surfaces that are too steep
@@ -62,6 +69,7 @@ public class FerretController : MonoBehaviour
 			{
 				floorNormal = rayhit.normal;
 				grounded = true;
+				//CancelJump();
 			}
 			else
 			{
@@ -70,6 +78,7 @@ public class FerretController : MonoBehaviour
 		}
 		else
 		{
+			//Reset floor normal
 			floorNormal = Vector3.up;
 			grounded = false;
 		}
@@ -94,14 +103,15 @@ public class FerretController : MonoBehaviour
 			//Give a boost if trying to go away from current velocity
 			if (Vector3.Dot(frameAcceleration, planarVelocity) < 0)
 			{
-				accelerationScaled = friction;
+				accelerationScaled += friction;
 			}
 		}
 		else
 		{
+			//Add friction
 			if (grounded)
 			{
-				frameAcceleration = -velocity;
+				frameAcceleration = -planarVelocity;
 				accelerationScaled = friction;
 			}
 		}
@@ -110,9 +120,6 @@ public class FerretController : MonoBehaviour
 		if (!grounded)
 			accelerationScaled *= airControl;
 		
-		//Multiply by slope ratio
-		accelerationScaled *= Mathf.Lerp(maxSlopeFactor, minSlopeFactor, Vector3.Dot(frameAcceleration.normalized, Vector3.up));
-
 		//Amount of acceleration in this frame
 		accelerationScaled *= Time.fixedDeltaTime;
 
@@ -122,25 +129,47 @@ public class FerretController : MonoBehaviour
 			frameAcceleration = frameAcceleration.normalized * accelerationScaled;
 		}
 
+		//Jump reset check
+		if (isJumping)
+		{
+			if (velocity.y <= 0)
+			{
+				CancelJump();
+			}
+		}
+
 		//GRAVITY
-		velocity += Vector3.down * gravity * Time.fixedDeltaTime;
-		//Add velocity
+		frameAcceleration += Vector3.down * gravity * Time.fixedDeltaTime;
+		//Add the acceleration calculated this frame to velocity
 		velocity += frameAcceleration;
 		
-		//LETS GOOOOO
+		//verlet integration
 		characterController.Move(velocity * Time.fixedDeltaTime);
 
+		//Rotation
+		Vector3 newLookDirection = lookDirection;
 		if (grounded && targetVelocity.sqrMagnitude > 0.01f)
 		{
-			lookDirection = targetVelocity.normalized;
+			newLookDirection = targetVelocity.normalized;
 		}
 		else
 		{
-			if (velocity.sqrMagnitude > 0.1f)
-				lookDirection = velocity.normalized;
+			if (velocity.sqrMagnitude > 0.01f)
+			{
+				Vector3 velDirection = velocity.normalized;
+				if (Mathf.Abs(Vector3.Dot(velDirection, -floorNormal)) < maxVerticalAngle)
+					newLookDirection = velDirection;
+				else
+					newLookDirection = (velDirection + lookDirection).normalized;
+			}
 			else
-				lookDirection = forward;
+			{
+				newLookDirection = Vector3.ProjectOnPlane(lookDirection, floorNormal);
+			}
 		}
+
+		if (Mathf.Abs(Vector3.Dot(newLookDirection, -floorNormal)) < maxVerticalAngle)
+			lookDirection = newLookDirection;
 
 		transform.rotation = Quaternion.RotateTowards(transform.rotation, Quaternion.LookRotation(lookDirection, floorNormal), lookSpeed * Time.fixedDeltaTime);
     }
@@ -158,6 +187,32 @@ public class FerretController : MonoBehaviour
 		velocity +=  hit.normal * Mathf.Max(Vector3.Dot(-hit.normal, velocity), 0);
 	}
 
+	public void CancelJump()
+	{
+		gravity = fallingArc.GetGravity();
+		isJumping = false;
+	}
+
+	public void SetRagdollState(bool state)
+	{
+		isRagdolled = state;
+
+		characterController.enabled = !isRagdolled;
+		
+		if (!isRagdolled)
+		{
+			velocity = rigidbody.velocity;
+			CancelJump();
+		}
+
+		rigidbody.isKinematic = !isRagdolled;
+
+		if (isRagdolled)
+		{
+			rigidbody.velocity = velocity;
+		}
+	}
+
 	public void OnMoveAxis(InputValue value)
 	{
 		input = value.Get<Vector2>();
@@ -167,34 +222,38 @@ public class FerretController : MonoBehaviour
 	{
 		if (grounded)
 		{
-			velocity += Vector3.up * jumpForce;
+			gravity = jumpArc.GetGravity();
+			velocity.y = jumpArc.GetJumpForce();
+			isJumping = true;
 		}
+	}
+
+	public void OnJumpRelease()
+	{
+		CancelJump();
 	}
 
 	public void OnDash()
 	{
-		isRagdolled = !isRagdolled;
-		characterController.enabled = !isRagdolled;
-		
-		if (!isRagdolled)
-		{
-			velocity = rigidbody.velocity;
-		}
-		rigidbody.isKinematic = !isRagdolled;
-
-		if (isRagdolled)
-		{
-			rigidbody.velocity = velocity;
-		}
+		SetRagdollState(!isRagdolled);
 	}
 
-	void OnDrawGizmos()
+	//---------STRUCTS-------------------//
+
+	[System.Serializable]
+	public struct JumpArc
 	{
-		Gizmos.color = Color.red;
-		Gizmos.DrawLine(transform.position, transform.position + floorNormal * 3);
-		Gizmos.color = Color.blue;
-		Gizmos.DrawLine(transform.position, transform.position + frameAcceleration.normalized * 3);
-		Gizmos.color = Color.green;
-		Gizmos.DrawLine(transform.position, transform.position + velocity);
+		public float height;
+		public float durationToPeak;
+
+		public float GetJumpForce()
+		{
+			return (2 * height) / durationToPeak;
+		}
+
+		public float GetGravity()
+		{
+			return (2 * height) / (durationToPeak * durationToPeak);
+		}
 	}
 }
