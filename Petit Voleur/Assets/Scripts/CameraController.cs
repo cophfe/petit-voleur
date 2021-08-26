@@ -17,6 +17,10 @@ public partial class CameraController : MonoBehaviour
 	public bool inverted = false;
 	[Tooltip("The layers that can obstruct the camera.")]
 	public LayerMask obstructionLayers;
+	[Tooltip("Y rotation cannot be higher than this value.")]
+	[Range(-90, 90)] public float maximumYRotation = 87;
+	[Tooltip("Y rotation cannot be less than this value.")]
+	[Range(-90, 90)] public float minimumYRotation = -87;
 	[Tooltip("Camera movement speed.")]
 	public float followSpeed = 15;
 	[Tooltip("If rotation should be smoothed")]
@@ -33,6 +37,11 @@ public partial class CameraController : MonoBehaviour
 			maxFollowDistance = 0;
 		if (rotateSpeed < 0)
 			rotateSpeed = 0;
+		if (maximumYRotation < minimumYRotation)
+		{
+			maximumYRotation = minimumYRotation;
+		}
+		
 	}
 
 	//The rotation of the targetQuaternion
@@ -96,7 +105,7 @@ public partial class CameraController : MonoBehaviour
 			input *= sensitivity;
 		rotation += input;
 		//y rotation is clamped
-		rotation.y = Mathf.Clamp(rotation.y, -88.0f, 88.0f);
+		rotation.y = Mathf.Clamp(rotation.y, -maximumYRotation, -minimumYRotation);
 		//set target quaternion
 		targetOrbit = Quaternion.Euler(rotation.y, rotation.x, 0);
 		
@@ -120,7 +129,10 @@ public partial class CameraController : MonoBehaviour
 		//check if camera is obstructed
 		if (Physics.BoxCast(((cam.nearClipPlane) / 2) * orbitVector + currentPivotPosition, boxExtents, orbitVector,
 			out RaycastHit boxHit, transform.rotation, maxFollowDistance, obstructionLayers.value))
+		{
 			orbitVector *= boxHit.distance;
+			
+		}
 		else
 		{
 			//if box cast doesn't detect it, it might still be obstructed
