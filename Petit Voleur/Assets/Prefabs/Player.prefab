@@ -193,7 +193,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 31321ba15b8f8eb4c954353edc038b1d, type: 2}
+  - {fileID: 2100000, guid: e9527eaafae77b94b85b44282acdb0d2, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -687,7 +687,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 31321ba15b8f8eb4c954353edc038b1d, type: 2}
+  - {fileID: 2100000, guid: e9527eaafae77b94b85b44282acdb0d2, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -896,7 +896,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 31321ba15b8f8eb4c954353edc038b1d, type: 2}
+  - {fileID: 2100000, guid: e9527eaafae77b94b85b44282acdb0d2, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -1105,7 +1105,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 31321ba15b8f8eb4c954353edc038b1d, type: 2}
+  - {fileID: 2100000, guid: e9527eaafae77b94b85b44282acdb0d2, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -1316,7 +1316,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 31321ba15b8f8eb4c954353edc038b1d, type: 2}
+  - {fileID: 2100000, guid: e9527eaafae77b94b85b44282acdb0d2, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -1431,12 +1431,13 @@ MonoBehaviour:
   velocity: {x: 0, y: 0, z: 0}
   grounded: 0
   isRagdolled: 0
+  upDirection: {x: 0, y: 1, z: 0}
   floorNormal: {x: 0, y: 1, z: 0}
   lookDirection: {x: 0, y: 0, z: 1}
   input: {x: 0, y: 0}
   groundCheckLayerMask:
     serializedVersion: 2
-    m_Bits: 55
+    m_Bits: 567
   groundCheckRadiusFactor: 1
   groundCheckDistance: 0.3
   acceleration: 60
@@ -1454,6 +1455,12 @@ MonoBehaviour:
   jumpArc:
     height: 6
     durationToPeak: 0.8
+  climbableLayers:
+    serializedVersion: 2
+    m_Bits: 512
+  isClimbing: 0
+  wallCheckDistance: 0.12
+  wallCheckFactor: 0.9
 --- !u!1 &7983130786950686225
 GameObject:
   m_ObjectHideFlags: 0

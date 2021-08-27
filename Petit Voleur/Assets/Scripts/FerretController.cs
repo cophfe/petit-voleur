@@ -10,6 +10,7 @@ public class FerretController : MonoBehaviour
 	public Vector3 velocity;
 	public bool grounded = false;
 	public bool isRagdolled = false;
+	public Vector3 upDirection = Vector3.up;
 	public Vector3 floorNormal = Vector3.up;
 	public Vector3 lookDirection = Vector3.forward;
 	public Vector2 input;
@@ -35,8 +36,15 @@ public class FerretController : MonoBehaviour
 	public JumpArc fallingArc;
 	public JumpArc jumpArc;
 
+	[Header("Wall Climbing")]
+	public LayerMask climbableLayers;
+	public bool isClimbing = false;
+	public float wallCheckDistance = 0.12f;
+	public float wallCheckFactor = 0.9f;
+
 	private CharacterController characterController;
 	new private Rigidbody rigidbody;
+	private Vector3 forward;
 	private Vector3 targetVelocity;
 	private Vector3 frameAcceleration;
 	private float accelerationScaled;
@@ -61,39 +69,34 @@ public class FerretController : MonoBehaviour
 		accelerationScaled = acceleration;
 
 		//Calculate floor normal and ground check
-		RaycastHit rayhit;
-		if (Physics.SphereCast(transform.position, characterController.radius * groundCheckRadiusFactor, -floorNormal, out rayhit, groundCheckDistance, groundCheckLayerMask))
-		{
 			//Don't consider surfaces that are too steep
-			if (Vector3.Angle(Vector3.up, rayhit.normal) <= characterController.slopeLimit)
-			{
-				floorNormal = rayhit.normal;
-				grounded = true;
-				//CancelJump();
-			}
-			else
-			{
-				grounded = false;
-			}
+		RaycastHit rayhit;
+		if (Physics.SphereCast(transform.position, characterController.radius * groundCheckRadiusFactor, -floorNormal, out rayhit, groundCheckDistance, groundCheckLayerMask) && Vector3.Angle(upDirection, rayhit.normal) <= characterController.slopeLimit)
+		{
+			floorNormal = rayhit.normal;
+			grounded = true;
 		}
 		else
 		{
 			//Reset floor normal
-			floorNormal = Vector3.up;
+			StopClimbing();
+			floorNormal = upDirection;
 			grounded = false;
 		}
 
 		//Component of velocity that is parallel with the ground
 		Vector3 planarVelocity = Vector3.ProjectOnPlane(velocity, floorNormal);
-		//Project camera's forward vector on virtual plane that is the "floor"
-		Vector3 forward = Vector3.ProjectOnPlane(Camera.main.transform.forward, floorNormal).normalized;
+		//Project camera's forward vector on virtual plane that is the "floor", use global up vector if wall climbing
+		Vector3 desiredCamVector;
+		desiredCamVector = isClimbing? Vector3.up : Camera.main.transform.forward;
+		forward = Vector3.ProjectOnPlane(desiredCamVector, floorNormal).normalized;
 
 		if (input.x != 0 || input.y != 0)
 		{
 			// ~~~~~~~ Generate target velocity ~~~~~~ //
 			//Forward component
 			targetVelocity = forward * input.y;
-			//Cross product the forward and global up to get the right component
+			//Cross product the forward and floorNormal to get the right component
 			targetVelocity -= Vector3.Cross(forward, floorNormal) * input.x;
 			targetVelocity *= targetSpeed;
 			
@@ -132,14 +135,15 @@ public class FerretController : MonoBehaviour
 		//Jump reset check
 		if (isJumping)
 		{
-			if (velocity.y <= 0)
+			//If the player is falling downwards
+			if (Vector3.Dot(velocity, upDirection) <= 0)
 			{
 				CancelJump();
 			}
 		}
 
 		//GRAVITY
-		frameAcceleration += Vector3.down * gravity * Time.fixedDeltaTime;
+		frameAcceleration -= upDirection * gravity * Time.fixedDeltaTime;
 		//Add the acceleration calculated this frame to velocity
 		velocity += frameAcceleration;
 		
@@ -148,14 +152,20 @@ public class FerretController : MonoBehaviour
 
 		//Rotation
 		Vector3 newLookDirection = lookDirection;
+		//Follow the target direction when the player is grounded and trying to move
 		if (grounded && targetVelocity.sqrMagnitude > 0.01f)
 		{
 			newLookDirection = targetVelocity.normalized;
 		}
 		else
 		{
+			//Set direction to direction of velocity unless velocity isn't high enough
 			if (velocity.sqrMagnitude > 0.01f)
 			{
+				//If velocity is less than the maxverticalangle then point in the direction of velocity
+				//Otherwise create a new look direction by adding the current velocity to the current look direction which
+				//	allows for vertical influence on the look direction.
+				//Without this the player will either look straight when jumping or look directly up and get confused
 				Vector3 velDirection = velocity.normalized;
 				if (Mathf.Abs(Vector3.Dot(velDirection, -floorNormal)) < maxVerticalAngle)
 					newLookDirection = velDirection;
@@ -193,6 +203,21 @@ public class FerretController : MonoBehaviour
 		isJumping = false;
 	}
 
+	void StartClimbing(Vector3 newUp)
+	{
+		isClimbing = true;
+		upDirection = newUp;
+		floorNormal = newUp;
+		CancelJump();
+	}
+
+	void StopClimbing()
+	{
+		isClimbing = false;
+		upDirection = Vector3.up;
+		floorNormal = Vector3.up;
+	}
+
 	public void SetRagdollState(bool state)
 	{
 		isRagdolled = state;
@@ -220,10 +245,21 @@ public class FerretController : MonoBehaviour
 
 	public void OnJump()
 	{
+		if (!isClimbing)
+		{
+			RaycastHit rayhit;
+			if (Physics.SphereCast(transform.position, characterController.radius * wallCheckFactor, targetVelocity.normalized, out rayhit, wallCheckDistance, climbableLayers))
+			{
+				StartClimbing(rayhit.normal);
+				return;
+			}
+		}
 		if (grounded)
 		{
 			gravity = jumpArc.GetGravity();
-			velocity.y = jumpArc.GetJumpForce();
+			//Reset "vertical" velocity
+			velocity -= upDirection * Vector3.Dot(velocity, upDirection);
+			velocity += upDirection * jumpArc.GetJumpForce();
 			isJumping = true;
 		}
 	}
@@ -233,7 +269,7 @@ public class FerretController : MonoBehaviour
 		CancelJump();
 	}
 
-	public void OnDash()
+	public void OnInteract()
 	{
 		SetRagdollState(!isRagdolled);
 	}
