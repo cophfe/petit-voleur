@@ -23,7 +23,7 @@ public class FerretController : MonoBehaviour
 	[Header("Ferret forces")]
 	public float acceleration = 50;
 	public float targetSpeed = 30;
-	public float friction = 80;
+	public float floorFriction = 80;
 	public float frictionMultiplier = 2;
 	public float airControl = 0.4f;
 	public float lookSpeed = 600f;
@@ -39,11 +39,14 @@ public class FerretController : MonoBehaviour
 	[Header("Wall Climbing")]
 	public LayerMask climbableLayers;
 	public bool isClimbing = false;
+	public float climbFriction = 140;
 	public float wallCheckDistance = 0.12f;
 	public float wallCheckFactor = 0.9f;
+	public int wallCheckAngles = 4;
 
 	private CharacterController characterController;
 	new private Rigidbody rigidbody;
+	private float friction = 80;
 	private Vector3 forward;
 	private Vector3 targetVelocity;
 	private Vector3 frameAcceleration;
@@ -54,6 +57,7 @@ public class FerretController : MonoBehaviour
     {
         characterController = GetComponent<CharacterController>();
 		rigidbody = GetComponent<Rigidbody>();
+		StopClimbing();
     }
 
     // FixedUpdate is called once per physics step
@@ -208,6 +212,7 @@ public class FerretController : MonoBehaviour
 		isClimbing = true;
 		upDirection = newUp;
 		floorNormal = newUp;
+		friction = climbFriction;
 		CancelJump();
 	}
 
@@ -216,6 +221,7 @@ public class FerretController : MonoBehaviour
 		isClimbing = false;
 		upDirection = Vector3.up;
 		floorNormal = Vector3.up;
+		friction = floorFriction;
 	}
 
 	public void SetRagdollState(bool state)
@@ -248,11 +254,20 @@ public class FerretController : MonoBehaviour
 		if (!isClimbing)
 		{
 			RaycastHit rayhit;
-			if (Physics.SphereCast(transform.position, characterController.radius * wallCheckFactor, targetVelocity.normalized, out rayhit, wallCheckDistance, climbableLayers))
+
+			Vector3 rayDirection = Vector3.forward;
+
+			for (int i = 0; i < wallCheckAngles; ++i)
 			{
-				StartClimbing(rayhit.normal);
-				return;
+				Debug.DrawRay(transform.position, rayDirection * 3, Color.red, 2);
+				if (Physics.SphereCast(transform.position, characterController.radius * wallCheckFactor, rayDirection, out rayhit, wallCheckDistance, climbableLayers))
+				{
+					StartClimbing(rayhit.normal);
+					return;
+				}
+				rayDirection = Quaternion.Euler(0, 360.0f / (float)wallCheckAngles, 0) * rayDirection;
 			}
+			
 		}
 		if (grounded)
 		{
