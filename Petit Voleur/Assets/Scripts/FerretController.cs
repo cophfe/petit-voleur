@@ -61,7 +61,7 @@ public class FerretController : MonoBehaviour
     }
 
     // FixedUpdate is called once per physics step
-    void FixedUpdate()
+    void Update()
     {
 		//No need to run these if the player is ragdolled
 		if (isRagdolled)
@@ -128,7 +128,7 @@ public class FerretController : MonoBehaviour
 			accelerationScaled *= airControl;
 		
 		//Amount of acceleration in this frame
-		accelerationScaled *= Time.fixedDeltaTime;
+		accelerationScaled *= Time.deltaTime;
 
 		//Limit change in position to the player's acceleration in this frame
 		if (frameAcceleration.sqrMagnitude > accelerationScaled * accelerationScaled)
@@ -147,12 +147,12 @@ public class FerretController : MonoBehaviour
 		}
 
 		//GRAVITY
-		frameAcceleration -= upDirection * gravity * Time.fixedDeltaTime;
+		frameAcceleration -= upDirection * gravity * Time.deltaTime;
 		//Add the acceleration calculated this frame to velocity
 		velocity += frameAcceleration;
 		
 		//verlet integration
-		characterController.Move(velocity * Time.fixedDeltaTime);
+		characterController.Move(velocity * Time.deltaTime);
 
 		//Rotation
 		Vector3 newLookDirection = lookDirection;
@@ -185,7 +185,7 @@ public class FerretController : MonoBehaviour
 		if (Mathf.Abs(Vector3.Dot(newLookDirection, -floorNormal)) < maxVerticalAngle)
 			lookDirection = newLookDirection;
 
-		transform.rotation = Quaternion.RotateTowards(transform.rotation, Quaternion.LookRotation(lookDirection, floorNormal), lookSpeed * Time.fixedDeltaTime);
+		transform.rotation = Quaternion.RotateTowards(transform.rotation, Quaternion.LookRotation(lookDirection, floorNormal), lookSpeed * Time.deltaTime);
     }
 
 	void OnControllerColliderHit(ControllerColliderHit hit)
