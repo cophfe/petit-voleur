@@ -131,13 +131,17 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   target: {fileID: 0}
   maxFollowDistance: 20
-  sensitivity: 0.087
-  inverted: 0
   obstructionLayers:
     serializedVersion: 2
     m_Bits: 55
+  sensitivity: 0.09
+  inverted: 0
+  maximumUpRotation: 40
+  minimumUpRotation: -4
   followSpeed: 15
-  smoothCameraRotation: 0
+  zoomInSpeed: 60
+  zoomOutSpeed: 4
+  smoothCameraRotation: 1
   rotateSpeed: 10
 --- !u!114 &3225189145465032137
 MonoBehaviour:

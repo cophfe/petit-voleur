@@ -7,48 +7,51 @@ using UnityEngine.InputSystem;
 public partial class CameraController : MonoBehaviour
 {
 	//INSPECTOR STUFF
+	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+	[Header("Behaviour")]
 	[Tooltip("The target to orbit around.")]
 	public Transform target;
 	[Tooltip("The maximum distance the camera can be away from the target.")]
 	public float maxFollowDistance = 10;
+	[Tooltip("The layers that can obstruct the camera.")]
+	public LayerMask obstructionLayers;
+
+	[Header("Control")]
+	[Space(5)]
 	[Tooltip("The camera sensitivity multiplier.")]
 	[Range(0, 1)] public float sensitivity = 0.1f;
 	[Tooltip("If input is inverted or not.")]
 	public bool inverted = false;
-	[Tooltip("The layers that can obstruct the camera.")]
-	public LayerMask obstructionLayers;
 	[Tooltip("Y rotation cannot be higher than this value.")]
-	[Range(-90, 90)] public float maximumYRotation = 87;
+	[Range(-90, 90)] public float maximumUpRotation = 87;
 	[Tooltip("Y rotation cannot be less than this value.")]
-	[Range(-90, 90)] public float minimumYRotation = -87;
+	[Range(-90, 90)] public float minimumUpRotation = -87;
+
+	[Header("Movement")]
+	[Space(5)]
 	[Tooltip("Camera movement speed.")]
 	public float followSpeed = 15;
-	[Tooltip("If rotation should be smoothed")]
+	[Tooltip("The Speed the camera zooms in. Setting this too low will cause clipping issues.")]
+	public float zoomInSpeed = 15;
+	[Tooltip("The Speed the camera zooms out.")]
+	public float zoomOutSpeed = 15;
+	[Tooltip("If rotation should be smoothed.")]
 	public bool smoothCameraRotation = false;
 	[Tooltip("Camera orbit speed.")]
 	[HideInInspector] public float rotateSpeed = 1;
+	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 	Camera cam;
 
-	//When inspector values are changed, check they are valid
-	void OnValidate()
-	{
-		if (maxFollowDistance < 0)
-			maxFollowDistance = 0;
-		if (rotateSpeed < 0)
-			rotateSpeed = 0;
-		if (maximumYRotation < minimumYRotation)
-		{
-			maximumYRotation = minimumYRotation;
-		}
-		
-	}
-
 	//The rotation of the targetQuaternion
-	Vector2 rotation = Vector2.zero;
+	Vector2 rotation;
 	//the offset from the target
 	Vector3 orbitVector;
 
+	//used for smooth zoom
+	float targetDistance;
+	float currentDistance = 0;
+	//used for smooth rotation
 	Quaternion targetOrbit;
 	Quaternion currentOrbit = Quaternion.identity;
 	Vector3 currentPivotPosition;
@@ -58,15 +61,23 @@ public partial class CameraController : MonoBehaviour
 		//show error in console if target is null
 		Debug.Assert(target != null);
 
-		//set default values for orbit vector
-		orbitVector = Vector3.forward * maxFollowDistance;
-		currentPivotPosition = target.position;
-		transform.forward = -Vector3.forward;
-
 		cam = GetComponent<Camera>();
+
+		//set default values for camera
+		rotation = new Vector2(180 + target.rotation.eulerAngles.y, -15);
+		targetOrbit = Quaternion.Euler(rotation.y, rotation.x, 0);
+		currentOrbit = targetOrbit;
+		orbitVector = currentOrbit * Vector3.forward;
+		currentPivotPosition = target.position;
+		SetOrbitDistance();
+		orbitVector = orbitVector.normalized * targetDistance;
+		currentDistance = targetDistance;
+		transform.position = currentPivotPosition + orbitVector;
+		transform.forward = -orbitVector;
+
 	}
 
-    void LateUpdate()
+	void LateUpdate()
     {
 		//smoothed camera movement
 		if (smoothCameraRotation)
@@ -80,11 +91,9 @@ public partial class CameraController : MonoBehaviour
 			transform.forward = -orbitVector;
 		}
 
-		
 		SetOrbitDistance();
 		//set camera position
 		transform.position = currentPivotPosition + orbitVector;
-
 	}
 
 	private void FixedUpdate()
@@ -105,7 +114,7 @@ public partial class CameraController : MonoBehaviour
 			input *= sensitivity;
 		rotation += input;
 		//y rotation is clamped
-		rotation.y = Mathf.Clamp(rotation.y, -maximumYRotation, -minimumYRotation);
+		rotation.y = Mathf.Clamp(rotation.y, -maximumUpRotation, -minimumUpRotation);
 		//set target quaternion
 		targetOrbit = Quaternion.Euler(rotation.y, rotation.x, 0);
 		
@@ -117,11 +126,23 @@ public partial class CameraController : MonoBehaviour
 		}
 	}
 
-	//Sets the orbitVector's magnitude to the correct value (checks obstructions)
-	void SetOrbitDistance()
+	//When inspector values are changed, check they are valid
+	void OnValidate()
 	{
-		orbitVector.Normalize();
-		
+		if (maxFollowDistance < 0)
+			maxFollowDistance = 0;
+		if (rotateSpeed < 0)
+			rotateSpeed = 0;
+		if (maximumUpRotation < minimumUpRotation)
+		{
+			maximumUpRotation = minimumUpRotation;
+		}
+	}
+
+	//Sets the orbitVector's magnitude to the correct value (checks obstructions)
+	//requires orbit to be normalised first
+	void SetOrbitDistance()
+	{		
 		float yExtend = Mathf.Tan(cam.fieldOfView * Mathf.Deg2Rad) * cam.nearClipPlane;
 		//regenerated every frame because it could change, could maybe optimise by only calling on camera change
 		Vector3 boxExtents = new Vector3(yExtend * cam.aspect, yExtend, cam.nearClipPlane);
@@ -130,7 +151,7 @@ public partial class CameraController : MonoBehaviour
 		if (Physics.BoxCast(((cam.nearClipPlane) / 2) * orbitVector + currentPivotPosition, boxExtents, orbitVector,
 			out RaycastHit boxHit, transform.rotation, maxFollowDistance, obstructionLayers.value))
 		{
-			orbitVector *= boxHit.distance;
+			targetDistance = boxHit.distance;
 			
 		}
 		else
@@ -141,16 +162,25 @@ public partial class CameraController : MonoBehaviour
 			Ray ray = new Ray(currentPivotPosition, orbitVector);
 			if (Physics.Raycast(ray, out RaycastHit rayHit, maxFollowDistance, obstructionLayers.value))
 			{
-				orbitVector *= rayHit.distance;
+				targetDistance = rayHit.distance;
 			}
 			else
 			{
-				orbitVector *= maxFollowDistance;
+				targetDistance =  maxFollowDistance;
 			}
 		}
-		
-		
 
-		
+		//magnitude changes differently depending if zooming in or out
+		if (currentDistance < targetDistance)
+		{
+			currentDistance = Mathf.MoveTowards(currentDistance, targetDistance, Time.deltaTime * zoomOutSpeed * (targetDistance - currentDistance));
+		}
+		else
+		{
+			currentDistance = Mathf.MoveTowards(currentDistance, targetDistance, Time.deltaTime * zoomInSpeed * (currentDistance - targetDistance));
+		}
+		orbitVector.Normalize();
+		//now set orbit vec
+		orbitVector *= currentDistance;
 	}
 }
