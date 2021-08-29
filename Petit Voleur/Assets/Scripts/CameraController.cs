@@ -96,10 +96,10 @@ public partial class CameraController : MonoBehaviour
 		transform.position = currentPivotPosition + orbitVector;
 	}
 
-	private void FixedUpdate()
+	private void Update()
 	{
 		float distance = Vector3.Distance(currentPivotPosition, target.position);
-		currentPivotPosition = Vector3.MoveTowards(currentPivotPosition, target.position, Time.fixedDeltaTime * followSpeed * distance);
+		currentPivotPosition = Vector3.MoveTowards(currentPivotPosition, target.position, Time.deltaTime * followSpeed * distance);
 	}
 
 	//Called through unity input system
