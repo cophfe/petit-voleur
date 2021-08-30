@@ -1,4 +1,4 @@
-﻿/*===================================================================
+/*===================================================================
 		  Created by Radongo Du Congo
 		||----------------------------||
 				  2021
@@ -94,7 +94,7 @@ public class FerretController : MonoBehaviour
 			floorNormal = upDirection;
 			grounded = false;
 		}
-
+		
 		//Component of velocity that is parallel with the ground
 		Vector3 planarVelocity = Vector3.ProjectOnPlane(velocity, floorNormal);
 		//Project camera's forward vector on virtual plane that is the "floor", use global up vector if wall climbing
