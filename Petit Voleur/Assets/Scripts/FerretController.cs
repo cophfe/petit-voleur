@@ -23,6 +23,7 @@ public class FerretController : MonoBehaviour
 
 	[Header("Ground Checking")]
 	public LayerMask groundCheckLayerMask;
+	public Collider floorObject;
 	public float groundCheckRadiusFactor = 0.85f;
 	public float groundCheckDistance = 0.3f;
 
@@ -49,6 +50,9 @@ public class FerretController : MonoBehaviour
 	public float wallCheckDistance = 0.12f;
 	public float wallCheckFactor = 0.9f;
 	public int wallCheckAngles = 4;
+
+	[Header("Impact")]
+	public float impactMultiplier;
 
 	private CharacterController characterController;
 	new private Rigidbody rigidbody;
@@ -85,6 +89,7 @@ public class FerretController : MonoBehaviour
 			 && Vector3.Angle(upDirection, rayhit.normal) <= characterController.slopeLimit)
 		{
 			floorNormal = rayhit.normal;
+			floorObject = rayhit.collider;
 			grounded = true;
 		}
 		else
@@ -92,6 +97,7 @@ public class FerretController : MonoBehaviour
 			//Reset floor normal
 			StopClimbing();
 			floorNormal = upDirection;
+			floorObject = null;
 			grounded = false;
 		}
 		
@@ -204,8 +210,15 @@ public class FerretController : MonoBehaviour
 						   \
 							\--------------->
 		-----------------------------------------------------------------*/
-		
-		velocity +=  hit.normal * Mathf.Max(Vector3.Dot(-hit.normal, velocity), 0);
+		Vector3 impactVector = hit.normal * Mathf.Max(Vector3.Dot(-hit.normal, velocity), 0);
+		if (hit.rigidbody && hit.collider != floorObject)
+		{
+			hit.rigidbody.AddForceAtPosition(-impactVector * impactMultiplier, hit.point, ForceMode.Force);
+		}
+		else
+		{
+			velocity +=  impactVector;
+		}
 	}
 
 	public void CancelJump()
