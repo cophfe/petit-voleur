@@ -1,4 +1,10 @@
-﻿using System.Collections;
+﻿/*===================================================================
+		  Created by Radongo Du Congo
+		||----------------------------||
+				  2021
+===================================================================*/
+
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -75,7 +81,8 @@ public class FerretController : MonoBehaviour
 		//Calculate floor normal and ground check
 			//Don't consider surfaces that are too steep
 		RaycastHit rayhit;
-		if (Physics.SphereCast(transform.position, characterController.radius * groundCheckRadiusFactor, -floorNormal, out rayhit, groundCheckDistance, groundCheckLayerMask) && Vector3.Angle(upDirection, rayhit.normal) <= characterController.slopeLimit)
+		if (Physics.SphereCast(transform.position, characterController.radius * groundCheckRadiusFactor, -floorNormal, out rayhit, groundCheckDistance, groundCheckLayerMask)
+			 && Vector3.Angle(upDirection, rayhit.normal) <= characterController.slopeLimit)
 		{
 			floorNormal = rayhit.normal;
 			grounded = true;
@@ -110,7 +117,7 @@ public class FerretController : MonoBehaviour
 			//Give a boost if trying to go away from current velocity
 			if (Vector3.Dot(frameAcceleration, planarVelocity) < 0)
 			{
-				accelerationScaled += friction;
+				accelerationScaled = friction;
 			}
 		}
 		else
@@ -151,7 +158,7 @@ public class FerretController : MonoBehaviour
 		//Add the acceleration calculated this frame to velocity
 		velocity += frameAcceleration;
 		
-		//verlet integration
+		//lets goooooooooooooooooooooo
 		characterController.Move(velocity * Time.deltaTime);
 
 		//Rotation
@@ -233,7 +240,7 @@ public class FerretController : MonoBehaviour
 		if (!isRagdolled)
 		{
 			velocity = rigidbody.velocity;
-			CancelJump();
+			StopClimbing();
 		}
 
 		rigidbody.isKinematic = !isRagdolled;
