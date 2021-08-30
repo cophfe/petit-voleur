@@ -2607,6 +2607,10 @@ PrefabInstance:
       propertyPath: obstructionLayers.m_Bits
       value: 567
       objectReference: {fileID: 0}
+    - target: {fileID: 3225189145465032139, guid: eb0a18701aeffc54d9d1d0e0b87389cc, type: 3}
+      propertyPath: zoomInSpeed
+      value: 60
+      objectReference: {fileID: 0}
     - target: {fileID: 3225189145465032141, guid: eb0a18701aeffc54d9d1d0e0b87389cc, type: 3}
       propertyPath: m_Name
       value: Camera
@@ -2780,6 +2784,18 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1746702304499565649, guid: 513c6c158ea1c38449d25e20b97227ed, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: e195c0b51ec8bd046bc1c598d7ed0403, type: 2}
+    - target: {fileID: 4305684909011078222, guid: 513c6c158ea1c38449d25e20b97227ed, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: a011e6a565f7f8945ac7653825ba97b2, type: 2}
+    - target: {fileID: 4495732607786726903, guid: 513c6c158ea1c38449d25e20b97227ed, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: e195c0b51ec8bd046bc1c598d7ed0403, type: 2}
     - target: {fileID: 7983130785288538092, guid: 513c6c158ea1c38449d25e20b97227ed, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
