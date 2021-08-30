@@ -240,7 +240,7 @@ public class FerretController : MonoBehaviour
 		if (!isRagdolled)
 		{
 			velocity = rigidbody.velocity;
-			CancelJump();
+			StopClimbing();
 		}
 
 		rigidbody.isKinematic = !isRagdolled;
