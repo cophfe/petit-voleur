@@ -125,8 +125,8 @@ Shader "Custom/TMP Wobble Distance Field" {
 
 				#include "UnityCG.cginc"
 				#include "UnityUI.cginc"
-				#include "TMPro_Properties.cginc"
-				#include "TMPro.cginc"
+				#include "Assets/TextMesh Pro/Shaders/TMPro_Properties.cginc"
+				#include "Assets/TextMesh Pro/Shaders/TMPro.cginc"
 
 				struct vertex_t
 		 {
