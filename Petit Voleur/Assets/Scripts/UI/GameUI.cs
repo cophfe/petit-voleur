@@ -131,18 +131,14 @@ public class GameUI : MonoBehaviour
 		//initialise point values
 		defaultFontSize = pointValueText.fontSize;
 
-		pointTracker = GameObject.Find("EventSystem").GetComponent<PointTracker>();
-		startPointValue = pointTracker.GetPoints();
+		GameObject eS = GameObject.Find("EventSystem");
+		if (eS != null)
+			pointTracker = eS.GetComponent<PointTracker>();
 	}
 
 	int pointValue = 0;
 	private void Update()
 	{
-		if (pointTracker.GetPoints() != pointValue)
-		{
-			pointValue = pointTracker.GetPoints();
-			UpdatePointUI();
-		}
 		//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 		//~~~~~~~~~PAUSE MENU TRANSITION~~~~~~~~~~~~
 		//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -207,6 +203,11 @@ public class GameUI : MonoBehaviour
 		//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 		//~~~~~~~~~~~~POINTS TRANSITION~~~~~~~~~~~~~
 		//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+		if (pointTracker.GetPoints() != pointValue)
+		{
+			pointValue = pointTracker.GetPoints();
+			UpdatePointUI();
+		}
 		if (pointsTransitioning)
 		{
 			//it is easier if transitions from 0 to 1
@@ -245,6 +246,21 @@ public class GameUI : MonoBehaviour
 		//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 	}
 
+	public void OpenOptions()
+	{
+
+	}
+
+	public void CloseOptions()
+	{
+
+	}
+
+	public void ExitGame()
+	{
+
+	}
+
 	//TEMPORARY (SET POINTS VALUE)
 	public void OnDash()
 	{
@@ -252,9 +268,9 @@ public class GameUI : MonoBehaviour
 		pointTracker.AddPoints(24);
 	}
 
-	////TEMPORARY (SET PAUSE VALUE)
-	//public void OnGrab()
-	//{
-	//	Pause(true);
-	//}
+	//TEMPORARY (SET PAUSE VALUE)
+	public void OnGrab()
+	{
+		Pause(true);
+	}
 }
