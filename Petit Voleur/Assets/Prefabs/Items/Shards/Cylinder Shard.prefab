@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 4847115675551597123}
   - component: {fileID: 4847115675551597122}
   - component: {fileID: 4847115675551597121}
-  m_Layer: 10
+  m_Layer: 0
   m_Name: Sphere (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -122,7 +122,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4847115676579800450}
   - component: {fileID: 4847115676579800451}
-  m_Layer: 10
+  m_Layer: 0
   m_Name: Cylinder Shard
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -163,8 +163,8 @@ MonoBehaviour:
   - {fileID: 4847115676952766234}
   - {fileID: 4847115675551597121}
   - {fileID: 4847115676643140945}
-  minExplodeVelocity: 1
-  maxExplodeVelocity: 6
+  minExplodeVelocity: 5
+  maxExplodeVelocity: 15
 --- !u!1 &4847115676643140948
 GameObject:
   m_ObjectHideFlags: 0
@@ -178,7 +178,7 @@ GameObject:
   - component: {fileID: 4847115676643140947}
   - component: {fileID: 4847115676643140946}
   - component: {fileID: 4847115676643140945}
-  m_Layer: 10
+  m_Layer: 0
   m_Name: Cylinder
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -291,7 +291,7 @@ GameObject:
   - component: {fileID: 4847115676952766236}
   - component: {fileID: 4847115676952766239}
   - component: {fileID: 4847115676952766234}
-  m_Layer: 10
+  m_Layer: 0
   m_Name: Sphere
   m_TagString: Untagged
   m_Icon: {fileID: 0}
