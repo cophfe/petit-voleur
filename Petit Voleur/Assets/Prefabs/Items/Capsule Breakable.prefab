@@ -12,9 +12,10 @@ GameObject:
   - component: {fileID: 8706330579251460124}
   - component: {fileID: 8706330579251460127}
   - component: {fileID: 8706330579251460126}
+  - component: {fileID: 5937633429674024110}
   - component: {fileID: 8706330579251460121}
   - component: {fileID: 8706330579251460114}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Capsule Breakable
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -30,7 +31,7 @@ Transform:
   m_GameObject: {fileID: 8706330579251460120}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 4.4431753, y: 6.323486, z: -9.359453}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 3, y: 3, z: 3}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
@@ -98,6 +99,19 @@ CapsuleCollider:
   m_Height: 2
   m_Direction: 1
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &5937633429674024110
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8706330579251460120}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 49ff1fa5e71373b48bce9a3419903993, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  rbody: {fileID: 0}
 --- !u!114 &8706330579251460121
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -110,9 +124,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 785268a14a906e542aee127ca8ff0525, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  pointTracker: {fileID: 0}
   shards: {fileID: 4847115676579800453, guid: fadfc1dc67cbe3e488640b40b928cd68, type: 3}
   breakValue: 0
-  impactThreshold: 10
+  impactThreshold: 30
 --- !u!54 &8706330579251460114
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -121,11 +136,11 @@ Rigidbody:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8706330579251460120}
   serializedVersion: 2
-  m_Mass: 1
+  m_Mass: 3
   m_Drag: 0
   m_AngularDrag: 0.05
   m_UseGravity: 1
   m_IsKinematic: 0
-  m_Interpolate: 0
+  m_Interpolate: 1
   m_Constraints: 0
   m_CollisionDetection: 0

@@ -55,20 +55,20 @@ public class GameUI : MonoBehaviour
 	float defaultFontSize;
 	//whether the point value is transitioning or not
 	bool pointsTransitioning = false;
+	//the component that controls point values
+	PointTracker pointTracker;
 
-	//these values are used for the easing function
-	int targetPointValue;
+	//these value osused for the easing function
 	int startPointValue = 0;
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-    public void SetPointUI(int points)
+    public void UpdatePointUI()
 	{
 		//set initial transition values
 		pointTransitionTimer = 0;
 		pointsTransitioning = true;
 		//starts halfway done
-		startPointValue = targetPointValue + (targetPointValue - startPointValue)/2;
-		targetPointValue = points;
+		startPointValue = pointTracker.GetPreviousScore() + (pointTracker.GetPoints() - pointTracker.GetPreviousScore()) /2;
 	}
 
 	public void Resume()
@@ -130,9 +130,13 @@ public class GameUI : MonoBehaviour
 
 		//initialise point values
 		defaultFontSize = pointValueText.fontSize;
-		//startPointValue = GameManager.GetPoints();
+
+		GameObject eS = GameObject.Find("EventSystem");
+		if (eS != null)
+			pointTracker = eS.GetComponent<PointTracker>();
 	}
 
+	int pointValue = 0;
 	private void Update()
 	{
 		//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -199,6 +203,11 @@ public class GameUI : MonoBehaviour
 		//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 		//~~~~~~~~~~~~POINTS TRANSITION~~~~~~~~~~~~~
 		//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+		if (pointTracker.GetPoints() != pointValue)
+		{
+			pointValue = pointTracker.GetPoints();
+			UpdatePointUI();
+		}
 		if (pointsTransitioning)
 		{
 			//it is easier if transitions from 0 to 1
@@ -208,7 +217,7 @@ public class GameUI : MonoBehaviour
 			//y = sqrt(r^2 - ((2rx)/w - r)^2)
 			float scaleTransformedX = (2 * pointBounceMagnitude * t - pointBounceMagnitude);
 			float scaleAddition = Mathf.Sqrt(pointBounceMagnitude * pointBounceMagnitude - scaleTransformedX * scaleTransformedX);
-			if (startPointValue < targetPointValue)
+			if (startPointValue < pointTracker.GetPoints())
 				pointValueText.fontSize = defaultFontSize * (1 + scaleAddition);
 			else
 				//font size decrease is max 25%, otherwise it looks bad
@@ -217,12 +226,12 @@ public class GameUI : MonoBehaviour
 			//set text value (linear, finishes 1/3 of the way through)
 			if (pointTransitionTimer <= pointTransitionTime / 3)
 			{
-				int currentPointValue = startPointValue + (int)((targetPointValue - startPointValue) * t * 3);
+				int currentPointValue = startPointValue + (int)((pointTracker.GetPoints() - startPointValue) * t * 3);
 				pointValueText.text = currentPointValue.ToString();
 			}
 			else
 			{
-				pointValueText.text = targetPointValue.ToString();
+				pointValueText.text = pointTracker.GetPoints().ToString();
 			}
 
 			//end transition at transitionTime
@@ -237,18 +246,31 @@ public class GameUI : MonoBehaviour
 		//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 	}
 
-	////TEMPORARY (SET POINTS VALUE)
-	//int pValue = 0;
-	//public void OnDash()
-	//{
-	//	Debug.Log("POINTS!!!");
-	//	pValue += 14;
-	//	SetPointUI(pValue);
-	//}
+	public void OpenOptions()
+	{
 
-	////TEMPORARY (SET PAUSE VALUE)
-	//public void OnGrab()
-	//{
-	//	Pause(true);
-	//}
+	}
+
+	public void CloseOptions()
+	{
+
+	}
+
+	public void ExitGame()
+	{
+
+	}
+
+	//TEMPORARY (SET POINTS VALUE)
+	public void OnDash()
+	{
+		Debug.Log("POINTS!!!");
+		pointTracker.AddPoints(24);
+	}
+
+	//TEMPORARY (SET PAUSE VALUE)
+	public void OnGrab()
+	{
+		Pause(true);
+	}
 }

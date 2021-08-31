@@ -10,6 +10,8 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 
 [RequireComponent(typeof(CharacterController))]
+[RequireComponent(typeof(FerretPickup))]
+[RequireComponent(typeof(Rigidbody))]
 public class FerretController : MonoBehaviour
 {
 	[Header("Status")]
@@ -37,6 +39,7 @@ public class FerretController : MonoBehaviour
 	//Measured in dot product
 	public float maxVerticalAngle = 0.9f;
 	public float gravity = 10;
+	public float maxVelocity = 300.0f;
 
 	[Header("Jumping")]
 	public bool isJumping = false;
@@ -51,11 +54,15 @@ public class FerretController : MonoBehaviour
 	public float wallCheckFactor = 0.9f;
 	public int wallCheckAngles = 4;
 
-	[Header("Impact")]
-	public float impactMultiplier;
+	[Header("Dashing and Impact")]
+	public float defaultImpactMultiplier = 0.5f;
+	public float dashVelocity = 40.0f;
+	public float dashCooldown = 1.4f;
+	private float dashCDTimer = 0f;
 
 	private CharacterController characterController;
 	new private Rigidbody rigidbody;
+	private FerretPickup ferretPickup;
 	private float friction = 80;
 	private Vector3 forward;
 	private Vector3 targetVelocity;
@@ -67,6 +74,7 @@ public class FerretController : MonoBehaviour
     {
         characterController = GetComponent<CharacterController>();
 		rigidbody = GetComponent<Rigidbody>();
+		ferretPickup = GetComponent<FerretPickup>();
 		StopClimbing();
     }
 
@@ -76,6 +84,10 @@ public class FerretController : MonoBehaviour
 		//No need to run these if the player is ragdolled
 		if (isRagdolled)
 			return;
+
+		//Decrement dash timer
+		if (dashCDTimer > 0)
+			dashCDTimer -= Time.deltaTime;
 		
 		//Reset these
 		targetVelocity = Vector3.zero;
@@ -104,9 +116,9 @@ public class FerretController : MonoBehaviour
 		//Component of velocity that is parallel with the ground
 		Vector3 planarVelocity = Vector3.ProjectOnPlane(velocity, floorNormal);
 		//Project camera's forward vector on virtual plane that is the "floor", use global up vector if wall climbing
-		Vector3 desiredCamVector;
-		desiredCamVector = isClimbing? Vector3.up : Camera.main.transform.forward;
-		forward = Vector3.ProjectOnPlane(desiredCamVector, floorNormal).normalized;
+		Vector3 desiredForwardVector;
+		desiredForwardVector = isClimbing? Vector3.up : Camera.main.transform.forward;
+		forward = Vector3.ProjectOnPlane(desiredForwardVector, floorNormal).normalized;
 
 		if (input.x != 0 || input.y != 0)
 		{
@@ -164,6 +176,12 @@ public class FerretController : MonoBehaviour
 		//Add the acceleration calculated this frame to velocity
 		velocity += frameAcceleration;
 		
+		//Limit velocity so nothing breaks
+		if (velocity.sqrMagnitude > maxVelocity * maxVelocity)
+		{
+			velocity = velocity.normalized * maxVelocity;
+		}
+		
 		//lets goooooooooooooooooooooo
 		characterController.Move(velocity * Time.deltaTime);
 
@@ -213,7 +231,7 @@ public class FerretController : MonoBehaviour
 		Vector3 impactVector = hit.normal * Mathf.Max(Vector3.Dot(-hit.normal, velocity), 0);
 		if (hit.rigidbody && hit.collider != floorObject)
 		{
-			hit.rigidbody.AddForceAtPosition(-impactVector * impactMultiplier, hit.point, ForceMode.Force);
+			hit.rigidbody.AddForceAtPosition(-impactVector * defaultImpactMultiplier, hit.point, ForceMode.Force);
 		}
 		else
 		{
@@ -221,10 +239,60 @@ public class FerretController : MonoBehaviour
 		}
 	}
 
-	public void CancelJump()
+	void Dash()
+	{
+		if (dashCDTimer <= 0)
+		{
+			Vector3 dashDirection = forward;
+			if (targetVelocity.sqrMagnitude > 0)
+				dashDirection = targetVelocity.normalized;
+
+			velocity = dashDirection * dashVelocity;
+			dashCDTimer = dashCooldown;
+		}
+	}
+
+	void ResetDash()
+	{
+		dashCDTimer = 0;
+	}
+
+	void StartJump()
+	{
+		gravity = jumpArc.GetGravity();
+		//Reset "vertical" velocity
+		velocity -= upDirection * Vector3.Dot(velocity, upDirection);
+		velocity += upDirection * jumpArc.GetJumpForce();
+		isJumping = true;
+	}
+
+	void CancelJump()
 	{
 		gravity = fallingArc.GetGravity();
 		isJumping = false;
+	}
+
+	bool TryClimb()
+	{
+		if (!isClimbing)
+		{
+			RaycastHit rayhit;
+
+			Vector3 rayDirection = Vector3.forward;
+
+			for (int i = 0; i < wallCheckAngles; ++i)
+			{
+				Debug.DrawRay(transform.position, rayDirection * 3, Color.red, 2);
+				if (Physics.SphereCast(transform.position, characterController.radius * wallCheckFactor, rayDirection, out rayhit, wallCheckDistance, climbableLayers))
+				{
+					StartClimbing(rayhit.normal);
+					return true;
+				}
+				rayDirection = Quaternion.Euler(0, 360.0f / (float)wallCheckAngles, 0) * rayDirection;
+			}
+		}
+
+		return false;
 	}
 
 	void StartClimbing(Vector3 newUp)
@@ -271,31 +339,10 @@ public class FerretController : MonoBehaviour
 
 	public void OnJump()
 	{
-		if (!isClimbing)
+		//Try climb first, otherwise jump
+		if (!TryClimb() && grounded)
 		{
-			RaycastHit rayhit;
-
-			Vector3 rayDirection = Vector3.forward;
-
-			for (int i = 0; i < wallCheckAngles; ++i)
-			{
-				Debug.DrawRay(transform.position, rayDirection * 3, Color.red, 2);
-				if (Physics.SphereCast(transform.position, characterController.radius * wallCheckFactor, rayDirection, out rayhit, wallCheckDistance, climbableLayers))
-				{
-					StartClimbing(rayhit.normal);
-					return;
-				}
-				rayDirection = Quaternion.Euler(0, 360.0f / (float)wallCheckAngles, 0) * rayDirection;
-			}
-			
-		}
-		if (grounded)
-		{
-			gravity = jumpArc.GetGravity();
-			//Reset "vertical" velocity
-			velocity -= upDirection * Vector3.Dot(velocity, upDirection);
-			velocity += upDirection * jumpArc.GetJumpForce();
-			isJumping = true;
+			StartJump();
 		}
 	}
 
@@ -304,9 +351,9 @@ public class FerretController : MonoBehaviour
 		CancelJump();
 	}
 
-	public void OnInteract()
+	public void OnDash()
 	{
-		SetRagdollState(!isRagdolled);
+		Dash();
 	}
 
 	//---------STRUCTS-------------------//
