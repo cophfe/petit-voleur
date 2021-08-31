@@ -379,7 +379,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   pointTracker: {fileID: 0}
   shards: {fileID: 625696796484315286, guid: 66fa6a8bf736fe64381c2afca8637a45, type: 3}
-  breakValue: 0
+  breakValue: 15
   impactThreshold: 30
 --- !u!1001 &8084338152097368365
 PrefabInstance:

@@ -139,7 +139,7 @@ MonoBehaviour:
   - {fileID: 5803449361696951666}
   - {fileID: 5803449362168726918}
   minExplodeVelocity: 3
-  maxExplodeVelocity: 3
+  maxExplodeVelocity: 15
 --- !u!1 &3192504710152437498
 GameObject:
   m_ObjectHideFlags: 0
