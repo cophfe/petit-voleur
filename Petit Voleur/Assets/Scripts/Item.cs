@@ -2,17 +2,18 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+[RequireComponent(typeof(Rigidbody))]
 public class Item : MonoBehaviour
 {
+	[HideInInspector]
 	public Rigidbody rbody;
-	private Collider col;
+	public GameObject col;
 	private Transform originalParent;
 	private RigidbodyInterpolation interpolateMode = RigidbodyInterpolation.None;
 
 	void Awake()
 	{
 		rbody = GetComponent<Rigidbody>();
-		col = GetComponent<Collider>();
 	}
 
 	public void Grab(Transform newParent, Vector3 offset)
@@ -21,7 +22,7 @@ public class Item : MonoBehaviour
 		interpolateMode = rbody.interpolation;
 		rbody.isKinematic = true;
 		rbody.interpolation = RigidbodyInterpolation.None;
-		col.enabled = false;
+		col.SetActive(false);
 		transform.SetParent(newParent);
 		transform.localPosition = offset;
 	}
@@ -37,7 +38,7 @@ public class Item : MonoBehaviour
 
 		rbody.interpolation = interpolateMode;
 		rbody.isKinematic = false;
-		col.enabled = true;
+		col.SetActive(true);
 		rbody.velocity = velocity;
 	}
 }

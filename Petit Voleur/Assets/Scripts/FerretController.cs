@@ -88,6 +88,9 @@ public class FerretController : MonoBehaviour
 		//Decrement dash timer
 		if (dashCDTimer > 0)
 			dashCDTimer -= Time.deltaTime;
+
+		//GRAVITY
+		velocity -= upDirection * gravity * Time.deltaTime;
 		
 		//Reset these
 		targetVelocity = Vector3.zero;
@@ -171,8 +174,6 @@ public class FerretController : MonoBehaviour
 			}
 		}
 
-		//GRAVITY
-		frameAcceleration -= upDirection * gravity * Time.deltaTime;
 		//Add the acceleration calculated this frame to velocity
 		velocity += frameAcceleration;
 		

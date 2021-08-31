@@ -26,8 +26,8 @@ public class BreakableItem : MonoBehaviour
 	void Break()
 	{
 		pointTracker.AddPoints(breakValue);
+		Destroy(gameObject);
 		GameObject newShards = Instantiate(shards, transform.position, transform.rotation);
 		newShards.transform.localScale = transform.localScale;
-		Destroy(gameObject);
 	}
 }
