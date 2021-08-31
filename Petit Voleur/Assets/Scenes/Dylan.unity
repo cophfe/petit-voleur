@@ -182,6 +182,10 @@ PrefabInstance:
       propertyPath: m_Layer
       value: 9
       objectReference: {fileID: 0}
+    - target: {fileID: 5074512353664290214, guid: 4f43b58f67f51594ea42b27b84a8ae2a, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: a011e6a565f7f8945ac7653825ba97b2, type: 2}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 4f43b58f67f51594ea42b27b84a8ae2a, type: 3}
 --- !u!1 &646424961 stripped
@@ -580,6 +584,26 @@ PrefabInstance:
     - target: {fileID: 7983130785288538093, guid: 513c6c158ea1c38449d25e20b97227ed, type: 3}
       propertyPath: m_Name
       value: Player Container
+      objectReference: {fileID: 0}
+    - target: {fileID: 7983130785382527613, guid: 513c6c158ea1c38449d25e20b97227ed, type: 3}
+      propertyPath: m_ConnectedAnchor.y
+      value: 0.00000007941145
+      objectReference: {fileID: 0}
+    - target: {fileID: 7983130785382527613, guid: 513c6c158ea1c38449d25e20b97227ed, type: 3}
+      propertyPath: m_ConnectedAnchor.z
+      value: -1.1084765
+      objectReference: {fileID: 0}
+    - target: {fileID: 7983130786010738103, guid: 513c6c158ea1c38449d25e20b97227ed, type: 3}
+      propertyPath: m_ConnectedAnchor.y
+      value: 0.00000007941145
+      objectReference: {fileID: 0}
+    - target: {fileID: 7983130786149057696, guid: 513c6c158ea1c38449d25e20b97227ed, type: 3}
+      propertyPath: m_ConnectedAnchor.y
+      value: -0.09699994
+      objectReference: {fileID: 0}
+    - target: {fileID: 7983130786252293196, guid: 513c6c158ea1c38449d25e20b97227ed, type: 3}
+      propertyPath: m_ConnectedAnchor.y
+      value: 0.00000007941145
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 513c6c158ea1c38449d25e20b97227ed, type: 3}
