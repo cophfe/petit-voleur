@@ -44,7 +44,7 @@ public class FerretPickup : MonoBehaviour
 			Vector3 grabPoint = (closestCollider.transform.position - point);
 			grabPoint -= (closestCollider.ClosestPoint(point) - point);
 			grabPoint = grabTransform.InverseTransformVector(grabPoint);
-			heldItem = closestCollider.GetComponent<Item>();
+			heldItem = closestCollider.attachedRigidbody.GetComponent<Item>();
 			heldItem.Grab(grabTransform, grabPoint);
 		}
 	}
