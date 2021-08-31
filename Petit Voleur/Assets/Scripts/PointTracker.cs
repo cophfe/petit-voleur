@@ -57,13 +57,6 @@ public class PointTracker : MonoBehaviour
         StampValues();
     }
 
-    //============================================                                                              !! - ONLY TEMP - !!
-    // Run the tester to watch
-     void Update()
-    {
-        WatchScoreLimit();
-    }
-
     //=============================================
     // Get players current score.
     public int GetPoints()
@@ -77,6 +70,7 @@ public class PointTracker : MonoBehaviour
     {
         if (index <= m_ScoreMaxLimit && index >= m_ScoreMinLimit)
         {
+            WatchScoreLimit();
             m_PlayerScore = index;
             m_Game.UpdatePointUI();
         }
@@ -92,6 +86,7 @@ public class PointTracker : MonoBehaviour
     {
         if (index <= m_ScoreMaxLimit && index >= m_ScoreMinLimit)
         {
+            WatchScoreLimit();
             m_ScorePrevious = m_PlayerScore;
             m_PlayerScore += index;
             m_Game.UpdatePointUI();
@@ -108,6 +103,7 @@ public class PointTracker : MonoBehaviour
     {
         if (index > m_StampMin)
         {
+            WatchScoreLimit();
             m_PlayerScore -= index;
             m_Game.UpdatePointUI();
         }
@@ -121,6 +117,7 @@ public class PointTracker : MonoBehaviour
     // Set the Max amount of points the player can get
     public void SetMaxLimit(int goal)
     {
+
         m_ScoreMaxLimit = goal;
     }
 
