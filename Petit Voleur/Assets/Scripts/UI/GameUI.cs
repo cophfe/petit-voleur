@@ -14,25 +14,38 @@ public class GameUI : MonoBehaviour
 	//~~~~~~~~~~~PAUSE MENU STUFF~~~~~~~~~~~~~~~
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 	//public variables
-	[Header("Pause Menu Variables ")]
-	[Tooltip("The screen overlay the pause menu uses.")]
+	[Header("Menu Variables ")]
+	[Tooltip("The screen overlay menus use.")]
 	public Image screenOverlay = null;
 	[Tooltip("The pause menu panel.")]
-	public RectTransform panel = null;
-	public float pauseTransitionTime = 0.5f;
+	public RectTransform pausePanel = null;
+	[Tooltip("The win menu panel.")]
+	public RectTransform winPanel = null;
+	[Tooltip("The options menu panel.")]
+	public RectTransform optionsPanel = null;
+	public GameObject notifyText = null;
+	public float screenTransitionTime = 0.5f;
 
 	//private variables
-	enum PauseTransitionState
+	enum ScreenTransitionState
 	{
-		TRANSITIONIN,
-		TRANSITIONOUT,
-		IN,
-		OUT
+		TPAUSEIN,
+		TPAUSEOUT,
+		PAUSE,
+		TWININ,
+		TWINOUT,
+		WIN,
+		TOPTIONSIN,
+		TOPTIONSOUT,
+		OPTIONS,
+		NOTHING
 	}
 	float pausePanelDefaultHeight;
+	float winPanelDefaultHeight;
+	float optionsPanelDefaultHeight;
 	float overlayDefaultAlpha;
-	PauseTransitionState pauseState = PauseTransitionState.OUT;
-	float pauseTransitionTimer = 0;
+	ScreenTransitionState screenState = ScreenTransitionState.NOTHING;
+	float screenTransitionTimer = 0;
 	float lastTimeScale = 1;
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -73,7 +86,7 @@ public class GameUI : MonoBehaviour
 
 	public void Resume()
 	{
-		if (pauseState == PauseTransitionState.IN)
+		if (screenState == ScreenTransitionState.PAUSE)
 		{
 			Pause(false);
 		}
@@ -81,35 +94,36 @@ public class GameUI : MonoBehaviour
 
 	public bool Pause(bool pause)
 	{
-		switch (pauseState)
+		switch (screenState)
 		{
-			case PauseTransitionState.IN:
+			case ScreenTransitionState.PAUSE:
 				{
 
 					//if already in correct state, return
 					if (pause)
 						return false;
 
-					pauseTransitionTimer = 0;
-					pauseState = PauseTransitionState.TRANSITIONOUT;
+					screenTransitionTimer = 0;
+					screenState = ScreenTransitionState.TPAUSEOUT;
 					return true;
 				}
 
-			case PauseTransitionState.OUT:
+			case ScreenTransitionState.NOTHING:
 				{
 					if (!pause)
 						return false;
 
-					screenOverlay.gameObject.SetActive(true);
-					pauseState = PauseTransitionState.TRANSITIONIN;
+					EnableScreen(ScreenTransitionState.PAUSE);
+
+					screenState = ScreenTransitionState.TPAUSEIN;
 
 					//pause time
 					lastTimeScale = Time.timeScale;
 					Time.timeScale = 0;
-					pauseTransitionTimer = 0;
+					screenTransitionTimer = 0;
 
 					//set initial values for transition
-					panel.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, 0);
+					pausePanel.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, 0);
 					var c = screenOverlay.color;
 					c.a = 0;
 					screenOverlay.color = c;
@@ -123,10 +137,12 @@ public class GameUI : MonoBehaviour
 
 	private void Start()
 	{
-		//initialise pause menu values
-		pausePanelDefaultHeight = panel.rect.height;
+		//initialise menu values
+		pausePanelDefaultHeight = pausePanel.rect.height;
+		winPanelDefaultHeight = winPanel.rect.height;
+		optionsPanelDefaultHeight = optionsPanel.rect.height;
 		overlayDefaultAlpha = screenOverlay.color.a;
-		screenOverlay.gameObject.SetActive(false);
+		EnableScreen(ScreenTransitionState.NOTHING);
 
 		//initialise point values
 		defaultFontSize = pointValueText.fontSize;
@@ -140,74 +156,94 @@ public class GameUI : MonoBehaviour
 	private void Update()
 	{
 		//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-		//~~~~~~~~~PAUSE MENU TRANSITION~~~~~~~~~~~~
+		//~~~~~~~~~~~~MENU TRANSITION~~~~~~~~~~~~~~~
 		//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-		switch (pauseState)
+		switch (screenState)
 		{
-			case PauseTransitionState.TRANSITIONIN:
+			case ScreenTransitionState.TPAUSEIN:
 				{
 					//end transition
-					if (pauseTransitionTimer >= pauseTransitionTime)
+					if (screenTransitionTimer >= screenTransitionTime)
 					{
-						pauseState = PauseTransitionState.IN;
-						panel.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, pausePanelDefaultHeight);
+						screenState = ScreenTransitionState.PAUSE;
+						pausePanel.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, pausePanelDefaultHeight);
 						Color finalColor = screenOverlay.color;
 						finalColor.a = overlayDefaultAlpha;
 						screenOverlay.color = finalColor;
 						break;
 					}
 
-					float t = pauseTransitionTimer / pauseTransitionTime;
+					float t = screenTransitionTimer / screenTransitionTime;
 					//transition panel height using ease out quad
-					panel.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, (1 - (1 - t) * (1 - t)) * pausePanelDefaultHeight);
+					pausePanel.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, (1 - (1 - t) * (1 - t)) * pausePanelDefaultHeight);
 					//transition overlay alpha linearly
 					Color c = screenOverlay.color;
 					c.a = overlayDefaultAlpha * t;
 					screenOverlay.color = c;
 
-					pauseTransitionTimer += Time.unscaledDeltaTime;
+					screenTransitionTimer += Time.unscaledDeltaTime;
 				}
 				break;
-			case PauseTransitionState.TRANSITIONOUT:
+			case ScreenTransitionState.TPAUSEOUT:
 				{
 					//end transition
-					if (pauseTransitionTimer >= pauseTransitionTime)
+					if (screenTransitionTimer >= screenTransitionTime)
 					{
-						pauseState = PauseTransitionState.OUT;
+						screenState = ScreenTransitionState.NOTHING;
 
 						//set final values
-						panel.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, 0);
+						pausePanel.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, 0);
 						var color = screenOverlay.color;
 						color.a = 0;
 						screenOverlay.color = color;
 						Time.timeScale = lastTimeScale;
 
-						screenOverlay.gameObject.SetActive(false);
+						EnableScreen(ScreenTransitionState.NOTHING);
 						break;
 					}
 
-					float t = 1 - pauseTransitionTimer / pauseTransitionTime;
+					float t = 1 - screenTransitionTimer / screenTransitionTime;
 					//transition panel height using ease in quad
-					panel.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, (t * t) * pausePanelDefaultHeight);
+					pausePanel.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, (t * t) * pausePanelDefaultHeight);
 					//transition overlay alpha linearly
 					Color c = screenOverlay.color;
 					c.a = overlayDefaultAlpha * t;
 					screenOverlay.color = c;
 
-					pauseTransitionTimer += Time.unscaledDeltaTime;
+					screenTransitionTimer += Time.unscaledDeltaTime;
 				}
 				break;
+			case ScreenTransitionState.TWININ:
+				{
+					//end transition
+					if (screenTransitionTimer >= screenTransitionTime)
+					{
+						screenState = ScreenTransitionState.WIN;
+						winPanel.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, winPanelDefaultHeight);
+						Color finalColor = screenOverlay.color;
+						finalColor.a = overlayDefaultAlpha;
+						screenOverlay.color = finalColor;
+						break;
+					}
+
+					float t = screenTransitionTimer / screenTransitionTime;
+					//transition panel height using ease out quad
+					winPanel.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, (1 - (1 - t) * (1 - t)) * winPanelDefaultHeight);
+					//transition overlay alpha linearly
+					Color c = screenOverlay.color;
+					c.a = overlayDefaultAlpha * t;
+					screenOverlay.color = c;
+
+					screenTransitionTimer += Time.unscaledDeltaTime;
+				}
+				break;
+
 		}
 		//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 		//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 		//~~~~~~~~~~~~POINTS TRANSITION~~~~~~~~~~~~~
 		//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-		if (pointTracker.GetPoints() != pointValue)
-		{
-			pointValue = pointTracker.GetPoints();
-			UpdatePointUI();
-		}
 		if (pointsTransitioning)
 		{
 			//it is easier if transitions from 0 to 1
@@ -246,6 +282,37 @@ public class GameUI : MonoBehaviour
 		//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 	}
 
+	void EnableScreen(ScreenTransitionState screenType)
+	{
+		switch (screenType)
+		{
+			case ScreenTransitionState.WIN:
+				pausePanel.gameObject.SetActive(false);
+				optionsPanel.gameObject.SetActive(false);
+				winPanel.gameObject.SetActive(true);
+				screenOverlay.gameObject.SetActive(true);
+				break;
+			case ScreenTransitionState.PAUSE:
+				pausePanel.gameObject.SetActive(true);
+				optionsPanel.gameObject.SetActive(false);
+				winPanel.gameObject.SetActive(false);
+				screenOverlay.gameObject.SetActive(true);
+				break;
+			case ScreenTransitionState.OPTIONS:
+				pausePanel.gameObject.SetActive(false);
+				optionsPanel.gameObject.SetActive(true);
+				winPanel.gameObject.SetActive(false);
+				screenOverlay.gameObject.SetActive(true);
+				break;
+			case ScreenTransitionState.NOTHING:
+				pausePanel.gameObject.SetActive(false);
+				optionsPanel.gameObject.SetActive(false);
+				winPanel.gameObject.SetActive(false);
+				screenOverlay.gameObject.SetActive(false);
+				break;		
+		}
+	}
+
 	public void OpenOptions()
 	{
 
@@ -258,19 +325,33 @@ public class GameUI : MonoBehaviour
 
 	public void ExitGame()
 	{
-
+		Application.Quit();
 	}
 
-	//TEMPORARY (SET POINTS VALUE)
-	public void OnDash()
+	public void OpenWinUI()
 	{
-		Debug.Log("POINTS!!!");
-		pointTracker.AddPoints(24);
+		EnableScreen(ScreenTransitionState.WIN);
+		screenState = ScreenTransitionState.TWININ;
+
+		//pause time
+		lastTimeScale = Time.timeScale;
+		Time.timeScale = 0;
+		screenTransitionTimer = 0;
+
+		//set initial values for transition
+		pausePanel.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, 0);
+		var c = screenOverlay.color;
+		c.a = 0;
+		screenOverlay.color = c;
 	}
 
-	//TEMPORARY (SET PAUSE VALUE)
-	public void OnGrab()
+	public void EnableNotifyText(bool enabled)
 	{
-		Pause(true);
+		notifyText.SetActive(enabled);
 	}
+
+	public bool CheckIsPaused()
+	{
+		return screenState == ScreenTransitionState.PAUSE;
+	}	
 }
