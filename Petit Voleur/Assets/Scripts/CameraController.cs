@@ -1,4 +1,8 @@
-﻿using System.Collections;
+﻿/*==================================================
+	Programmer: Connor Fettes
+==================================================*/
+
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -57,7 +61,7 @@ public partial class CameraController : MonoBehaviour
 	Vector3 currentPivotPosition;
 
 	void Start()
-    {
+	{
 		//show error in console if target is null
 		Debug.Assert(target != null);
 
@@ -78,7 +82,7 @@ public partial class CameraController : MonoBehaviour
 	}
 
 	void LateUpdate()
-    {
+	{
 		//smoothed camera movement
 		if (smoothCameraRotation)
 		{

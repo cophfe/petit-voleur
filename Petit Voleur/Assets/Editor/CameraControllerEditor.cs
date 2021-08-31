@@ -1,4 +1,8 @@
-﻿using UnityEngine;
+﻿/*==================================================
+	Programmer: Connor Fettes
+==================================================*/
+
+using UnityEngine;
 using UnityEditor;
 
 //Very simple editor script
