@@ -10,10 +10,11 @@ GameObject:
   m_Component:
   - component: {fileID: 245367421}
   - component: {fileID: 245367423}
+  - component: {fileID: 1554460918}
   m_Layer: 8
-  m_Name: GameObject
+  m_Name: Grab Point
   m_TagString: Untagged
-  m_Icon: {fileID: 0}
+  m_Icon: {fileID: 4422084297763085224, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
@@ -25,7 +26,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 245367420}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0.992, z: 0.543}
+  m_LocalPosition: {x: 0, y: 0.992, z: 0.745}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 7983130786746716467}
@@ -47,6 +48,51 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
+--- !u!144 &1554460918
+CharacterJoint:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 245367420}
+  m_ConnectedBody: {fileID: 0}
+  m_Anchor: {x: 0, y: 0, z: 0}
+  m_Axis: {x: 1, y: 0, z: 0}
+  m_AutoConfigureConnectedAnchor: 0
+  m_ConnectedAnchor: {x: 0, y: 0, z: 0}
+  serializedVersion: 2
+  m_SwingAxis: {x: 0, y: 1, z: 0}
+  m_TwistLimitSpring:
+    spring: 0
+    damper: 0
+  m_LowTwistLimit:
+    limit: -20
+    bounciness: 0
+    contactDistance: 0
+  m_HighTwistLimit:
+    limit: 70
+    bounciness: 0
+    contactDistance: 0
+  m_SwingLimitSpring:
+    spring: 0
+    damper: 0
+  m_Swing1Limit:
+    limit: 51.126762
+    bounciness: 0
+    contactDistance: 0
+  m_Swing2Limit:
+    limit: 40
+    bounciness: 0
+    contactDistance: 0
+  m_EnableProjection: 0
+  m_ProjectionDistance: 0.1
+  m_ProjectionAngle: 180
+  m_BreakForce: Infinity
+  m_BreakTorque: Infinity
+  m_EnableCollision: 0
+  m_EnablePreprocessing: 1
+  m_MassScale: 1
+  m_ConnectedMassScale: 1
 --- !u!1 &7983130785137056048
 GameObject:
   m_ObjectHideFlags: 0
@@ -302,7 +348,7 @@ ConfigurableJoint:
   m_Anchor: {x: 0, y: 0, z: 0}
   m_Axis: {x: 1, y: 0, z: 0}
   m_AutoConfigureConnectedAnchor: 1
-  m_ConnectedAnchor: {x: 0, y: 0, z: -1.1084762}
+  m_ConnectedAnchor: {x: 0, y: -0.00000023823435, z: -1.1084762}
   serializedVersion: 2
   m_SecondaryAxis: {x: 0, y: 1, z: 0}
   m_XMotion: 1
@@ -701,7 +747,7 @@ ConfigurableJoint:
   m_Anchor: {x: 0, y: 0, z: 0}
   m_Axis: {x: 1, y: 0, z: 0}
   m_AutoConfigureConnectedAnchor: 1
-  m_ConnectedAnchor: {x: 0, y: 0, z: -1.1311252}
+  m_ConnectedAnchor: {x: 0, y: -0.00000023823435, z: -1.1311252}
   serializedVersion: 2
   m_SecondaryAxis: {x: 0, y: 1, z: 0}
   m_XMotion: 1
@@ -910,7 +956,7 @@ ConfigurableJoint:
   m_Anchor: {x: 0, y: 0, z: 0}
   m_Axis: {x: 1, y: 0, z: 0}
   m_AutoConfigureConnectedAnchor: 1
-  m_ConnectedAnchor: {x: 0, y: -0.097, z: -1.085}
+  m_ConnectedAnchor: {x: 0, y: -0.09700018, z: -1.085}
   serializedVersion: 2
   m_SecondaryAxis: {x: 0, y: 1, z: 0}
   m_XMotion: 1
@@ -1119,7 +1165,7 @@ ConfigurableJoint:
   m_Anchor: {x: 0, y: 0, z: 0}
   m_Axis: {x: 1, y: 0, z: 0}
   m_AutoConfigureConnectedAnchor: 1
-  m_ConnectedAnchor: {x: 0, y: 0, z: -1.1750913}
+  m_ConnectedAnchor: {x: 0, y: -0.00000023823435, z: -1.1750913}
   serializedVersion: 2
   m_SecondaryAxis: {x: 0, y: 1, z: 0}
   m_XMotion: 1
@@ -1217,6 +1263,7 @@ GameObject:
   - component: {fileID: 7983130786746716428}
   - component: {fileID: 7983130786746716466}
   - component: {fileID: 7983130786746716429}
+  - component: {fileID: 765785696}
   m_Layer: 8
   m_Name: Head
   m_TagString: Untagged
@@ -1339,7 +1386,7 @@ MonoBehaviour:
   input: {x: 0, y: 0}
   groundCheckLayerMask:
     serializedVersion: 2
-    m_Bits: 567
+    m_Bits: 5687
   floorObject: {fileID: 0}
   groundCheckRadiusFactor: 1
   groundCheckDistance: 0.3
@@ -1366,7 +1413,27 @@ MonoBehaviour:
   wallCheckDistance: 1.5
   wallCheckFactor: 0.9
   wallCheckAngles: 4
-  impactMultiplier: 0.5
+  defaultImpactMultiplier: 0.5
+  dashVelocity: 60
+  dashCooldown: 1.4
+--- !u!114 &765785696
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7983130786746716468}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b631d1cef260acc4faae5b9c81a53cdc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  grabRange: 1
+  grabTransform: {fileID: 245367421}
+  grabLayers:
+    serializedVersion: 2
+    m_Bits: 1024
+  heldItem: {fileID: 0}
 --- !u!1 &7983130786950686225
 GameObject:
   m_ObjectHideFlags: 0
@@ -1528,7 +1595,7 @@ PrefabInstance:
     - target: {fileID: -1904706013627562567, guid: 4f43b58f67f51594ea42b27b84a8ae2a, type: 3}
       propertyPath: m_Materials.Array.data[0]
       value: 
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 2100000, guid: 08448aecdb2dffc46a2ef2b9280bd996, type: 2}
     - target: {fileID: 919132149155446097, guid: 4f43b58f67f51594ea42b27b84a8ae2a, type: 3}
       propertyPath: m_Name
       value: Ferret

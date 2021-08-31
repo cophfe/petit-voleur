@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+[RequireComponent(typeof(Item))]
 public class BreakableItem : MonoBehaviour
 {
 	public PointTracker pointTracker;

@@ -14,6 +14,7 @@ GameObject:
   - component: {fileID: 3225189145465032136}
   - component: {fileID: 3225189145465032139}
   - component: {fileID: 3225189145465032137}
+  - component: {fileID: 1452059188}
   m_Layer: 0
   m_Name: Camera
   m_TagString: MainCamera
@@ -63,7 +64,7 @@ Camera:
   field of view: 60
   orthographic: 0
   orthographic size: 5
-  m_Depth: -1
+  m_Depth: 0
   m_CullingMask:
     serializedVersion: 2
     m_Bits: 4294967295
@@ -103,12 +104,12 @@ MonoBehaviour:
   m_RequiresOpaqueTextureOption: 2
   m_CameraType: 0
   m_Cameras: []
-  m_RendererIndex: -1
+  m_RendererIndex: 0
   m_VolumeLayerMask:
     serializedVersion: 2
     m_Bits: 1
   m_VolumeTrigger: {fileID: 0}
-  m_RenderPostProcessing: 0
+  m_RenderPostProcessing: 1
   m_Antialiasing: 0
   m_AntialiasingQuality: 2
   m_StopNaN: 0
@@ -137,7 +138,7 @@ MonoBehaviour:
   sensitivity: 0.09
   inverted: 0
   maximumUpRotation: 40
-  minimumUpRotation: -4
+  minimumUpRotation: 0
   followSpeed: 15
   zoomInSpeed: 60
   zoomOutSpeed: 4
@@ -173,3 +174,20 @@ MonoBehaviour:
   m_DefaultActionMap: Camera
   m_SplitScreenIndex: -1
   m_Camera: {fileID: 3225189145465032143}
+--- !u!114 &1452059188
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3225189145465032141}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 172515602e62fb746b5d573b38a5fe58, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  isGlobal: 1
+  priority: 0
+  blendDistance: 0
+  weight: 1
+  sharedProfile: {fileID: 11400000, guid: 38ce8de106f30684d8241c8bd46b4bea, type: 2}
