@@ -5,6 +5,7 @@ using UnityEngine;
 [RequireComponent(typeof(Rigidbody))]
 public class Item : MonoBehaviour
 {
+	public bool pickupable = true;
 	[HideInInspector]
 	public Rigidbody rbody;
 	public GameObject col;
