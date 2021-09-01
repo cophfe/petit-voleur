@@ -130,7 +130,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7fb08bf12b9c8824195ee73db7afbaa3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  destroyTime: 20
+  destroyTime: 90
   pieces:
   - {fileID: 5803449361370784263}
   - {fileID: 5803449361854152344}
