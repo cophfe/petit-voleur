@@ -2151,6 +2151,54 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 177823774359851232, guid: b1730f21cc1a07a4f84e255366027754, type: 3}
+      propertyPath: m_AnchorMin.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 177823774359851232, guid: b1730f21cc1a07a4f84e255366027754, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 177823774359851232, guid: b1730f21cc1a07a4f84e255366027754, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 177823774359851232, guid: b1730f21cc1a07a4f84e255366027754, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 177823774359851232, guid: b1730f21cc1a07a4f84e255366027754, type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 177823774359851232, guid: b1730f21cc1a07a4f84e255366027754, type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 389748833589960654, guid: b1730f21cc1a07a4f84e255366027754, type: 3}
+      propertyPath: m_AnchorMin.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 389748833589960654, guid: b1730f21cc1a07a4f84e255366027754, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 389748833589960654, guid: b1730f21cc1a07a4f84e255366027754, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 389748833589960654, guid: b1730f21cc1a07a4f84e255366027754, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 389748833589960654, guid: b1730f21cc1a07a4f84e255366027754, type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 389748833589960654, guid: b1730f21cc1a07a4f84e255366027754, type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 4143135717619213364, guid: b1730f21cc1a07a4f84e255366027754, type: 3}
       propertyPath: m_Name
       value: Canvas
@@ -2242,6 +2290,30 @@ PrefabInstance:
     - target: {fileID: 4143135717619213370, guid: b1730f21cc1a07a4f84e255366027754, type: 3}
       propertyPath: m_DefaultActionMap
       value: fe559f99-4a11-46dc-b219-5467f3fd474d
+      objectReference: {fileID: 0}
+    - target: {fileID: 4876276096028766282, guid: b1730f21cc1a07a4f84e255366027754, type: 3}
+      propertyPath: m_AnchorMin.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4876276096028766282, guid: b1730f21cc1a07a4f84e255366027754, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4876276096028766282, guid: b1730f21cc1a07a4f84e255366027754, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4876276096028766282, guid: b1730f21cc1a07a4f84e255366027754, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4876276096028766282, guid: b1730f21cc1a07a4f84e255366027754, type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4876276096028766282, guid: b1730f21cc1a07a4f84e255366027754, type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: b1730f21cc1a07a4f84e255366027754, type: 3}
@@ -11364,6 +11436,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1394950400}
   - component: {fileID: 1394950399}
+  - component: {fileID: 1394950401}
   m_Layer: 11
   m_Name: Stash Trigger
   m_TagString: Stash
@@ -11398,6 +11471,21 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 9
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1394950401
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1394950398}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1a0f67ea77c8cf14db4756e28925137c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ferretLayer:
+    serializedVersion: 2
+    m_Bits: 256
 --- !u!1 &1424489093
 GameObject:
   m_ObjectHideFlags: 0
