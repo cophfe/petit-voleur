@@ -15,7 +15,9 @@ public class BreakableItem : MonoBehaviour
 	{
 		if (!broken)
 		{
-			if (collision.relativeVelocity.sqrMagnitude > impactThreshold * impactThreshold)
+			Vector3 contactNormal = collision.GetContact(0).normal;
+			float impactVector = Vector3.Dot(collision.relativeVelocity, contactNormal);
+			if (impactVector > impactThreshold)
 			{
 				Break();
 				broken = true;
