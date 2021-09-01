@@ -13196,9 +13196,17 @@ PrefabInstance:
       propertyPath: defaultImpactMultiplier
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 7983130786746716429, guid: 513c6c158ea1c38449d25e20b97227ed, type: 3}
+      propertyPath: maxVelocityFollowAngle
+      value: 80
+      objectReference: {fileID: 0}
     - target: {fileID: 7983130786746716468, guid: 513c6c158ea1c38449d25e20b97227ed, type: 3}
       propertyPath: m_TagString
       value: Player
+      objectReference: {fileID: 0}
+    - target: {fileID: 7983130786746716471, guid: 513c6c158ea1c38449d25e20b97227ed, type: 3}
+      propertyPath: m_Interpolate
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 513c6c158ea1c38449d25e20b97227ed, type: 3}

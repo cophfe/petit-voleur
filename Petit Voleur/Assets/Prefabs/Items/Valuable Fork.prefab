@@ -42,8 +42,8 @@ BoxCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 0.2754159, y: 0.17566109, z: 2.6537628}
-  m_Center: {x: 0.036378145, y: -0.008778572, z: -0.23740101}
+  m_Size: {x: 0.3584063, y: 0.1828804, z: 2.6537628}
+  m_Center: {x: -0.0022717714, y: 0.009149551, z: -0.23740101}
 --- !u!1 &1311148203342367784
 GameObject:
   m_ObjectHideFlags: 0
@@ -55,7 +55,7 @@ GameObject:
   - component: {fileID: 1311148203342367799}
   - component: {fileID: 1311148203342367798}
   m_Layer: 10
-  m_Name: GameObject
+  m_Name: Head
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -86,8 +86,8 @@ BoxCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 0.6009811, y: 0.16309798, z: 1}
-  m_Center: {x: 0.00035959482, y: 0.13871463, z: -0.0000000038671626}
+  m_Size: {x: 0.6009811, y: 0.18182187, z: 1}
+  m_Center: {x: 0.00035959482, y: 0.12935293, z: -0.0000000028134508}
 --- !u!1 &1311148203848637421
 GameObject:
   m_ObjectHideFlags: 0
@@ -183,6 +183,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 49ff1fa5e71373b48bce9a3419903993, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  pickupable: 1
   rbody: {fileID: 0}
   col: {fileID: 1311148203848637421}
 --- !u!114 &1311148204885620893
@@ -198,7 +199,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   pointValue: 30
-  stashTag: Stash
 --- !u!1001 &1311148203377388686
 PrefabInstance:
   m_ObjectHideFlags: 0
