@@ -551,10 +551,10 @@ GameObject:
   m_Component:
   - component: {fileID: 144172852}
   - component: {fileID: 144172853}
-  m_Layer: 12
+  m_Layer: 0
   m_Name: Window Block
   m_TagString: Untagged
-  m_Icon: {fileID: 0}
+  m_Icon: {fileID: 3936346786652291628, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 4294967295
   m_IsActive: 1
@@ -8492,7 +8492,7 @@ GameObject:
   - component: {fileID: 629460021}
   - component: {fileID: 629460020}
   - component: {fileID: 629460019}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: Roof
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -9612,6 +9612,10 @@ PrefabInstance:
       propertyPath: maxFollowDistance
       value: 18
       objectReference: {fileID: 0}
+    - target: {fileID: 3225189145465032139, guid: eb0a18701aeffc54d9d1d0e0b87389cc, type: 3}
+      propertyPath: obstructionLayers.m_Bits
+      value: 4608
+      objectReference: {fileID: 0}
     - target: {fileID: 3225189145465032141, guid: eb0a18701aeffc54d9d1d0e0b87389cc, type: 3}
       propertyPath: m_Name
       value: Camera
@@ -10550,7 +10554,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh-75204
+  m_Name: pb_Mesh17866
   serializedVersion: 10
   m_SubMeshes:
   - serializedVersion: 2
@@ -15327,10 +15331,10 @@ GameObject:
   m_Component:
   - component: {fileID: 1968880127}
   - component: {fileID: 1968880128}
-  m_Layer: 12
+  m_Layer: 0
   m_Name: Door Block
   m_TagString: Untagged
-  m_Icon: {fileID: 0}
+  m_Icon: {fileID: 3936346786652291628, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 4294967295
   m_IsActive: 1
