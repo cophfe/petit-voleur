@@ -26,7 +26,7 @@ public class ValuableItem : MonoBehaviour
 		if (!stashed && other.gameObject.tag == "Stash")
 		{
 			pointTracker.AddPoints(pointValue);
-			//GetComponent<Item>().pickupable = false;
+			GetComponent<Item>().pickupable = false;
 			stashed = true;
 		}
 	}
