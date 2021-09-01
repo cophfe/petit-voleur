@@ -11192,6 +11192,26 @@ PrefabInstance:
       propertyPath: m_Name
       value: Player Container
       objectReference: {fileID: 0}
+    - target: {fileID: 7983130785382527587, guid: 513c6c158ea1c38449d25e20b97227ed, type: 3}
+      propertyPath: m_TagString
+      value: Player
+      objectReference: {fileID: 0}
+    - target: {fileID: 7983130786010738101, guid: 513c6c158ea1c38449d25e20b97227ed, type: 3}
+      propertyPath: m_TagString
+      value: Player
+      objectReference: {fileID: 0}
+    - target: {fileID: 7983130786149057702, guid: 513c6c158ea1c38449d25e20b97227ed, type: 3}
+      propertyPath: m_TagString
+      value: Player
+      objectReference: {fileID: 0}
+    - target: {fileID: 7983130786252293234, guid: 513c6c158ea1c38449d25e20b97227ed, type: 3}
+      propertyPath: m_TagString
+      value: Player
+      objectReference: {fileID: 0}
+    - target: {fileID: 7983130786746716468, guid: 513c6c158ea1c38449d25e20b97227ed, type: 3}
+      propertyPath: m_TagString
+      value: Player
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 513c6c158ea1c38449d25e20b97227ed, type: 3}
 --- !u!1001 &1324671863
@@ -15516,7 +15536,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e6e50af41fbd1124baf049a8f2fd7e4c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  multiplier: 1.4
+  multiplier: 3
 --- !u!1001 &2099436153
 PrefabInstance:
   m_ObjectHideFlags: 0
