@@ -16,9 +16,7 @@ public class ValuableItem : MonoBehaviour
 
 	private void Start()
 	{
-		GameObject eS = GameObject.Find("EventSystem");
-		if (eS != null)
-			pointTracker = eS.GetComponent<PointTracker>();
+		pointTracker = GameObject.FindObjectOfType<PointTracker>();
 	}
 
 	private void OnTriggerEnter(Collider other)

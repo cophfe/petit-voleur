@@ -82,7 +82,14 @@ public class GameUI : MonoBehaviour
 		pointTransitionTimer = 0;
 		pointsTransitioning = true;
 		//starts halfway done
-		startPointValue = pointTracker.GetPreviousScore() + (pointTracker.GetPoints() - pointTracker.GetPreviousScore()) /2;
+		try
+		{
+			startPointValue = pointTracker.GetPreviousScore() + (pointTracker.GetPoints() - pointTracker.GetPreviousScore()) /2;
+		}
+		catch
+		{
+			Debug.LogError("ayo bitch");
+		}
 	}
 
 	public void Resume()
@@ -148,9 +155,7 @@ public class GameUI : MonoBehaviour
 		//initialise point values
 		defaultFontSize = pointValueText.fontSize;
 
-		GameObject eS = GameObject.Find("EventSystem");
-		if (eS != null)
-			pointTracker = eS.GetComponent<PointTracker>();
+		pointTracker = GameObject.FindObjectOfType<PointTracker>();
 	}
 
 	int pointValue = 0;

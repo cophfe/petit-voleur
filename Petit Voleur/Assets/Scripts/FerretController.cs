@@ -33,7 +33,6 @@ public class FerretController : MonoBehaviour
 	public float acceleration = 50;
 	public float targetSpeed = 30;
 	public float floorFriction = 80;
-	public float frictionMultiplier = 2;
 	public float airControl = 0.4f;
 	public float lookSpeed = 600f;
 	//Measured in dot product
@@ -91,6 +90,7 @@ public class FerretController : MonoBehaviour
 
 		//GRAVITY
 		velocity -= upDirection * gravity * Time.deltaTime;
+
 		
 		//Reset these
 		targetVelocity = Vector3.zero;
@@ -123,7 +123,7 @@ public class FerretController : MonoBehaviour
 		desiredForwardVector = isClimbing? Vector3.up : Camera.main.transform.forward;
 		forward = Vector3.ProjectOnPlane(desiredForwardVector, floorNormal).normalized;
 
-		if (input.x != 0 || input.y != 0)
+		if (input.sqrMagnitude > 0)
 		{
 			// ~~~~~~~ Generate target velocity ~~~~~~ //
 			//Forward component
@@ -230,9 +230,19 @@ public class FerretController : MonoBehaviour
 							\--------------->
 		-----------------------------------------------------------------*/
 		Vector3 impactVector = hit.normal * Mathf.Max(Vector3.Dot(-hit.normal, velocity), 0);
-		if (hit.rigidbody && hit.collider != floorObject)
+		
+		if (hit.rigidbody)
 		{
-			hit.rigidbody.AddForceAtPosition(-impactVector * defaultImpactMultiplier, hit.point, ForceMode.Force);
+			if (hit.collider == floorObject)
+			{
+				hit.rigidbody.AddForceAtPosition(-impactVector * defaultImpactMultiplier, hit.point, ForceMode.Impulse);
+				velocity += impactVector;
+			}
+			else
+			{
+				hit.rigidbody.AddForceAtPosition(-impactVector * defaultImpactMultiplier, hit.point, ForceMode.Force);
+				velocity += impactVector * Time.fixedDeltaTime;
+			}
 		}
 		else
 		{
@@ -245,7 +255,7 @@ public class FerretController : MonoBehaviour
 		if (dashCDTimer <= 0)
 		{
 			Vector3 dashDirection = forward;
-			if (targetVelocity.sqrMagnitude > 0)
+			if (input.sqrMagnitude > 0)
 				dashDirection = targetVelocity.normalized;
 
 			velocity = dashDirection * dashVelocity;
