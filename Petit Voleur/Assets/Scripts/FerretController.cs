@@ -229,24 +229,24 @@ public class FerretController : MonoBehaviour
 						   \
 							\--------------->
 		-----------------------------------------------------------------*/
-		Vector3 impactVector = hit.normal * Mathf.Max(Vector3.Dot(-hit.normal, velocity), 0);
+		Vector3 impactVector = -hit.normal * Mathf.Max(-Vector3.Dot(hit.normal, velocity), 0);
 		
 		if (hit.rigidbody)
 		{
 			if (hit.collider == floorObject)
 			{
-				hit.rigidbody.AddForceAtPosition(-impactVector * defaultImpactMultiplier, hit.point, ForceMode.Impulse);
-				velocity += impactVector;
+				hit.rigidbody.AddForceAtPosition(impactVector * defaultImpactMultiplier, hit.point, ForceMode.Impulse);
+				velocity -= impactVector;
 			}
 			else
 			{
-				hit.rigidbody.AddForceAtPosition(-impactVector * defaultImpactMultiplier, hit.point, ForceMode.Force);
-				velocity += impactVector * Time.fixedDeltaTime;
+				hit.rigidbody.AddForceAtPosition(impactVector * defaultImpactMultiplier, hit.point, ForceMode.Force);
+				velocity -= impactVector * Time.fixedDeltaTime;
 			}
 		}
 		else
 		{
-			velocity +=  impactVector;
+			velocity -=  impactVector;
 		}
 	}
 
