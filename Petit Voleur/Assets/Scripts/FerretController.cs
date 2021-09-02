@@ -55,7 +55,11 @@ public class FerretController : MonoBehaviour
 
 	[Header("Dashing and Impact")]
 	public float defaultImpactMultiplier = 0.5f;
+	public bool isDashing = false;
+	public float dashImpactForce = 100.0f;
+	public float dashRecoil = 3.0f;
 	public float dashVelocity = 40.0f;
+	public float dashDuration = 1.0f;
 	public float dashCooldown = 1.4f;
 	private float dashCDTimer = 0f;
 
@@ -78,7 +82,6 @@ public class FerretController : MonoBehaviour
 		StopClimbing();
     }
 
-    // FixedUpdate is called once per physics step
     void Update()
     {
 		//No need to run these if the player is ragdolled
@@ -90,7 +93,7 @@ public class FerretController : MonoBehaviour
 		DoRotation();
 
 		//Decrement dash timer when on the ground
-		if (grounded && dashCDTimer > 0)
+		if (grounded && !isDashing && dashCDTimer > 0)
 			dashCDTimer -= Time.deltaTime;
     }
 
@@ -138,10 +141,6 @@ public class FerretController : MonoBehaviour
 	//--------------------------------------------------------/
 	void Move()
 	{
-		//GRAVITY
-		//Happens before everything else so that slope calculations can include gravity and resolve it BEFORE rotation happens
-		velocity -= upDirection * gravity * Time.deltaTime;
-
 		//Reset these
 		projectedInput = Vector3.zero;
 		targetVelocity = Vector3.zero;
@@ -165,12 +164,16 @@ public class FerretController : MonoBehaviour
 			floorObject = null;
 			grounded = false;
 		}
-				
+		
 		//Project camera's forward vector on virtual plane that is the "floor", use global up vector if wall climbing
 		//This is great for slopes, as the player will go up and down the slope, rather than trying to go into it
 		Vector3 desiredForwardVector;
 		desiredForwardVector = isClimbing? Vector3.up : Camera.main.transform.forward;
 		forward = Vector3.ProjectOnPlane(desiredForwardVector, floorNormal).normalized;
+
+		//GRAVITY
+		//Happens before everything else so that slope calculations can include gravity and resolve it BEFORE rotation happens
+		velocity -= upDirection * gravity * Time.deltaTime;
 
 		//  Component of velocity that is parallel with the ground  //
 		//Necessary to ensure friction doesn't affect "vertical" component of velocity
@@ -291,7 +294,7 @@ public class FerretController : MonoBehaviour
 	//		--- Start Dash ---
 	//--------------------------------------------------------/
 	//Starts a dash if the dash cooldown is done
-	void Dash()
+	void StartDash()
 	{
 		if (dashCDTimer <= 0)
 		{
@@ -303,7 +306,13 @@ public class FerretController : MonoBehaviour
 
 			velocity = dashDirection * dashVelocity;
 			dashCDTimer = dashCooldown;
+			isDashing = true;
 		}
+	}
+
+	void StopDash()
+	{
+		isDashing = false;
 	}
 
 	// ========================================================|
@@ -449,7 +458,7 @@ public class FerretController : MonoBehaviour
 
 	public void OnDash()
 	{
-		Dash();
+		StartDash();
 	}
 
 	public void OnRagdoll()

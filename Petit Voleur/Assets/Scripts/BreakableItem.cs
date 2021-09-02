@@ -15,8 +15,11 @@ public class BreakableItem : MonoBehaviour
 	{
 		if (!broken)
 		{
+			//Get the first contact point normal
 			Vector3 contactNormal = collision.GetContact(0).normal;
+			//Calculate the amount of relative velocity going into the contact wall. This avoids slides from smashing the object
 			float impactVector = Vector3.Dot(collision.relativeVelocity, contactNormal);
+			//Break if the impactVector is too high
 			if (impactVector > impactThreshold)
 			{
 				Break();
@@ -25,6 +28,7 @@ public class BreakableItem : MonoBehaviour
 		}
 	}
 
+	// ~~~~~ Break object and add points ~~~~~ //
 	void Break()
 	{
 		pointTracker.AddPoints(breakValue);
