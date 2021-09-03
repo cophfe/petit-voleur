@@ -1,5 +1,5 @@
 /*===================================================================
-		  Created by Radongo Du Congo
+		  Created by Rahul J
 		||----------------------------||
 				  2021
 ===================================================================*/
@@ -89,6 +89,7 @@ public class FerretController : MonoBehaviour
 		StopClimbing();
     }
 
+	//Called every frame
     void Update()
     {
 		//No need to run these if the player is ragdolled
@@ -116,6 +117,7 @@ public class FerretController : MonoBehaviour
 	// ========================================================|
 	//		--- Collision Response ---
 	//--------------------------------------------------------/
+	//Solves velocity modification when hitting objects and pushes other physics objects around
 	void OnControllerColliderHit(ControllerColliderHit hit)
 	{
 		//-----------------------------------------------------------------
@@ -266,7 +268,7 @@ public class FerretController : MonoBehaviour
 		//Add the acceleration calculated this frame to velocity
 		velocity += deltaVelocity;
 
-		//Override velocity when dashing. Multiplies by the curve
+		//Override velocity when dashing. Multiplies by the curve based on time
 		if (isDashing)
 		{
 			velocity = dashVelocity * Mathf.Clamp01(dashSpeedCurve.Evaluate(1 - (dashTimer / dashDuration)));
@@ -356,6 +358,10 @@ public class FerretController : MonoBehaviour
 		}
 	}
 
+	// ========================================================|
+	//		--- Cancel Dash ---
+	//--------------------------------------------------------/
+	//Resets dash state and starts cooldown
 	void CancelDash()
 	{
 		isDashing = false;
@@ -363,6 +369,10 @@ public class FerretController : MonoBehaviour
 		dashCDTimer = dashCooldown;
 	}
 
+	// ========================================================|
+	//		--- Dash has hit a wall ---
+	//--------------------------------------------------------/
+	//Cancels dash and adds an impulse to nearby rigidbodies
 	void DashImpact(Vector3 point, Vector3 impulse)
 	{
 		//Add impulse here
@@ -463,6 +473,7 @@ public class FerretController : MonoBehaviour
 		floorNormal = newUp;
 		friction = climbFriction;
 	}
+	
 	// ========================================================|
 	//		--- Resets Climbing ---
 	//--------------------------------------------------------/
@@ -503,6 +514,7 @@ public class FerretController : MonoBehaviour
 			rigidbody.interpolation = RigidbodyInterpolation.Interpolate;
 		}
 	}
+
 
 	// ====================================================== //
 	// =================== Input Checking =================== //
