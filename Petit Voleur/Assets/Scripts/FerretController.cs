@@ -15,8 +15,15 @@ using UnityEngine.InputSystem;
 public class FerretController : MonoBehaviour
 {
 	[Header("Status")]
+	public bool inputEnabled = true;
 	public Vector3 velocity;
+	public float speed;
+	public float gravity = 10;
+	private float friction = 80;
 	public bool grounded = false;
+	public bool isJumping = false;
+	public bool isDashing = false;
+	public bool isClimbing = false;
 	public bool isRagdolled = false;
 	public Vector3 upDirection = Vector3.up;
 	public Vector3 floorNormal = Vector3.up;
@@ -37,17 +44,14 @@ public class FerretController : MonoBehaviour
 	public float lookSpeed = 600f;
 	//Measured in dot product
 	public float maxVelocityFollowAngle = 0.9f;
-	public float gravity = 10;
 	public float maxVelocity = 300.0f;
 
 	[Header("Jumping")]
-	public bool isJumping = false;
 	public JumpArc fallingArc;
 	public JumpArc jumpArc;
 
 	[Header("Wall Climbing")]
 	public LayerMask climbableLayers;
-	public bool isClimbing = false;
 	public float climbFriction = 140;
 	public float wallCheckDistance = 0.12f;
 	public float wallCheckFactor = 0.9f;
@@ -55,22 +59,25 @@ public class FerretController : MonoBehaviour
 
 	[Header("Dashing and Impact")]
 	public float defaultImpactMultiplier = 0.5f;
-	public bool isDashing = false;
 	public float dashImpactForce = 100.0f;
+	public Vector3 dashImpactBox = Vector3.one;
+	public float dashImpactMaxAngle = 20.0f;
 	public float dashRecoil = 3.0f;
-	public float dashVelocity = 40.0f;
+	public float dashSpeed = 40.0f;
+	public AnimationCurve dashSpeedCurve;
 	public float dashDuration = 1.0f;
+	private float dashTimer = 0.0f;
 	public float dashCooldown = 1.4f;
 	private float dashCDTimer = 0f;
 
 	private CharacterController characterController;
 	new private Rigidbody rigidbody;
 	private FerretPickup ferretPickup;
-	private float friction = 80;
 	private Vector3 forward;
 	private Vector3 projectedInput;
 	private Vector3 targetVelocity;
 	private Vector3 deltaVelocity;
+	private Vector3 dashVelocity;
 	private float accelerationThisFrame;
 
     // Start is called before the first frame update
@@ -88,12 +95,21 @@ public class FerretController : MonoBehaviour
 		if (isRagdolled)
 			return;
 
+		//Decrement dash timer and cancel if its over
+		if (isDashing)
+		{
+			if (dashTimer > 0)
+				dashTimer -= Time.deltaTime;
+			else
+				CancelDash();
+		}
+
 		Move();
 
 		DoRotation();
 
 		//Decrement dash timer when on the ground
-		if (grounded && !isDashing && dashCDTimer > 0)
+		if (!isDashing && dashCDTimer > 0)
 			dashCDTimer -= Time.deltaTime;
     }
 
@@ -113,26 +129,37 @@ public class FerretController : MonoBehaviour
 		
 		//Calculate the component of velocity that is going INTO the wall
 		Vector3 impactVector = -hit.normal * Mathf.Max(-Vector3.Dot(hit.normal, velocity), 0);
-		
-		//Apply forces to other rigidbody if the other object has a rigidbody
-		if (hit.rigidbody)
+
+		if (isDashing)
 		{
-			//If the player is standing on a physics object, then impart all velocity into the object. Remove that same velocity from the player
-			if (hit.collider == floorObject)
+			//Call dash impact if the angle between the dash velocity and inverse of the normal is small enough
+			if (Vector3.Angle(-hit.normal, dashVelocity.normalized) < dashImpactMaxAngle)
 			{
-				hit.rigidbody.AddForceAtPosition(impactVector * defaultImpactMultiplier, hit.point, ForceMode.Impulse);
-				velocity -= impactVector;
-			}
-			//Otherwise add the force over time
-			else
-			{
-				hit.rigidbody.AddForceAtPosition(impactVector * defaultImpactMultiplier, hit.point, ForceMode.Force);
-				velocity -= impactVector * Time.fixedDeltaTime;
+				DashImpact(hit.point, dashVelocity.normalized * dashImpactForce);
 			}
 		}
 		else
 		{
-			velocity -=  impactVector;
+			//Apply forces to other rigidbody if the other object has a rigidbody
+			if (hit.rigidbody)
+			{
+				//If the player is standing on a physics object, then impart all velocity into the object. Remove that same velocity from the player
+				if (hit.collider == floorObject)
+				{
+					hit.rigidbody.AddForceAtPosition(impactVector * defaultImpactMultiplier, hit.point, ForceMode.Impulse);
+					velocity -= impactVector;
+				}
+				//Otherwise add the force over time
+				else
+				{
+					hit.rigidbody.AddForceAtPosition(impactVector * defaultImpactMultiplier, hit.point, ForceMode.Force);
+					velocity -= impactVector * Time.fixedDeltaTime;
+				}
+			}
+			else
+			{
+				velocity -=  impactVector;
+			}
 		}
 	}
 
@@ -186,6 +213,9 @@ public class FerretController : MonoBehaviour
 			//By using this desired change in velocity every frame, but limited by the max acceleration per frame we can ensure
 			//that constant acceleration is maintained, and the velocity never overshoots
 		
+		//Override input if control is blocked
+		if (!inputEnabled)
+			input = Vector2.zero;
 		//Input
 		if (input.sqrMagnitude > 0)
 		{
@@ -235,6 +265,13 @@ public class FerretController : MonoBehaviour
 
 		//Add the acceleration calculated this frame to velocity
 		velocity += deltaVelocity;
+
+		//Override velocity when dashing. Multiplies by the curve
+		if (isDashing)
+		{
+			velocity = dashVelocity * Mathf.Clamp01(dashSpeedCurve.Evaluate(1 - (dashTimer / dashDuration)));
+		}
+
 		
 		//Hard limit to totalVelocity
 		if (velocity.sqrMagnitude > maxVelocity * maxVelocity)
@@ -244,6 +281,10 @@ public class FerretController : MonoBehaviour
 		
 		//lets goooooooooooooooooooooo
 		characterController.Move(velocity * Time.deltaTime);
+		
+		speed = velocity.magnitude;
+		if (speed < 0.0001)
+			speed = 0;
 	}
 
 	// ========================================================|
@@ -284,8 +325,10 @@ public class FerretController : MonoBehaviour
 
 		if (lookDirAngle < maxVelocityFollowAngle)
 			lookDirection = newLookDirection;
-		else
-			lookDirection = forward;
+
+		//Override direction if dashing
+		if (isDashing)
+			lookDirection = dashVelocity.normalized;
 
 		transform.rotation = Quaternion.RotateTowards(transform.rotation, Quaternion.LookRotation(lookDirection, floorNormal), lookSpeed * Time.deltaTime);
 	}
@@ -296,30 +339,58 @@ public class FerretController : MonoBehaviour
 	//Starts a dash if the dash cooldown is done
 	void StartDash()
 	{
-		if (dashCDTimer <= 0)
+		if (!isDashing)
 		{
-			//Default to lookDirection
-			Vector3 dashDirection = lookDirection;
-			//Use projected input if possible
-			if (input.sqrMagnitude > 0)
-				dashDirection = projectedInput;
+			if (dashCDTimer <= 0)
+			{
+				//Default to lookDirection
+				Vector3 dashDirection = Vector3.ProjectOnPlane(lookDirection, floorNormal).normalized;
+				//Use projected input if possible
+				if (input.sqrMagnitude > 0)
+					dashDirection = projectedInput;
 
-			velocity = dashDirection * dashVelocity;
-			dashCDTimer = dashCooldown;
-			isDashing = true;
+				dashVelocity = dashDirection * dashSpeed;
+				dashTimer = dashDuration;
+				isDashing = true;
+			}
 		}
 	}
 
-	void StopDash()
+	void CancelDash()
 	{
 		isDashing = false;
+		dashTimer = 0;
+		dashCDTimer = dashCooldown;
+	}
+
+	void DashImpact(Vector3 point, Vector3 impulse)
+	{
+		//Add impulse here
+		Vector3 impulseDirection = impulse.normalized;
+		//Recoil player from impact
+		velocity = -impulseDirection * dashRecoil;
+
+		//Get all colliders in the impact area
+		Collider[] results = Physics.OverlapBox(point, dashImpactBox, Quaternion.LookRotation(impulseDirection, floorNormal));
+
+		//loop through all colliders and add forces to the ones with rigidbodies
+		for (int i = 0; i < results.Length; ++i)
+		{
+			if (results[i].attachedRigidbody)
+			{
+				results[i].attachedRigidbody.AddForce(impulse, ForceMode.Impulse);
+			}
+		}
+
+		//End dash
+		CancelDash();
 	}
 
 	// ========================================================|
 	//		--- Reset Dash ---
 	//--------------------------------------------------------/
 	//Simply clears the dash cooldown
-	void ResetDash()
+	void ResetDashCooldown()
 	{
 		dashCDTimer = 0;
 	}
