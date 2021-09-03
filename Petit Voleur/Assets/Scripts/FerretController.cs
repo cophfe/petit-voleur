@@ -58,17 +58,17 @@ public class FerretController : MonoBehaviour
 	public int wallCheckAngles = 4;
 
 	[Header("Dashing and Impact")]
-	public float defaultImpactMultiplier = 0.5f;
-	public float dashImpactForce = 100.0f;
-	public Vector3 dashImpactBox = Vector3.one;
-	public float dashImpactMaxAngle = 20.0f;
-	public float dashRecoil = 3.0f;
 	public float dashSpeed = 40.0f;
+	public float dashImpactMaxAngle = 20.0f;
+	public Vector3 dashImpactBox = Vector3.one;
+	public float dashImpactForce = 100.0f;
+	public float dashRecoil = 3.0f;
+	public float dashRecoilRagdollDuration = 2.0f;
+	public LayerMask dashRagdollLayers;
 	public AnimationCurve dashSpeedCurve;
 	public float dashDuration = 1.0f;
-	private float dashTimer = 0.0f;
 	public float dashCooldown = 1.4f;
-	private float dashCDTimer = 0f;
+	public float defaultImpactMultiplier = 0.5f;
 
 	private CharacterController characterController;
 	new private Rigidbody rigidbody;
@@ -79,6 +79,10 @@ public class FerretController : MonoBehaviour
 	private Vector3 deltaVelocity;
 	private Vector3 dashVelocity;
 	private float accelerationThisFrame;
+	//Dash timers
+	private float dashTimer = 0f;
+	private float dashCDTimer = 0f;
+	private float ragdollTimer = 0f;
 
     // Start is called before the first frame update
     void Start()
@@ -92,26 +96,32 @@ public class FerretController : MonoBehaviour
 	//Called every frame
     void Update()
     {
-		//No need to run these if the player is ragdolled
 		if (isRagdolled)
-			return;
-
-		//Decrement dash timer and cancel if its over
-		if (isDashing)
 		{
-			if (dashTimer > 0)
-				dashTimer -= Time.deltaTime;
+			if (ragdollTimer > 0)
+				ragdollTimer -= Time.deltaTime;
 			else
-				CancelDash();
+				CancelRagdoll();
 		}
+		else
+		{
+			//Decrement dash timer and cancel if its over
+			if (isDashing)
+			{
+				if (dashTimer > 0)
+					dashTimer -= Time.deltaTime;
+				else
+					CancelDash();
+			}
 
-		Move();
+			Move();
+			
+			DoRotation();
 
-		DoRotation();
-
-		//Decrement dash timer when on the ground
-		if (!isDashing && dashCDTimer > 0)
-			dashCDTimer -= Time.deltaTime;
+			//Decrement dash timer when on the ground
+			if (!isDashing && dashCDTimer > 0)
+				dashCDTimer -= Time.deltaTime;
+		}
     }
 
 	// ========================================================|
@@ -137,7 +147,8 @@ public class FerretController : MonoBehaviour
 			//Call dash impact if the angle between the dash velocity and inverse of the normal is small enough
 			if (Vector3.Angle(-hit.normal, dashVelocity.normalized) < dashImpactMaxAngle)
 			{
-				DashImpact(hit.point, dashVelocity.normalized * dashImpactForce);
+				bool ragdoll = ((1 << hit.gameObject.layer) & dashRagdollLayers.value) > 0;
+				DashImpact(hit.point, dashVelocity.normalized * dashImpactForce, ragdoll);
 			}
 		}
 		else
@@ -336,6 +347,14 @@ public class FerretController : MonoBehaviour
 	}
 
 	// ========================================================|
+	//		--- Add Velocity ---
+	//--------------------------------------------------------/
+	public void AddVelocity(Vector3 addedAcceleration)
+	{
+		velocity += addedAcceleration;
+	}
+
+	// ========================================================|
 	//		--- Start Dash ---
 	//--------------------------------------------------------/
 	//Starts a dash if the dash cooldown is done
@@ -373,12 +392,16 @@ public class FerretController : MonoBehaviour
 	//		--- Dash has hit a wall ---
 	//--------------------------------------------------------/
 	//Cancels dash and adds an impulse to nearby rigidbodies
-	void DashImpact(Vector3 point, Vector3 impulse)
+	void DashImpact(Vector3 point, Vector3 impulse, bool ragdoll = false)
 	{
 		//Add impulse here
 		Vector3 impulseDirection = impulse.normalized;
 		//Recoil player from impact
 		velocity = -impulseDirection * dashRecoil;
+
+		//Ragdoll player
+		if (ragdoll)
+			StartRagdoll(dashRecoilRagdollDuration);
 
 		//Get all colliders in the impact area
 		Collider[] results = Physics.OverlapBox(point, dashImpactBox, Quaternion.LookRotation(impulseDirection, floorNormal));
@@ -492,7 +515,7 @@ public class FerretController : MonoBehaviour
 	//Disables character controller and enables physics when true
 	//Enables character controller and disables physics when false
 	//Preserves velocity between states
-	public void SetRagdollState(bool state)
+	void SetRagdollState(bool state)
 	{
 		isRagdolled = state;
 
@@ -513,6 +536,24 @@ public class FerretController : MonoBehaviour
 			rigidbody.velocity = velocity;
 			rigidbody.interpolation = RigidbodyInterpolation.Interpolate;
 		}
+	}
+
+	// ========================================================|
+	//		--- START RAGDOLL ---
+	//--------------------------------------------------------/
+	public void StartRagdoll(float time)
+	{
+		ragdollTimer = time;
+		SetRagdollState(true);
+	}
+
+	// ========================================================|
+	//		--- CANCEL RAGDOLL ---
+	//--------------------------------------------------------/
+	public void CancelRagdoll()
+	{
+		ragdollTimer = 0.0f;
+		SetRagdollState(false);
 	}
 
 
