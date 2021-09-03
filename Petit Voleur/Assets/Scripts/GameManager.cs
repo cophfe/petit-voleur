@@ -1,4 +1,8 @@
-﻿using System.Collections;
+﻿/*==================================================
+	Programmer: Connor Fettes
+==================================================*/
+
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -11,36 +15,43 @@ public class GameManager : MonoBehaviour
 	private void Start()
 	{
 		UI = FindObjectOfType<GameUI>();
+		Cursor.lockState = CursorLockMode.Confined;
+		Cursor.visible = false;
 	}
 
 	public void UpdatePointUI()
 	{
-		UI.UpdatePointUI();
+		if (UI != null)
+			UI.UpdatePointUI();
 	}
 
 	public void OnReachedPointThreshold()
 	{
 		canWin = true;
-		UI.EnableNotifyText(true);
+
+		if (UI != null)
+			UI.EnableNotifyText(true);
 	}
 
 	public void OnLeftPointThreshold()
 	{
 		canWin = false;
-		UI.EnableNotifyText(false);
+		if (UI != null)
+			UI.EnableNotifyText(false);
 	}
 
 	public void OnEnterStash()
 	{
 		if (canWin)
 		{
-			Debug.Log("pog");
-			UI.OpenWinUI();
+			if (UI != null)
+				UI.OpenWinUI();
 		}
 	}
 
 	public void OnToggleMenu()
 	{
-		UI.Pause(!UI.CheckIsPaused());
+		if (UI != null)
+			UI.Pause(!UI.CheckIsPaused());
 	}
 }
