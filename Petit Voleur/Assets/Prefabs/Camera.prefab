@@ -104,7 +104,7 @@ MonoBehaviour:
   m_RequiresOpaqueTextureOption: 2
   m_CameraType: 0
   m_Cameras: []
-  m_RendererIndex: 0
+  m_RendererIndex: 1
   m_VolumeLayerMask:
     serializedVersion: 2
     m_Bits: 1
@@ -134,7 +134,7 @@ MonoBehaviour:
   maxFollowDistance: 20
   obstructionLayers:
     serializedVersion: 2
-    m_Bits: 563
+    m_Bits: 4608
   sensitivity: 0.09
   inverted: 0
   maximumUpRotation: 40
