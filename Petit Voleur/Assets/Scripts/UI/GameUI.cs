@@ -7,11 +7,12 @@ using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
 using UnityEngine.UI;
+using UnityEngine.InputSystem;
 
 public class GameUI : MonoBehaviour
 {
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-	//~~~~~~~~~~~PAUSE MENU STUFF~~~~~~~~~~~~~~~
+	//~~~~~~~~~~~~~~MENU STUFF~~~~~~~~~~~~~~~~~~
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 	//public variables
 	[Header("Menu Variables ")]
@@ -23,10 +24,12 @@ public class GameUI : MonoBehaviour
 	public RectTransform winPanel = null;
 	[Tooltip("The options menu panel.")]
 	public RectTransform optionsPanel = null;
+	[Tooltip("The points notification text.")]
 	public TextMeshProUGUI notifyText = null;
+	[Tooltip("The points progress bar.")]
 	public Image completionBar = null;
+	[Tooltip("The time it takes to transition between menus.")]
 	public float screenTransitionTime = 0.5f;
-
 	//private variables
 	enum ScreenState
 	{
@@ -41,13 +44,23 @@ public class GameUI : MonoBehaviour
 		OPTIONS,
 		NOTHING
 	}
+	//default heights for panels (used for transitions)
 	float pausePanelDefaultHeight;
 	float winPanelDefaultHeight;
 	float optionsPanelDefaultHeight;
+	//the initial alpha of the screen overlay
 	float overlayDefaultAlpha;
+	//the current screen state
 	ScreenState screenState = ScreenState.NOTHING;
+	//the timer used for transitioning menus
 	float screenTransitionTimer = 0;
+	//the time scale before pausing
 	float lastTimeScale = 1;
+	//The player's input component
+	PlayerInput playerInput = null;
+	//The camera's input component
+	PlayerInput cameraInput = null;
+
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -72,23 +85,24 @@ public class GameUI : MonoBehaviour
 	//the component that controls point values
 	PointTracker pointTracker;
 
-	//these value osused for the easing function
+	//this value is used for the easing function
 	int startPointValue = 0;
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
     public void UpdatePointUI()
 	{
-		//set initial transition values
-		pointTransitionTimer = 0;
-		pointsTransitioning = true;
-		//starts halfway done
+		
 		try
 		{
+			//points starts halfway done
 			startPointValue = pointTracker.GetPreviousScore() + (pointTracker.GetPoints() - pointTracker.GetPreviousScore()) /2;
+			//set initial transition values
+			pointTransitionTimer = 0;
+			pointsTransitioning = true;
 		}
 		catch
 		{
-			Debug.LogError("ayo bitch");
+			Debug.LogError("Cannot update point UI");
 		}
 	}
 
@@ -106,7 +120,6 @@ public class GameUI : MonoBehaviour
 		{
 			case ScreenState.PAUSE:
 				{
-
 					//if already in correct state, return
 					if (pause)
 						return false;
@@ -120,6 +133,13 @@ public class GameUI : MonoBehaviour
 				{
 					if (!pause)
 						return false;
+
+					//disable input from player
+					if (playerInput)
+						playerInput.enabled = false;
+
+					if (cameraInput)
+						cameraInput.enabled = false;
 
 					EnableScreen(ScreenState.PAUSE);
 
@@ -155,10 +175,21 @@ public class GameUI : MonoBehaviour
 		//initialise point values
 		defaultFontSize = pointValueText.fontSize;
 
-		pointTracker = GameObject.FindObjectOfType<PointTracker>();
-	}
+		//find the point tracker
+		pointTracker = FindObjectOfType<PointTracker>();
 
-	int pointValue = 0;
+		//find the player's input
+		try
+		{
+			playerInput = GameObject.FindGameObjectWithTag("Player").GetComponentInChildren<PlayerInput>();
+			cameraInput = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<PlayerInput>();
+		}
+		catch
+		{
+			Debug.LogWarning("Error in finding input components.");
+		}
+	}
+	
 	private void Update()
 	{
 		//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -205,6 +236,14 @@ public class GameUI : MonoBehaviour
 						Time.timeScale = lastTimeScale;
 
 						EnableScreen(ScreenState.NOTHING);
+
+						//enable input from player
+						if (playerInput)
+							playerInput.enabled = true;
+
+						if (cameraInput)
+							cameraInput.enabled = true;
+
 						break;
 					}
 
