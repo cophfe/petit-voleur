@@ -1472,6 +1472,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   inputEnabled: 1
   velocity: {x: 0, y: 0, z: 0}
+  stats:
+    stats:
+    - 0
+    - 0
+    - 0
+    - 0
   speed: 0
   gravity: 30
   grounded: 0
@@ -1493,7 +1499,7 @@ MonoBehaviour:
   targetSpeed: 20
   floorFriction: 80
   airControl: 0.6
-  lookSpeed: 600
+  lookSpeed: 900
   maxVelocityFollowAngle: 80
   maxVelocity: 300
   fallingArc:
@@ -1509,12 +1515,15 @@ MonoBehaviour:
   wallCheckDistance: 1.5
   wallCheckFactor: 0.9
   wallCheckAngles: 4
-  defaultImpactMultiplier: 1
-  dashImpactForce: 100
-  dashImpactBox: {x: 2, y: 2, z: 2}
-  dashImpactMaxAngle: 50
-  dashRecoil: 15
   dashSpeed: 60
+  dashImpactMaxAngle: 50
+  dashImpactBox: {x: 2, y: 2, z: 2}
+  dashImpactForce: 50
+  dashRecoil: 15
+  dashRecoilRagdollDuration: 2
+  dashRagdollLayers:
+    serializedVersion: 2
+    m_Bits: 4608
   dashSpeedCurve:
     serializedVersion: 2
     m_Curve:
@@ -1568,6 +1577,7 @@ MonoBehaviour:
     m_RotationOrder: 4
   dashDuration: 0.5
   dashCooldown: 1.4
+  defaultImpactMultiplier: 1
 --- !u!114 &765785696
 MonoBehaviour:
   m_ObjectHideFlags: 0

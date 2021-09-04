@@ -12526,14 +12526,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: Player Container
       objectReference: {fileID: 0}
-    - target: {fileID: 7983130786746716429, guid: 513c6c158ea1c38449d25e20b97227ed, type: 3}
-      propertyPath: dashRagdollLayers.m_Bits
-      value: 4608
-      objectReference: {fileID: 0}
-    - target: {fileID: 7983130786746716429, guid: 513c6c158ea1c38449d25e20b97227ed, type: 3}
-      propertyPath: dashImpactForce
-      value: 50
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 513c6c158ea1c38449d25e20b97227ed, type: 3}
 --- !u!4 &1286339765 stripped
