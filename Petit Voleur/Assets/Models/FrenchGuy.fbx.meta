@@ -2,7 +2,16 @@ fileFormatVersion: 2
 guid: e1845b7ea624c09429c79902e64ca1fb
 ModelImporter:
   serializedVersion: 20101
-  internalIDToNameTable: []
+  internalIDToNameTable:
+  - first:
+      74: 8435642798795867270
+    second: ChefRig|ChefRigAction
+  - first:
+      74: 8249687147538688145
+    second: ChefRig|Sphere.002Action
+  - first:
+      74: 6260389476474903853
+    second: Sphere.002|Sphere.002Action
   externalObjects: {}
   materials:
     materialImportMode: 1
