@@ -17,6 +17,7 @@ public class FerretController : MonoBehaviour
 	[Header("Status")]
 	public bool inputEnabled = true;
 	public Vector3 velocity;
+	public FerretStats stats = new FerretStats();
 	public float speed;
 	public float gravity = 10;
 	private float friction = 80;
@@ -91,6 +92,7 @@ public class FerretController : MonoBehaviour
 		rigidbody = GetComponent<Rigidbody>();
 		ferretPickup = GetComponent<FerretPickup>();
 		StopClimbing();
+		stats.Reset();
     }
 
 	//Called every frame
@@ -120,7 +122,7 @@ public class FerretController : MonoBehaviour
 
 			//Decrement dash timer when on the ground
 			if (!isDashing && dashCDTimer > 0)
-				dashCDTimer -= Time.deltaTime;
+				dashCDTimer -= Time.deltaTime * stats.DashFrequency;
 		}
     }
 
@@ -148,7 +150,7 @@ public class FerretController : MonoBehaviour
 			if (Vector3.Angle(-hit.normal, dashVelocity.normalized) < dashImpactMaxAngle)
 			{
 				bool ragdoll = ((1 << hit.gameObject.layer) & dashRagdollLayers.value) > 0;
-				DashImpact(hit.point, dashVelocity.normalized * dashImpactForce, ragdoll);
+				DashImpact(hit.point, dashVelocity.normalized, ragdoll);
 			}
 		}
 		else
@@ -235,7 +237,7 @@ public class FerretController : MonoBehaviour
 			// ~~~~~~~ Generate target velocity ~~~~~~ //
 			projectedInput = forward * input.y;									//Forward component
 			projectedInput -= Vector3.Cross(forward, floorNormal) * input.x;	//Cross product the forward and floorNormal to get the left component
-			targetVelocity = projectedInput * targetSpeed;						//Multiply by target speed to set the magnitude of targetVelocity
+			targetVelocity = projectedInput * (targetSpeed * stats.Speed);						//Multiply by target speed to set the magnitude of targetVelocity
 			
 			//Desired change in velocity along the plane
 			deltaVelocity = targetVelocity - planarVelocity;
@@ -262,9 +264,10 @@ public class FerretController : MonoBehaviour
 		//Reduce control in the air
 		if (!grounded)
 			accelerationThisFrame *= airControl;
-		
+
+		//Multiply acceleration by speed to keep movement proportionate
 		//Finally limit acceleration value to be for this frame
-		accelerationThisFrame *= Time.deltaTime;
+		accelerationThisFrame *= stats.Speed * Time.deltaTime;
 
 		//Limit change in position to accelerationThisFrame
 		if (deltaVelocity.sqrMagnitude > accelerationThisFrame * accelerationThisFrame)
@@ -392,10 +395,8 @@ public class FerretController : MonoBehaviour
 	//		--- Dash has hit a wall ---
 	//--------------------------------------------------------/
 	//Cancels dash and adds an impulse to nearby rigidbodies
-	void DashImpact(Vector3 point, Vector3 impulse, bool ragdoll = false)
+	void DashImpact(Vector3 point, Vector3 impulseDirection, bool ragdoll = false)
 	{
-		//Add impulse here
-		Vector3 impulseDirection = impulse.normalized;
 		//Recoil player from impact
 		velocity = -impulseDirection * dashRecoil;
 
@@ -411,7 +412,7 @@ public class FerretController : MonoBehaviour
 		{
 			if (results[i].attachedRigidbody)
 			{
-				results[i].attachedRigidbody.AddForce(impulse, ForceMode.Impulse);
+				results[i].attachedRigidbody.AddForce(impulseDirection * (dashImpactForce * stats.DashPower), ForceMode.Impulse);
 			}
 		}
 
@@ -438,7 +439,7 @@ public class FerretController : MonoBehaviour
 		gravity = jumpArc.GetGravity();
 		//Reset "vertical" velocity
 		velocity -= upDirection * Vector3.Dot(velocity, upDirection);
-		velocity += upDirection * jumpArc.GetJumpForce();
+		velocity += upDirection * jumpArc.GetJumpForce() * stats.Jump;
 		isJumping = true;
 	}
 
@@ -608,6 +609,95 @@ public class FerretController : MonoBehaviour
 		public float GetGravity()
 		{
 			return (2 * height) / (durationToPeak * durationToPeak);
+		}
+	}
+
+	[System.Serializable]
+	public class FerretStats
+	{
+		[SerializeField]
+		private float[] stats = new float[4];
+		private float[] statTimers = new float[4];
+
+		//Getters
+		public float Speed
+		{
+			get
+			{
+				return stats[(int)Stat.Speed];
+			}
+		}
+
+		public float Jump
+		{
+			get
+			{
+				return stats[(int)Stat.Jump];
+			}
+		}
+
+		public float DashPower
+		{
+			get
+			{
+				return stats[(int)Stat.DashPower];
+			}
+		}
+
+		public float DashFrequency
+		{
+			get
+			{
+				return stats[(int)Stat.DashFrequency];
+			}
+		}
+
+		//Revert to all initial values and reset timers
+		public void Reset()
+		{
+			for (int i = 0; i < 4; ++i)
+			{
+				stats[i] = 1.0f;
+				statTimers[i] = 0.0f;
+			}
+		}
+
+		//Decrement all stats and reset if timer is complete
+		public void Update()
+		{
+			for (int i = 0; i < 4; ++i)
+			{
+				if (statTimers[i] > 0)
+				{
+					statTimers[i] -= Time.deltaTime;
+
+					if (statTimers[i] <= 0)
+						stats[i] = 1.0f;
+				}
+			}
+		}
+
+		//Return a stat by enum value
+		public float GetStat(Stat stat)
+		{
+			return stats[(int)stat];
+		}
+		
+		//Sets a stat value for *duration* seconds
+		public void SetStat(Stat stat, float newValue, float duration)
+		{
+			stats[(int)stat] = newValue;
+			statTimers[(int)stat] = duration;
+		}
+
+		//Base enum for reference
+		[System.Serializable]
+		public enum Stat : int
+		{
+			Speed,
+			Jump,
+			DashPower,
+			DashFrequency
 		}
 	}
 }
