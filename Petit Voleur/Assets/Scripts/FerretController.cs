@@ -63,6 +63,7 @@ public class FerretController : MonoBehaviour
 	public float dashImpactMaxAngle = 20.0f;
 	public Vector3 dashImpactBox = Vector3.one;
 	public float dashImpactForce = 100.0f;
+	public LayerMask dashImpactLayers;
 	public float dashRecoil = 3.0f;
 	public float dashRecoilRagdollDuration = 2.0f;
 	public LayerMask dashRagdollLayers;
@@ -98,6 +99,7 @@ public class FerretController : MonoBehaviour
 	//Called every frame
     void Update()
     {
+		stats.Update();
 		if (isRagdolled)
 		{
 			if (ragdollTimer > 0)
@@ -405,7 +407,7 @@ public class FerretController : MonoBehaviour
 			StartRagdoll(dashRecoilRagdollDuration);
 
 		//Get all colliders in the impact area
-		Collider[] results = Physics.OverlapBox(point, dashImpactBox, Quaternion.LookRotation(impulseDirection, floorNormal));
+		Collider[] results = Physics.OverlapBox(point, dashImpactBox, Quaternion.LookRotation(impulseDirection, floorNormal), dashImpactLayers);
 
 		//loop through all colliders and add forces to the ones with rigidbodies
 		for (int i = 0; i < results.Length; ++i)

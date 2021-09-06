@@ -9,7 +9,10 @@ public class FerretPickup : MonoBehaviour
 	public Transform grabTransform;
 	public LayerMask grabLayers;
 	public Item heldItem;
+	public float appliedForce = 30.0f;
 	private FerretController controller;
+	private Vector3 grabPoint;
+	private Quaternion grabRotation;
 	
     // Start is called before the first frame update
     void Awake()
@@ -20,7 +23,15 @@ public class FerretPickup : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+        if (heldItem)
+		{
+			Vector3 targetPoint = grabTransform.TransformPoint(grabPoint);
+			
+			heldItem.rbody.MovePosition(targetPoint);
+			heldItem.rbody.MoveRotation(grabTransform.transform.rotation * grabRotation);
+			heldItem.rbody.velocity = Vector3.zero;
+			heldItem.rbody.angularVelocity = Vector3.zero;
+		}
     }
 
 	void GrabItem(Vector3 point, float range)
@@ -45,10 +56,11 @@ public class FerretPickup : MonoBehaviour
 
 			if (heldItem.pickupable)
 			{
-				Vector3 grabPoint = (closestCollider.transform.position - point);
+				grabPoint = (closestCollider.transform.position - point);
 				grabPoint -= (closestCollider.ClosestPoint(point) - point);
 				grabPoint = grabTransform.InverseTransformVector(grabPoint);
-				heldItem.Grab(grabTransform, grabPoint);
+				grabRotation = Quaternion.Inverse(grabTransform.transform.rotation) * heldItem.transform.rotation;
+				heldItem.Grab();
 			}
 		}
 	}
