@@ -41,11 +41,15 @@ public class FerretPickup : MonoBehaviour
 					closestCollider = results[i];
 				}
 			}
-			Vector3 grabPoint = (closestCollider.transform.position - point);
-			grabPoint -= (closestCollider.ClosestPoint(point) - point);
-			grabPoint = grabTransform.InverseTransformVector(grabPoint);
-			heldItem = closestCollider.GetComponent<Item>();
-			heldItem.Grab(grabTransform, grabPoint);
+			heldItem = closestCollider.attachedRigidbody.GetComponent<Item>();
+
+			if (heldItem.pickupable)
+			{
+				Vector3 grabPoint = (closestCollider.transform.position - point);
+				grabPoint -= (closestCollider.ClosestPoint(point) - point);
+				grabPoint = grabTransform.InverseTransformVector(grabPoint);
+				heldItem.Grab(grabTransform, grabPoint);
+			}
 		}
 	}
 

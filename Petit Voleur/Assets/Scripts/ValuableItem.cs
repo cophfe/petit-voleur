@@ -10,29 +10,22 @@ using UnityEngine;
 public class ValuableItem : MonoBehaviour
 {
 	public int pointValue = 1;
-	public string stashTag = "Stash";
 
+	bool stashed = false;
 	PointTracker pointTracker = null;
 
 	private void Start()
 	{
-		GameObject eS = GameObject.Find("EventSystem");
-		if (eS != null)
-			pointTracker = eS.GetComponent<PointTracker>();
-	}
-	private void OnTriggerEnter(Collider other)
-	{
-		if (other.tag == stashTag && pointTracker != null)
-		{
-			pointTracker.AddPoints(pointValue);
-		}
+		pointTracker = GameObject.FindObjectOfType<PointTracker>();
 	}
 
-	private void OnTriggerExit(Collider other)
+	private void OnTriggerEnter(Collider other)
 	{
-		if (other.tag == stashTag && pointTracker != null)
+		if (!stashed && other.gameObject.tag == "Stash")
 		{
-			pointTracker.SubtractPoints(pointValue);
+			pointTracker.AddPoints(pointValue);
+			GetComponent<Item>().pickupable = false;
+			stashed = true;
 		}
 	}
 

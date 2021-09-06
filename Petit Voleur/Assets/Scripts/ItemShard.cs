@@ -15,6 +15,7 @@ public class ItemShard : MonoBehaviour
 		Destroy(gameObject, destroyTime);
 		foreach(Rigidbody piece in pieces)
 		{
+			//Launch each shard outwards
 			Vector3 direction = piece.transform.localPosition.normalized;
 			piece.velocity = direction * Random.Range(minExplodeVelocity, maxExplodeVelocity);
 		}
