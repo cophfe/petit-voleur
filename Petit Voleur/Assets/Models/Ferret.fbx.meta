@@ -5,10 +5,22 @@ ModelImporter:
   internalIDToNameTable:
   - first:
       74: -4720634922552875360
-    second: ferrer_Idle
+    second: Idle
   - first:
       74: -639873375141106807
     second: FerretRig|LampAction
+  - first:
+      74: 8814811631015332252
+    second: Run
+  - first:
+      74: 8628234142971173032
+    second: Ferret_Start_Run
+  - first:
+      74: 8672962583937049257
+    second: Ferret_Idle
+  - first:
+      74: 8814811631015332252
+    second: Ferret_Run
   externalObjects:
   - first:
       type: UnityEngine:Material
@@ -48,10 +60,39 @@ ModelImporter:
     extraUserProperties: []
     clipAnimations:
     - serializedVersion: 16
-      name: ferrer_Idle
+      name: Ferret_Idle
       takeName: FerretRig|FerretRigAction
       internalID: 0
       firstFrame: 0
+      lastFrame: 29
+      wrapMode: 0
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      hasAdditiveReferencePose: 0
+      loopTime: 0
+      loopBlend: 0
+      loopBlendOrientation: 0
+      loopBlendPositionY: 0
+      loopBlendPositionXZ: 0
+      keepOriginalOrientation: 0
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 0
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events: []
+      transformMask: []
+      maskType: 3
+      maskSource: {instanceID: 0}
+      additiveReferencePoseFrame: 0
+    - serializedVersion: 16
+      name: Ferret_Run
+      takeName: FerretRig|FerretRigAction
+      internalID: 0
+      firstFrame: 40
       lastFrame: 80
       wrapMode: 0
       orientationOffsetY: 0
