@@ -5,41 +5,40 @@ using UnityEngine;
 [RequireComponent(typeof(Rigidbody))]
 public class Item : MonoBehaviour
 {
+	//Statics
+	public static int itemLayer = 10;
+	public static int heldItemLayer = 13;
+
 	public bool pickupable = true;
 	[HideInInspector]
 	public Rigidbody rbody;
 	public GameObject col;
-	private Transform originalParent;
-	private RigidbodyInterpolation interpolateMode = RigidbodyInterpolation.None;
 
 	void Awake()
 	{
 		rbody = GetComponent<Rigidbody>();
 	}
 
-	public void Grab(Transform newParent, Vector3 offset)
+	public void Grab()
 	{
-		originalParent = transform.parent;
-		interpolateMode = rbody.interpolation;
-		rbody.isKinematic = true;
-		rbody.interpolation = RigidbodyInterpolation.None;
-		col.SetActive(false);
-		transform.SetParent(newParent);
-		transform.localPosition = offset;
-	}
-
-	public void Grab(Transform newParent)
-	{
-		Grab(newParent, Vector3.zero);
+		SetLayerRecursively(gameObject, heldItemLayer);
+		rbody.useGravity = false;
 	}
 
 	public void Release(Vector3 velocity)
 	{
-		transform.SetParent(originalParent);
-
-		rbody.interpolation = interpolateMode;
-		rbody.isKinematic = false;
-		col.SetActive(true);
+		SetLayerRecursively(gameObject, itemLayer);
 		rbody.velocity = velocity;
+		rbody.useGravity = true;
+	}
+
+	public static void SetLayerRecursively(GameObject obj, int newLayer)
+	{
+		obj.layer = newLayer;
+
+		foreach (Transform child in obj.transform)
+		{
+			SetLayerRecursively(child.gameObject, newLayer);
+		}
 	}
 }
