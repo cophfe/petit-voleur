@@ -20,6 +20,7 @@ TagManager:
   - Item
   - Stash
   - Environment
+  - HeldItem
   - 
   - 
   - 
