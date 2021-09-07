@@ -13023,6 +13023,10 @@ PrefabInstance:
       propertyPath: m_LocalScale.z
       value: 3.2165704
       objectReference: {fileID: 0}
+    - target: {fileID: -6847251729367374925, guid: e1845b7ea624c09429c79902e64ca1fb, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0.719
+      objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: e1845b7ea624c09429c79902e64ca1fb, type: 3}
       propertyPath: m_Name
       value: FrenchGuy
