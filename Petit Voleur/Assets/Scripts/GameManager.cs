@@ -54,4 +54,9 @@ public class GameManager : MonoBehaviour
 		if (UI != null)
 			UI.Pause(!UI.CheckIsPaused());
 	}
+
+	public void OnDeath()
+	{
+		//Call UI
+	}
 }

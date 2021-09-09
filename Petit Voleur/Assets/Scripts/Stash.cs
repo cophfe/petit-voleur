@@ -18,7 +18,7 @@ public class Stash : MonoBehaviour
 
 	private void OnTriggerEnter(Collider other)
 	{
-		if (((1 << other.gameObject.layer) & ferretLayer.value) > 0)
+		if (((1 << other.gameObject.layer) & ferretLayer.value) > 0 && gameManager != null)
 		{
 			gameManager.OnEnterStash();
 		}
