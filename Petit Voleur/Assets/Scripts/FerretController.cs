@@ -63,17 +63,21 @@ public class FerretController : MonoBehaviour
 	public float dashImpactMaxAngle = 20.0f;
 	public Vector3 dashImpactBox = Vector3.one;
 	public float dashImpactForce = 100.0f;
+	public LayerMask dashImpactLayers;
 	public float dashRecoil = 3.0f;
 	public float dashRecoilRagdollDuration = 2.0f;
 	public LayerMask dashRagdollLayers;
 	public AnimationCurve dashSpeedCurve;
 	public float dashDuration = 1.0f;
 	public float dashCooldown = 1.4f;
+	public float dashImpactSlowdown = 0.0f;
+	public float dashImpactSlowdownDuration = 0.05f;
 	public float defaultImpactMultiplier = 0.5f;
 
 	private CharacterController characterController;
 	new private Rigidbody rigidbody;
 	private FerretPickup ferretPickup;
+	private TimeManager timeManager;
 	private Vector3 forward;
 	private Vector3 projectedInput;
 	private Vector3 targetVelocity;
@@ -91,6 +95,7 @@ public class FerretController : MonoBehaviour
         characterController = GetComponent<CharacterController>();
 		rigidbody = GetComponent<Rigidbody>();
 		ferretPickup = GetComponent<FerretPickup>();
+		timeManager = FindObjectOfType<TimeManager>();
 		StopClimbing();
 		stats.Reset();
     }
@@ -98,6 +103,7 @@ public class FerretController : MonoBehaviour
 	//Called every frame
     void Update()
     {
+		stats.Update();
 		if (isRagdolled)
 		{
 			if (ragdollTimer > 0)
@@ -403,21 +409,24 @@ public class FerretController : MonoBehaviour
 		//Ragdoll player
 		if (ragdoll)
 			StartRagdoll(dashRecoilRagdollDuration);
+		else
+			timeManager.StartTimeModifier(dashImpactSlowdown, dashImpactSlowdownDuration, 0f);
 
 		//Get all colliders in the impact area
-		Collider[] results = Physics.OverlapBox(point, dashImpactBox, Quaternion.LookRotation(impulseDirection, floorNormal));
+		Collider[] results = Physics.OverlapBox(point, dashImpactBox, Quaternion.LookRotation(impulseDirection, floorNormal), dashImpactLayers);
 
 		//loop through all colliders and add forces to the ones with rigidbodies
 		for (int i = 0; i < results.Length; ++i)
 		{
 			if (results[i].attachedRigidbody)
 			{
-				results[i].attachedRigidbody.AddForce(impulseDirection * (dashImpactForce * stats.DashPower), ForceMode.Impulse);
+				results[i].attachedRigidbody.velocity = impulseDirection * (dashImpactForce * stats.DashPower) / results[i].attachedRigidbody.mass;
 			}
 		}
 
 		//End dash
 		CancelDash();
+
 	}
 
 	// ========================================================|
