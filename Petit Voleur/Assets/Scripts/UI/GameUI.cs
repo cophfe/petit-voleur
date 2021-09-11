@@ -91,7 +91,6 @@ public class GameUI : MonoBehaviour
 
     public void UpdatePointUI()
 	{
-		
 		try
 		{
 			//points starts halfway done
