@@ -21,6 +21,9 @@ ModelImporter:
   - first:
       74: 8814811631015332252
     second: Ferret_Run
+  - first:
+      74: -4720634922552875360
+    second: FerretRig|FerretRigAction
   externalObjects:
   - first:
       type: UnityEngine:Material
@@ -50,7 +53,7 @@ ModelImporter:
     animationRetargetingWarnings: 
     animationDoRetargetingWarnings: 0
     importAnimatedCustomProperties: 0
-    importConstraints: 1
+    importConstraints: 0
     animationCompression: 1
     animationRotationError: 0.5
     animationPositionError: 0.5

@@ -75,7 +75,7 @@ public class FerretController : MonoBehaviour
 	public float defaultImpactMultiplier = 0.5f;
 
 	private CharacterController characterController;
-	new private Rigidbody rigidbody;
+	new public Rigidbody rigidbody;
 	private FerretPickup ferretPickup;
 	private TimeManager timeManager;
 	private Vector3 forward;
