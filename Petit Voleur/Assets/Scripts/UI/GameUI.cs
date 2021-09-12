@@ -8,7 +8,6 @@ using UnityEngine;
 using TMPro;
 using UnityEngine.UI;
 using UnityEngine.InputSystem;
-using UnityEngine.SceneManagement;
 
 public class GameUI : MonoBehaviour
 {
@@ -31,12 +30,6 @@ public class GameUI : MonoBehaviour
 	public Image completionBar = null;
 	[Tooltip("The time it takes to transition between menus.")]
 	public float screenTransitionTime = 0.5f;
-	[Tooltip("The main menu scene's name.")]
-	public string menuSceneName = "Menu";
-	[Tooltip("The scene transition animator.")]
-	public Animator sceneTransitionAnimator;
-	[Tooltip("The amount of time it takes to transition to a new scene")]
-	public float sceneTransitionTime = 1;
 	//private variables
 	enum ScreenState
 	{
@@ -69,9 +62,10 @@ public class GameUI : MonoBehaviour
 	PlayerInput cameraInput = null;
 
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 	//~~~~~~~~~~~~~POINTS STUFF~~~~~~~~~~~~~~~~~
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
 	//public variables
 	[Header("Points Variables")]
 	[Space(5)]
@@ -93,22 +87,81 @@ public class GameUI : MonoBehaviour
 
 	//this value is used for the easing function
 	int startPointValue = 0;
-
-	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-	//~~~~~~~~~~~~~HEALTH STUFF~~~~~~~~~~~~~~~~~
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-	//public variables
-	[Header("Health Variables")]
-	[Space(5)]
-	[Tooltip("")]
-	public GameObject healthPrefab = null;
-	[Tooltip("")]
-	public RectTransform healthParent = null;
+    public void UpdatePointUI()
+	{
+		
+		try
+		{
+			//points starts halfway done
+			startPointValue = pointTracker.GetPreviousScore() + (pointTracker.GetPoints() - pointTracker.GetPreviousScore()) /2;
+			//set initial transition values
+			pointTransitionTimer = 0;
+			pointsTransitioning = true;
+		}
+		catch
+		{
+			Debug.LogError("Cannot update point UI");
+		}
+	}
 
-	//private variables
-	List<GameObject> healthChildren = null;
-	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+	public void Resume()
+	{
+		if (screenState == ScreenState.PAUSE)
+		{
+			Pause(false);
+		}
+	}
+
+	public bool Pause(bool pause)
+	{
+		switch (screenState)
+		{
+			case ScreenState.PAUSE:
+				{
+					//if already in correct state, return
+					if (pause)
+						return false;
+
+					screenTransitionTimer = 0;
+					screenState = ScreenState.TPAUSEOUT;
+					return true;
+				}
+
+			case ScreenState.NOTHING:
+				{
+					if (!pause)
+						return false;
+
+					//disable input from player
+					if (playerInput)
+						playerInput.enabled = false;
+
+					if (cameraInput)
+						cameraInput.enabled = false;
+
+					EnableScreen(ScreenState.PAUSE);
+
+					screenState = ScreenState.TPAUSEIN;
+
+					//pause time
+					lastTimeScale = Time.timeScale;
+					Time.timeScale = 0;
+					screenTransitionTimer = 0;
+
+					//set initial values for transition
+					pausePanel.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, 0);
+					var c = screenOverlay.color;
+					c.a = 0;
+					screenOverlay.color = c;
+					return true;
+				}
+
+			default:
+				return false;
+		}
+	}
 
 	private void Start()
 	{
@@ -244,8 +297,9 @@ public class GameUI : MonoBehaviour
 					float t = screenTransitionTimer / screenTransitionTime;
 					//transition panel height using ease out quad
 					optionsPanel.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, (1 - (1 - t) * (1 - t)) * optionsPanelDefaultHeight);
-					pausePanel.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, (1 - t) * (1 - t) * pausePanelDefaultHeight);
+					pausePanel.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, (1-t) * pausePanelDefaultHeight);
 					
+
 					screenTransitionTimer += Time.unscaledDeltaTime;
 				}
 				break;
@@ -318,79 +372,6 @@ public class GameUI : MonoBehaviour
 		//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 	}
 
-	public void UpdatePointUI()
-	{
-		try
-		{
-			//points starts halfway done
-			startPointValue = pointTracker.GetPreviousScore() + (pointTracker.GetPoints() - pointTracker.GetPreviousScore()) / 2;
-			//set initial transition values
-			pointTransitionTimer = 0;
-			pointsTransitioning = true;
-		}
-		catch
-		{
-			Debug.LogError("Cannot update point UI");
-		}
-	}
-
-	public void Resume()
-	{
-		if (screenState == ScreenState.PAUSE)
-		{
-			Pause(false);
-		}
-	}
-
-	public bool Pause(bool pause)
-	{
-		switch (screenState)
-		{
-			case ScreenState.PAUSE:
-				{
-					//if already in correct state, return
-					if (pause)
-						return false;
-
-					screenTransitionTimer = 0;
-					screenState = ScreenState.TPAUSEOUT;
-					return true;
-				}
-
-			case ScreenState.NOTHING:
-				{
-					if (!pause)
-						return false;
-
-					//disable input from player
-					if (playerInput)
-						playerInput.enabled = false;
-
-					if (cameraInput)
-						cameraInput.enabled = false;
-
-					EnableScreen(ScreenState.PAUSE);
-
-					screenState = ScreenState.TPAUSEIN;
-
-					//pause time
-					lastTimeScale = Time.timeScale;
-					Time.timeScale = 0;
-					screenTransitionTimer = 0;
-
-					//set initial values for transition
-					pausePanel.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, 0);
-					var c = screenOverlay.color;
-					c.a = 0;
-					screenOverlay.color = c;
-					return true;
-				}
-
-			default:
-				return false;
-		}
-	}
-
 	void EnableScreen(ScreenState screenType)
 	{
 		switch (screenType)
@@ -443,26 +424,13 @@ public class GameUI : MonoBehaviour
 		}
 	}
 
-	public void TransitionToExit()
+	public void ExitGame()
 	{
-		StartCoroutine(ExitGame());
-	}
-
-	IEnumerator ExitGame()
-	{
-		sceneTransitionAnimator.SetTrigger("Leave");
-
-		yield return new WaitForSecondsRealtime(sceneTransitionTime);
-
-		try
-		{
-			Time.timeScale = 1;
-			SceneManager.LoadScene(menuSceneName);
-		}
-		catch
-		{
-			Debug.LogError("Could not load scene '" + menuSceneName + "'.");
-		}
+		#if UNITY_EDITOR
+		UnityEditor.EditorApplication.ExitPlaymode();
+		#else
+		Application.Quit();
+		#endif
 	}
 
 	public void OpenWinUI()
@@ -491,51 +459,4 @@ public class GameUI : MonoBehaviour
 	{
 		return screenState == ScreenState.PAUSE;
 	}	
-
-	public void InitializeHealthUI(int maxHealth)
-	{
-		//if health UI has already been initialized
-		if (healthChildren != null)
-		{
-			if (maxHealth > healthChildren.Count)
-			{
-				for (int i = healthChildren.Count - 1; i < maxHealth; i++)
-				{
-					healthChildren.Add(Instantiate(healthPrefab, healthParent));
-				}
-			}
-			else if (maxHealth < healthChildren.Count)
-			{
-				for (int i = maxHealth; i < healthChildren.Count; i++)
-				{
-					GameObject.Destroy(healthChildren[i]);
-					healthChildren.RemoveAt(i);
-				}
-			}
-		}
-		else if (maxHealth > 0)
-		{
-			healthChildren = new List<GameObject>(maxHealth);
-
-			for (int i = 0; i < maxHealth; i++)
-			{
-				healthChildren.Add(Instantiate(healthPrefab, healthParent));
-			}
-		}
-	}
-
-	public void SetHealthUI(int currentHealth)
-	{
-		if (healthChildren == null)
-		{
-			Debug.LogError("Health UI has not been initialized");
-		}
-		else
-		{
-			for (int i = 0; i < healthChildren.Count; i++)
-			{
-				healthChildren[i].SetActive(i < currentHealth);
-			}
-		}
-	}
 }

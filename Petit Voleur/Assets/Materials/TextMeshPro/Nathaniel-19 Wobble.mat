@@ -21,7 +21,7 @@ Material:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: Nathaniel-19 Wobble
-  m_Shader: {fileID: 4800000, guid: 2b540c83d3bf0cc4fb5ddde005b3ccc0, type: 3}
+  m_Shader: {fileID: 4800000, guid: bddd22e2c0ceb4d418ba56bc2de239f7, type: 3}
   m_ShaderKeywords: UNDERLAY_ON
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 0

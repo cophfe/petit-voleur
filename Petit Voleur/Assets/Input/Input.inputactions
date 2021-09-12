@@ -205,14 +205,6 @@
                     "expectedControlType": "Button",
                     "processors": "",
                     "interactions": ""
-                },
-                {
-                    "name": "Mouse Change",
-                    "type": "Value",
-                    "id": "d865e6cd-b931-43ac-81ed-e4ff02b12557",
-                    "expectedControlType": "Vector2",
-                    "processors": "",
-                    "interactions": ""
                 }
             ],
             "bindings": [
@@ -224,17 +216,6 @@
                     "processors": "",
                     "groups": "KBM",
                     "action": "Toggle Menu",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "c4555601-f11a-4104-8a30-bb149e995019",
-                    "path": "<Mouse>/position",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "Mouse Change",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }
