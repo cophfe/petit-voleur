@@ -54,6 +54,8 @@ GameObject:
   m_Component:
   - component: {fileID: 1395391770021163245}
   - component: {fileID: 1395391770021163242}
+  - component: {fileID: -8475579060511094880}
+  - component: {fileID: 7035835418890850249}
   m_Layer: 14
   m_Name: Frying Pan
   m_TagString: Untagged
@@ -93,6 +95,42 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
+--- !u!114 &-8475579060511094880
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1395391770021163244}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7fb08bf12b9c8824195ee73db7afbaa3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  destroyTime: 10
+  pieces: []
+  minExplodeVelocity: 0
+  maxExplodeVelocity: 0
+  scaleOut: 1
+--- !u!114 &7035835418890850249
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1395391770021163244}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2cb240759a02e63469c0da74b25eca2d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  rb: {fileID: 1395391770021163242}
+  colliders: {fileID: 1395391770124041398}
+  ferretLayer:
+    serializedVersion: 2
+    m_Bits: 256
+  ragdollDuration: 5
+  impulse: 30
 --- !u!1 &1395391770124041401
 GameObject:
   m_ObjectHideFlags: 0

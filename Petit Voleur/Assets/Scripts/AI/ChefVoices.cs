@@ -7,18 +7,21 @@ public class ChefVoices : MonoBehaviour
 {
 	public AudioSource source;
 	[Tooltip("Wander, Inspect, Kick, Throw, Last Seen")]
-	public VoicePack[] voicePacks = new VoicePack[5];
+	public VoicePack voicePack;
 	private ChefAI chefAI;
 	private float playTimer;
+	private int[] sumWeights;
+
 	// Start is called before the first frame update
 	void Start()
 	{
 		chefAI = GetComponent<ChefAI>();
 
+		sumWeights = new int[voicePack.voiceSets.Length];
 		//Update lengths!
-		for (int i = 0; i < voicePacks.Length; ++i)
+		for (int i = 0; i < sumWeights.Length; ++i)
 		{
-			voicePacks[i].UpdateSumWeights();
+			sumWeights[i] = SumWeights(voicePack.voiceSets[i]);
 		}
 	}
 
@@ -28,62 +31,52 @@ public class ChefVoices : MonoBehaviour
 		playTimer += Time.deltaTime;
 
 		//Play a random clip if the play delay threshold is reached
-		if (playTimer > voicePacks[(int)chefAI.currentState].delayPerPlay)
+		if (playTimer > voicePack.voiceSets[(int)chefAI.currentState].delayPerPlay)
 		{
-			source.clip = voicePacks[(int)chefAI.currentState].GetRandomClip();
+			source.clip = GetRandomClip((int)chefAI.currentState);
+			source.Stop();
 			source.Play();
 			playTimer = 0;
 		}
 	}
 
-	[System.Serializable]
-	public class VoicePack
+	//Calculate sum of all weights
+	private int SumWeights(VoiceSet set)
 	{
-		public VoiceClip[] clips;
-		public float delayPerPlay = 5.0f;
-		private float sumWeights = 0;
-
-		//Calculate sum of all weights
-		public void UpdateSumWeights()
+		int sum = 0;
+		for(int i = 0; i < set.clips.Length; ++i)
 		{
-			sumWeights = 0;
-			for(int i = 0; i < clips.Length; ++i)
-			{
-				sumWeights += clips[i].weight;
-			}
+			sum += set.clips[i].weight;
 		}
 
-		//Get a weighted random clip
-		public AudioClip GetRandomClip()
-		{
-			float randomNum = Random.Range(0, sumWeights);
-
-			float cum = 0;
-			int index = 0;
-
-			//Iterate through all clips, adding their weight to the cumulative sum, then checking if the sum is larger than the random number
-			for (index = 0; index < clips.Length; ++index)
-			{
-				cum += clips[index].weight;
-
-				if (cum > randomNum)
-					break;
-			}
-
-			if (index >= clips.Length)
-			{
-				index--;
-			}
-			
-			return clips[index].clip;
-		}
-
-		//Used for weighted random selection
-		[System.Serializable]
-		public class VoiceClip
-		{
-			public AudioClip clip;
-			public int weight = 1;
-		}
+		return sum;
 	}
+
+	//Get a weighted random clip
+	private AudioClip GetRandomClip(int index)
+	{
+		VoiceSet set = voicePack.voiceSets[index];
+		float randomNum = Random.Range(0, sumWeights[index]);
+
+		float cum = 0;
+		int i = 0;
+
+		//Iterate through all clips, adding their weight to the cumulative sum, then checking if the sum is larger than the random number
+		for (i = 0; i < set.clips.Length; ++i)
+		{
+			cum += set.clips[i].weight;
+
+			if (cum > randomNum)
+				break;
+		}
+
+		if (i >= set.clips.Length)
+		{
+			i--;
+		}
+		
+		return set.clips[i].clip;
+	}
+
+	
 }

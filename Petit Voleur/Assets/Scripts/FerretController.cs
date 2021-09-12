@@ -27,7 +27,7 @@ public class FerretController : MonoBehaviour
 	public bool isClimbing = false;
 	public bool isRagdolled = false;
 	public Vector3 upDirection = Vector3.up;
-	public Vector3 floorNormal = Vector3.up;
+	private Vector3 floorNormal = Vector3.up;
 	public Vector3 lookDirection = Vector3.forward;
 	public Vector2 input;
 
@@ -74,6 +74,8 @@ public class FerretController : MonoBehaviour
 	public float dashImpactSlowdownDuration = 0.05f;
 	public float defaultImpactMultiplier = 0.5f;
 
+	[HideInInspector]
+	public FerretHealth health;
 	private CharacterController characterController;
 	new public Rigidbody rigidbody;
 	private FerretPickup ferretPickup;
@@ -96,6 +98,7 @@ public class FerretController : MonoBehaviour
 		rigidbody = GetComponent<Rigidbody>();
 		ferretPickup = GetComponent<FerretPickup>();
 		timeManager = FindObjectOfType<TimeManager>();
+		health = GetComponent<FerretHealth>();
 		StopClimbing();
 		stats.Reset();
     }
@@ -129,6 +132,10 @@ public class FerretController : MonoBehaviour
 			//Decrement dash timer when on the ground
 			if (!isDashing && dashCDTimer > 0)
 				dashCDTimer -= Time.deltaTime * stats.DashFrequency;
+
+			//Player deaaad
+			if (health.CurrentHealth <= 0)
+				StartRagdoll(999);
 		}
     }
 
@@ -553,6 +560,9 @@ public class FerretController : MonoBehaviour
 	//--------------------------------------------------------/
 	public void StartRagdoll(float time)
 	{
+		if (isRagdolled)
+			return;
+		
 		ragdollTimer = time;
 		SetRagdollState(true);
 	}
@@ -565,7 +575,6 @@ public class FerretController : MonoBehaviour
 		ragdollTimer = 0.0f;
 		SetRagdollState(false);
 	}
-
 
 	// ====================================================== //
 	// =================== Input Checking =================== //

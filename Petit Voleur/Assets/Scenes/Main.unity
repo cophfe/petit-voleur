@@ -266,7 +266,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh17958
+  m_Name: pb_Mesh25276
   serializedVersion: 10
   m_SubMeshes:
   - serializedVersion: 2
@@ -2926,7 +2926,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 424960203}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -1.5275, y: 0.71, z: 20.753}
+  m_LocalPosition: {x: -1.5275, y: -6.55, z: 20.753}
   m_LocalScale: {x: 12.954065, y: 15.5358, z: 31.45929}
   m_Children: []
   m_Father: {fileID: 771067517}
@@ -10307,7 +10307,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh18142
+  m_Name: pb_Mesh25458
   serializedVersion: 10
   m_SubMeshes:
   - serializedVersion: 2
@@ -10483,7 +10483,7 @@ PrefabInstance:
     - target: {fileID: 3225189145465032136, guid: eb0a18701aeffc54d9d1d0e0b87389cc, type: 3}
       propertyPath: m_Cameras.Array.data[0]
       value: 
-      objectReference: {fileID: 1805075827}
+      objectReference: {fileID: 0}
     - target: {fileID: 3225189145465032139, guid: eb0a18701aeffc54d9d1d0e0b87389cc, type: 3}
       propertyPath: target
       value: 
@@ -11354,7 +11354,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh17944
+  m_Name: pb_Mesh25262
   serializedVersion: 10
   m_SubMeshes:
   - serializedVersion: 2
@@ -12077,7 +12077,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh17844
+  m_Name: pb_Mesh25162
   serializedVersion: 10
   m_SubMeshes:
   - serializedVersion: 2
@@ -16260,7 +16260,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh18190
+  m_Name: pb_Mesh25506
   serializedVersion: 10
   m_SubMeshes:
   - serializedVersion: 2
@@ -16864,6 +16864,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d39ac8138bfadbc43ab798d0b822d4d1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  lockCursor: 1
+  enableMenuToggle: 1
 --- !u!114 &1761492419 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 4015407378647977322, guid: ae4e6d43ee428f741899759d462ca05d, type: 3}
@@ -17107,11 +17109,6 @@ PrefabInstance:
 Transform:
   m_CorrespondingSourceObject: {fileID: 1311148204885620894, guid: 7ba6008a92f4d9f4db9cd317475eb6f2, type: 3}
   m_PrefabInstance: {fileID: 1788338919}
-  m_PrefabAsset: {fileID: 0}
---- !u!20 &1805075827 stripped
-Camera:
-  m_CorrespondingSourceObject: {fileID: 3325050861395757878, guid: c588ce2a75014da48a5257fefbe567ad, type: 3}
-  m_PrefabInstance: {fileID: 3325050861806063173}
   m_PrefabAsset: {fileID: 0}
 --- !u!1 &1815300500
 GameObject:
@@ -17439,7 +17436,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh18226
+  m_Name: pb_Mesh25542
   serializedVersion: 10
   m_SubMeshes:
   - serializedVersion: 2
@@ -17796,7 +17793,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh17876
+  m_Name: pb_Mesh25194
   serializedVersion: 10
   m_SubMeshes:
   - serializedVersion: 2
@@ -18245,7 +18242,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh17920
+  m_Name: pb_Mesh25238
   serializedVersion: 10
   m_SubMeshes:
   - serializedVersion: 2
@@ -18613,10 +18610,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: Ferret
       objectReference: {fileID: 0}
-    - target: {fileID: 3325050860681079636, guid: c588ce2a75014da48a5257fefbe567ad, type: 3}
-      propertyPath: groundCheckLayerMask.m_Bits
-      value: 22071
-      objectReference: {fileID: 0}
     - target: {fileID: 3325050861552015953, guid: c588ce2a75014da48a5257fefbe567ad, type: 3}
       propertyPath: m_Materials.Array.data[0]
       value: 
@@ -18682,10 +18675,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 6354315350578367726, guid: 84ffc813f6d7cb34a8c276f02ca14f4a, type: 3}
-      propertyPath: OutputAudioMixerGroup
-      value: 
-      objectReference: {fileID: 208827308769968937, guid: 3c03042c2931a8e43ac41147a5988e4f, type: 2}
     - target: {fileID: 6354315351796493652, guid: 84ffc813f6d7cb34a8c276f02ca14f4a, type: 3}
       propertyPath: m_LocalPosition.x
       value: 28.86
@@ -18735,8 +18724,8 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 1260587447}
     - target: {fileID: 6354315351796493653, guid: 84ffc813f6d7cb34a8c276f02ca14f4a, type: 3}
-      propertyPath: viewLaserMask.m_Bits
-      value: 5633
+      propertyPath: throwSpeed
+      value: 60
       objectReference: {fileID: 0}
     - target: {fileID: 6354315351796493658, guid: 84ffc813f6d7cb34a8c276f02ca14f4a, type: 3}
       propertyPath: m_Name

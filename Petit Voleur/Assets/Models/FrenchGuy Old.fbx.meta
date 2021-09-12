@@ -26,13 +26,16 @@ ModelImporter:
     second: Chef_Start_Kick
   - first:
       74: -6458631351157870967
-    second: Chef_Idle
+    second: Chef_Old_Idle
   - first:
       74: -8416776961825391631
-    second: Chef_Kick
+    second: Chef_Old_Kick
   - first:
       74: 6065853329218996737
     second: Chef_Start_Walk
+  - first:
+      74: -5630253532490259572
+    second: Chef_Old_Walk
   externalObjects:
   - first:
       type: UnityEngine:Material
@@ -112,7 +115,7 @@ ModelImporter:
     extraUserProperties: []
     clipAnimations:
     - serializedVersion: 16
-      name: Chef_Idle
+      name: Chef_Old_Idle
       takeName: ChefRig|ChefRigAction
       internalID: 0
       firstFrame: 0
@@ -141,7 +144,7 @@ ModelImporter:
       maskSource: {instanceID: 0}
       additiveReferencePoseFrame: 0
     - serializedVersion: 16
-      name: Chef_Walk
+      name: Chef_Old_Walk
       takeName: ChefRig|ChefRigAction
       internalID: 0
       firstFrame: 50
@@ -170,7 +173,7 @@ ModelImporter:
       maskSource: {instanceID: 0}
       additiveReferencePoseFrame: 0
     - serializedVersion: 16
-      name: Chef_Kick
+      name: Chef_Old_Kick
       takeName: ChefRig|ChefRigAction
       internalID: 0
       firstFrame: 100
