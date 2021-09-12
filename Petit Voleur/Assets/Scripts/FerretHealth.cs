@@ -8,6 +8,7 @@ using UnityEngine;
 
 public class FerretHealth : MonoBehaviour
 {
+	[Tooltip("The maximum and initial health value for the ferret.")]
 	public int maxHealth = 3;
 	int currentHealth;
 

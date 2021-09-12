@@ -20,7 +20,7 @@ public class GameManager : MonoBehaviour
 		UI = FindObjectOfType<GameUI>();
 		if (lockCursor)
 		{
-			Cursor.lockState = CursorLockMode.Confined;
+			Cursor.lockState = CursorLockMode.Locked;
 			Cursor.visible = false;
 		}
 	}
@@ -58,8 +58,10 @@ public class GameManager : MonoBehaviour
 	public void OnToggleMenu()
 	{
 		if (enableMenuToggle && UI != null)
+		{
 			//its not necessarily *good* that ui controls pause logic, but also it makes stuff easier soooooooo
-			UI.Pause(!UI.CheckIsPaused());
+			UI.ToggleMenu();
+		}
 	}
 
 	public void OnDeath()
