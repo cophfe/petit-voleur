@@ -11,6 +11,14 @@ public class FerretHealth : MonoBehaviour
 	public int maxHealth = 3;
 	int currentHealth;
 
+	public int CurrentHealth
+	{
+		get
+		{
+			return currentHealth;
+		}
+	}
+
 	GameUI UI;
 	GameManager gM;
 
@@ -19,6 +27,7 @@ public class FerretHealth : MonoBehaviour
 		currentHealth = maxHealth;
 		UI = FindObjectOfType<GameUI>();
 		gM = FindObjectOfType<GameManager>();
+		UI.InitializeHealthUI(maxHealth);
 	}
 
     public void SetHealth(int health)
@@ -26,8 +35,8 @@ public class FerretHealth : MonoBehaviour
 		currentHealth = Mathf.Min(health, maxHealth);
 		if (currentHealth <= 0)
 			gM.OnDeath();
-		
-		//Call UI function
+
+		UI.SetHealthUI(currentHealth);
 	}
 
 	public void Damage(int damageAmount = 1)
@@ -35,13 +44,13 @@ public class FerretHealth : MonoBehaviour
 		currentHealth -= damageAmount;
 		if (currentHealth <= 0)
 			gM.OnDeath();
-		
-		//Call UI function
+
+		UI.SetHealthUI(currentHealth);
 	}
 
 	public void Heal(int healAmount = 1)
 	{
 		currentHealth = Mathf.Min(currentHealth + healAmount, maxHealth);
-		//Call UI function
+		UI.SetHealthUI(currentHealth);
 	}
 }
