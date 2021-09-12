@@ -68,7 +68,7 @@ public partial class CameraController : MonoBehaviour
 	float shakeTimer = 0;
 	
 	//used to stop camera from clipping into walls
-	Vector3 cameraBoxExtents;
+	Vector3 cameraBoxHalfExtents;
 	public bool physicsShake = true;
 
 	void Start()
@@ -115,18 +115,11 @@ public partial class CameraController : MonoBehaviour
 			float t = (shakeTimer) / shakeTime;
 			Vector3 shakeVector = (shakeDir + t * shakeMag * shakeNoiseMag * Random.insideUnitSphere) * (shakeMag * t);
 			float shakeMagnitude = shakeVector.magnitude;
+			//if camera shake would put camera into the ground, cancel shake.
+			//Note: this should be added to max ray distance: 2 * Vector3.Dot(transform.rotation * cameraBoxHalfExtents, shakeVector / shakeMagnitude)
 			if (physicsShake && Physics.Raycast(new Ray(transform.position, shakeVector / shakeMagnitude), out var hit, shakeMagnitude, obstructionLayers.value))
 			{
 				shakeVector = Vector3.zero;
-				//	float newDist = hit.distance - Vector3.Dot(transform.rotation * boxExtents, shakeVector / shakeMagnitude);
-				//	if (newDist < 0)
-				//	{
-				//		shakeVector = shakeVector / shakeMagnitude * hit.distance;
-				//	}
-				//	else
-				//	{
-				//		shakeVector = shakeVector / shakeMagnitude * newDist;
-				//	}
 			}
 			transform.position += shakeVector;
 		}
@@ -181,17 +174,17 @@ public partial class CameraController : MonoBehaviour
 	{		
 		float yExtend = Mathf.Tan(cam.fieldOfView * Mathf.Deg2Rad) * cam.nearClipPlane;
 		//regenerated every frame because it could change, could maybe optimise by only calling on camera change
-		cameraBoxExtents = new Vector3(yExtend * cam.aspect, yExtend, cam.nearClipPlane) / 2;
+		cameraBoxHalfExtents = new Vector3(yExtend * cam.aspect, yExtend, cam.nearClipPlane) / 2;
 
 		//check if camera is obstructed
 
-		Collider[] c = Physics.OverlapBox(((cam.nearClipPlane) / 2) * orbitVector + currentPivotPosition, cameraBoxExtents, transform.rotation, obstructionLayers.value);
+		Collider[] c = Physics.OverlapBox(((cam.nearClipPlane) / 2) * orbitVector + currentPivotPosition, cameraBoxHalfExtents, transform.rotation, obstructionLayers.value);
 
 		//check if obstructing object is inside box used for raycast (if this is the case the raycast does not detect it)
 		//if so, do not change target distance
 		if (c.Length == 0)
 		{
-			if (Physics.BoxCast(((cam.nearClipPlane) / 2) * orbitVector + currentPivotPosition, cameraBoxExtents, orbitVector,
+			if (Physics.BoxCast(((cam.nearClipPlane) / 2) * orbitVector + currentPivotPosition, cameraBoxHalfExtents, orbitVector,
 			out RaycastHit boxHit, transform.rotation, maxFollowDistance, obstructionLayers.value))
 			{
 				targetDistance = boxHit.distance;

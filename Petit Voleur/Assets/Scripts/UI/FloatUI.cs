@@ -10,46 +10,46 @@ using UnityEngine.InputSystem;
 public class FloatUI : MonoBehaviour
 {
 	[Header("Transforms")]
-	[Tooltip("")]
+	[Tooltip("The transform for the chef character.")]
 	public RectTransform chefTransform;
-	[Tooltip("")]
+	[Tooltip("The transform for the ferret character.")]
 	public RectTransform ferretTransform;
-	[Tooltip("")]
+	[Tooltip("The object that has all item images as children.")]
 	public RectTransform itemsParent;
-	[Tooltip("")]
+	[Tooltip("The object that has all images that need to wobble (items and characters both) as children.")]
 	public RectTransform imagesParent;
 
 	[Header("Character Movement")]
 	[Space(5)]
-	[Tooltip("")]
+	[Tooltip("The amount of time before the characters rotate onto screen.")]
 	public float characterStartTime = 2;
-	[Tooltip("")]
+	[Tooltip("The amount the characters rotate left or right in degrees.")]
 	public float characterWobbleMag = 1;
-	[Tooltip("")]
+	[Tooltip("Proportional to the speed of the character's wobble.")]
 	public float characterWobbleSpeed = 1;
-	[Tooltip("")]
+	[Tooltip("Proportional to the effect noise has on the character's rotations.")]
 	public float characterWobbleNoiseMag = 1;
-	[Tooltip("")]
+	[Tooltip("Proportional to the effect noise has on the character's position.")]
 	public float characterMoveNoiseMag = 1;
-	[Tooltip("")]
+	[Tooltip("Proportional to the speed the noise sample positions change.")]
 	public float characterNoiseSpeed = 1;
-	
+	[Tooltip("The base value used for the dampening sine wave used for character's wobble.")]
+	public float wobbleBaseValue = 2.7182818284590452353602874713527f;
+
 	[Header("Items Movement")]
 	[Space(5)]
-	[Tooltip("")]
+	[Tooltip("Proportional to the effect noise has on the items's rotations.")]
 	public float wobbleNoiseMag = 1;
-	[Tooltip("")]
+	[Tooltip("Proportional to the effect noise has on the item's position.")]
 	public float moveNoiseMag = 1;
-	[Tooltip("")]
+	[Tooltip("Proportional to the speed the noise sample positions change.")]
 	public float noiseSpeed = 1;
-	[Tooltip("")]
-	public float wobbleBaseValue = 2.7182818284590452353602874713527f;
 
 	[Header("Image Rotate")]
 	[Space(5)]
-	[Tooltip("")]
+	[Tooltip("The max amount imagesParent can be rotated around the Y axis.")]
 	public float maxYRotation = 10;
-	[Tooltip("")]
+	[Tooltip("The max amount imagesParent can be rotated around the X axis.")]
 	public float maxXRotation = 10;
 
 	RectTransformStore[] items;

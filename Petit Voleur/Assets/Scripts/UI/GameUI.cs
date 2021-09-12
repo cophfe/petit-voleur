@@ -9,6 +9,7 @@ using TMPro;
 using UnityEngine.UI;
 using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
+using UnityEngine.Rendering.Universal;
 
 public class GameUI : MonoBehaviour
 {
@@ -37,6 +38,9 @@ public class GameUI : MonoBehaviour
 	public Animator sceneTransitionAnimator;
 	[Tooltip("The amount of time it takes to transition to a new scene")]
 	public float sceneTransitionTime = 1;
+	[Tooltip("The maximum blur amount.")]
+	public float maxBlurAmount = 0.02f;
+
 	//private variables
 	enum ScreenState
 	{
@@ -67,6 +71,9 @@ public class GameUI : MonoBehaviour
 	PlayerInput playerInput = null;
 	//The camera's input component
 	PlayerInput cameraInput = null;
+
+	//manager used for blurring background
+	BlurManager blurManager;
 
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 	//~~~~~~~~~~~~~POINTS STUFF~~~~~~~~~~~~~~~~~
@@ -101,9 +108,9 @@ public class GameUI : MonoBehaviour
 	//public variables
 	[Header("Health Variables")]
 	[Space(5)]
-	[Tooltip("")]
+	[Tooltip("The object representing 1 unit of health.")]
 	public GameObject healthPrefab = null;
-	[Tooltip("")]
+	[Tooltip("The object that holds the health unit objects. Should have a horizontal or vertical layout group attached.")]
 	public RectTransform healthParent = null;
 
 	//private variables
@@ -124,6 +131,9 @@ public class GameUI : MonoBehaviour
 
 		//find the point tracker
 		pointTracker = FindObjectOfType<PointTracker>();
+
+		//find the blur manager
+		blurManager = GetComponent<BlurManager>();
 
 		//find the player's input
 		try
@@ -150,20 +160,25 @@ public class GameUI : MonoBehaviour
 					if (screenTransitionTimer >= screenTransitionTime)
 					{
 						screenState = ScreenState.PAUSE;
+
 						pausePanel.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, pausePanelDefaultHeight);
 						Color finalColor = screenOverlay.color;
 						finalColor.a = overlayDefaultAlpha;
 						screenOverlay.color = finalColor;
+						blurManager.SetBlurAmount(maxBlurAmount);
 						break;
 					}
 
 					float t = screenTransitionTimer / screenTransitionTime;
-					//transition panel height using ease out quad
-					pausePanel.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, (1 - (1 - t) * (1 - t)) * pausePanelDefaultHeight);
+					t = (1 - (1 - t) * (1 - t));
 					//transition overlay alpha linearly
 					Color c = screenOverlay.color;
 					c.a = overlayDefaultAlpha * t;
 					screenOverlay.color = c;
+					blurManager.SetBlurAmount(maxBlurAmount * t);
+					//transition panel height using ease out quad
+					pausePanel.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical,t * pausePanelDefaultHeight);
+					
 
 					screenTransitionTimer += Time.unscaledDeltaTime;
 				}
@@ -191,12 +206,18 @@ public class GameUI : MonoBehaviour
 						if (cameraInput)
 							cameraInput.enabled = true;
 
+						blurManager.SetBlurAmount(0);
+						blurManager.DisableBlur();
+
 						break;
 					}
 
 					float t = 1 - screenTransitionTimer / screenTransitionTime;
+					t = t * t;
+					blurManager.SetBlurAmount(t * maxBlurAmount);
+
 					//transition panel height using ease in quad
-					pausePanel.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, (t * t) * pausePanelDefaultHeight);
+					pausePanel.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, t * pausePanelDefaultHeight);
 					//transition overlay alpha linearly
 					Color c = screenOverlay.color;
 					c.a = overlayDefaultAlpha * t;
@@ -215,13 +236,18 @@ public class GameUI : MonoBehaviour
 						Color finalColor = screenOverlay.color;
 						finalColor.a = overlayDefaultAlpha;
 						screenOverlay.color = finalColor;
+						blurManager.SetBlurAmount(maxBlurAmount);
+
 						break;
 					}
 
 					float t = screenTransitionTimer / screenTransitionTime;
+					t = (1 - (1 - t) * (1 - t));
+
 					//transition panel height using ease out quad
-					winPanel.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, (1 - (1 - t) * (1 - t)) * winPanelDefaultHeight);
+					winPanel.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, t * winPanelDefaultHeight);
 					//transition overlay alpha linearly
+					blurManager.SetBlurAmount(t * maxBlurAmount);
 					Color c = screenOverlay.color;
 					c.a = overlayDefaultAlpha * t;
 					screenOverlay.color = c;
@@ -342,6 +368,28 @@ public class GameUI : MonoBehaviour
 		}
 	}
 
+	public void ToggleMenu()
+	{
+		switch (screenState)
+		{
+			case ScreenState.PAUSE:
+				{
+					Pause(false);
+				}
+				break;
+			case ScreenState.OPTIONS:
+				{
+					CloseOptions();
+				}
+				break;
+			case ScreenState.NOTHING:
+				{
+					Pause(true);
+				}
+				break;
+		}
+	}
+
 	public bool Pause(bool pause)
 	{
 		switch (screenState)
@@ -352,6 +400,10 @@ public class GameUI : MonoBehaviour
 					if (pause)
 						return false;
 
+					//lock cursor
+					Cursor.lockState = CursorLockMode.Locked;
+					Cursor.visible = false;
+
 					screenTransitionTimer = 0;
 					screenState = ScreenState.TPAUSEOUT;
 					return true;
@@ -361,6 +413,14 @@ public class GameUI : MonoBehaviour
 				{
 					if (!pause)
 						return false;
+
+					//free cursor
+					Cursor.lockState = CursorLockMode.None;
+					Cursor.visible = true;
+
+					//enable blur forward renderer (quicker than a second camera apparently, and waaaaaaay quicker than disabling a render feature i think)
+					blurManager.EnableBlur();
+					blurManager.SetBlurAmount(0);
 
 					//disable input from player
 					if (playerInput)
@@ -469,6 +529,7 @@ public class GameUI : MonoBehaviour
 	{
 		EnableScreen(ScreenState.WIN);
 		screenState = ScreenState.TWININ;
+		blurManager.EnableBlur();
 
 		//pause time
 		lastTimeScale = Time.timeScale;
