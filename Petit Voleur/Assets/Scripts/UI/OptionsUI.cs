@@ -9,14 +9,14 @@ using UnityEngine.UI;
 
 public class OptionsUI : MonoBehaviour
 {
-	[Tooltip("")]
+	[Tooltip("The slider representing the volume value.")]
 	public Slider volumeSlider = null;
-	[Tooltip("")]
+	[Tooltip("The toggle that changes fullscreen value")]
 	public Toggle fullscreenToggle = null;
 
 	private void Awake()
 	{
-		//set values to default value	
+		//set values to default
 	}
 
 	public void OnVolumeChanged()

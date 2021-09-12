@@ -41,6 +41,9 @@ public class MainMenuUI : MonoBehaviour
 
 		optionsPanel.gameObject.SetActive(false);
 		mainPanel.gameObject.SetActive(true);
+
+		Cursor.lockState = CursorLockMode.None;
+		Cursor.visible = true;
 	}
 
 	void Update()
