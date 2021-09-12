@@ -5,7 +5,7 @@ using UnityEngine.AI;
 
 public class ChefAI : MonoBehaviour
 {
-	public enum State
+	public enum State : int
 	{
 		Wander,
 		Inspect,
