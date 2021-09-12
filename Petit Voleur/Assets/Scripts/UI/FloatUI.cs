@@ -10,30 +10,46 @@ using UnityEngine.InputSystem;
 public class FloatUI : MonoBehaviour
 {
 	[Header("Transforms")]
+	[Tooltip("")]
 	public RectTransform chefTransform;
+	[Tooltip("")]
 	public RectTransform ferretTransform;
+	[Tooltip("")]
 	public RectTransform itemsParent;
+	[Tooltip("")]
 	public RectTransform imagesParent;
 
 	[Header("Character Movement")]
 	[Space(5)]
+	[Tooltip("")]
 	public float characterStartTime = 2;
+	[Tooltip("")]
 	public float characterWobbleMag = 1;
+	[Tooltip("")]
 	public float characterWobbleSpeed = 1;
+	[Tooltip("")]
 	public float characterWobbleNoiseMag = 1;
+	[Tooltip("")]
 	public float characterMoveNoiseMag = 1;
+	[Tooltip("")]
 	public float characterNoiseSpeed = 1;
 	
 	[Header("Items Movement")]
 	[Space(5)]
+	[Tooltip("")]
 	public float wobbleNoiseMag = 1;
+	[Tooltip("")]
 	public float moveNoiseMag = 1;
+	[Tooltip("")]
 	public float noiseSpeed = 1;
+	[Tooltip("")]
 	public float wobbleBaseValue = 2.7182818284590452353602874713527f;
 
 	[Header("Image Rotate")]
 	[Space(5)]
+	[Tooltip("")]
 	public float maxYRotation = 10;
+	[Tooltip("")]
 	public float maxXRotation = 10;
 
 	RectTransformStore[] items;

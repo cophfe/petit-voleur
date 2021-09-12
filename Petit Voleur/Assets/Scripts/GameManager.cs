@@ -9,14 +9,20 @@ using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
+	public bool lockCursor = true;
+	public bool enableMenuToggle = true;
+
 	GameUI UI = null;
 	bool canWin = false;
-
+	
 	private void Start()
 	{
 		UI = FindObjectOfType<GameUI>();
-		Cursor.lockState = CursorLockMode.Confined;
-		Cursor.visible = false;
+		if (lockCursor)
+		{
+			Cursor.lockState = CursorLockMode.Confined;
+			Cursor.visible = false;
+		}
 	}
 
 	public void UpdatePointUI()
@@ -51,12 +57,14 @@ public class GameManager : MonoBehaviour
 
 	public void OnToggleMenu()
 	{
-		if (UI != null)
+		if (enableMenuToggle && UI != null)
+			//its not necessarily *good* that ui controls pause logic, but also it makes stuff easier soooooooo
 			UI.Pause(!UI.CheckIsPaused());
 	}
 
 	public void OnDeath()
 	{
+		Debug.Log("PLAYER DIED!!");
 		//Call UI
 	}
 }
