@@ -27,9 +27,9 @@ public class FerretAudio : MonoBehaviour
 	/// Plays a clip as a one shot, not being interrupted
 	/// </summary>
 	/// <param name="clip"></param>
-	void PlayQuickSound(AudioClip clip)
+	void PlayQuickSound(AudioClip clip, float volume = 1.0f)
 	{
-		source.PlayOneShot(clip);
+		source.PlayOneShot(clip, volume);
 	}
 
 	// ====================================================== //
@@ -56,9 +56,9 @@ public class FerretAudio : MonoBehaviour
 		PlayQuickSound(ferretJump);
 	}
 	
-	public void PlayFerretLanded()
+	public void PlayFerretLanded(float volume = 1.0f)
 	{
-		PlayQuickSound(ferretLanded);
+		PlayQuickSound(ferretLanded, volume);
 	}
 
 	public void PlayFerretKicked()

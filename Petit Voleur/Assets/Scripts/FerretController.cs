@@ -46,6 +46,7 @@ public class FerretController : MonoBehaviour
 	//Measured in dot product
 	public float maxVelocityFollowAngle = 0.9f;
 	public float maxVelocity = 300.0f;
+	public float airTimeSoundThreshold = 20.0f;
 
 	[Header("Jumping")]
 	public JumpArc fallingArc;
@@ -96,6 +97,7 @@ public class FerretController : MonoBehaviour
 	private float dashTimer = 0f;
 	private float dashCDTimer = 0f;
 	private float ragdollTimer = 0f;
+	private float airTimeTimer = 0f;
 	private bool isDead = false;
 
     // Start is called before the first frame update
@@ -145,6 +147,10 @@ public class FerretController : MonoBehaviour
 				else
 					CancelDash();
 			}
+
+			//Tick up air time timer (used for jump sound)
+			if (!grounded)
+				airTimeTimer += Time.deltaTime;
 
 			Move();
 			
@@ -232,11 +238,12 @@ public class FerretController : MonoBehaviour
 		{
 			floorNormal = rayhit.normal;
 			floorObject = rayhit.collider;
+			grounded = true;
 
-			if (!grounded)
+			if (airTimeTimer >= airTimeSoundThreshold)
 			{
-				grounded = true;
-				ferretAudio.PlayFerretLanded();
+				ferretAudio.PlayFerretLanded(Mathf.Min(airTimeTimer / airTimeSoundThreshold, 3.0f));
+				airTimeTimer = 0;
 			}
 		}
 		else
@@ -277,7 +284,7 @@ public class FerretController : MonoBehaviour
 			// ~~~~~~~ Generate target velocity ~~~~~~ //
 			projectedInput = forward * input.y;									//Forward component
 			projectedInput -= Vector3.Cross(forward, floorNormal) * input.x;	//Cross product the forward and floorNormal to get the left component
-			targetVelocity = projectedInput * (targetSpeed * stats.Speed);						//Multiply by target speed to set the magnitude of targetVelocity
+			targetVelocity = projectedInput * (targetSpeed * stats.Speed);		//Multiply by target speed to set the magnitude of targetVelocity
 			
 			//Desired change in velocity along the plane
 			deltaVelocity = targetVelocity - planarVelocity;
@@ -583,6 +590,7 @@ public class FerretController : MonoBehaviour
 			velocity = rigidbody.velocity;
 			//This is important to prevent the player from having incorrect gravity
 			StopClimbing();
+			CancelDash();
 		}
 
 		rigidbody.isKinematic = !isRagdolled;
@@ -599,7 +607,7 @@ public class FerretController : MonoBehaviour
 	/// </summary>
 	/// <param name="time">Ragdoll duration</param>
 	public void StartRagdoll(float time)
-	{		
+	{
 		ragdollTimer = time;
 		SetRagdollState(true);
 	}

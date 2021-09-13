@@ -8,6 +8,7 @@ public class ChefThrowable : MonoBehaviour
 	public Transform colliders;
 	public AudioSource audioSource;
     public LayerMask ferretLayer;
+	public float velocityThreshold;
 	public float ragdollDuration;
 	public float impulse;
 	public int damage = 1;
@@ -22,7 +23,7 @@ public class ChefThrowable : MonoBehaviour
 			foreach (Transform t in colliders)
 				t.gameObject.layer = 0;
 		}
-		if (!hitPlayer)
+		if (!hitPlayer && (rb.velocity.sqrMagnitude > velocityThreshold * velocityThreshold))
 		{
 
 			if ((ferretLayer.value & (1 << collision.gameObject.layer)) > 0)

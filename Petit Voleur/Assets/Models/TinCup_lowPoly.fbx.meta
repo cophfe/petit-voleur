@@ -3,7 +3,17 @@ guid: 5d0e21bb72f3b7c41a48f945bb85954c
 ModelImporter:
   serializedVersion: 20101
   internalIDToNameTable: []
-  externalObjects: {}
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: TinCup_text_a
+    second: {fileID: 2100000, guid: d6726e8540ccc844cb116b9ad4f1ae77, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: TinCup_text_b
+    second: {fileID: 2100000, guid: d6726e8540ccc844cb116b9ad4f1ae77, type: 2}
   materials:
     materialImportMode: 1
     materialName: 0

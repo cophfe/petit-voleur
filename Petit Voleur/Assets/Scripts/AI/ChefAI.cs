@@ -327,7 +327,10 @@ public class ChefAI : MonoBehaviour
 		Vector3 aiToTarget = targetTransform.position - transform.position;
 		aiToTarget.y = 0;
 		if (aiToTarget.sqrMagnitude < kickRange * kickRange)
-			PlayKickAnim();
+		{
+			if (Vector3.Angle(transform.forward, aiToTarget) < 15.0f)
+				PlayKickAnim();
+		}
 		else
 			agent.SetDestination(targetTransform.position);
 	}

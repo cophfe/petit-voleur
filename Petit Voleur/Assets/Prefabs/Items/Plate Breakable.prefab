@@ -327,7 +327,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 9002765365627379036}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 4.209443, y: 27.56686, z: 1.99}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 8627753162177752774}
@@ -350,7 +350,7 @@ Rigidbody:
   m_IsKinematic: 0
   m_Interpolate: 1
   m_Constraints: 0
-  m_CollisionDetection: 2
+  m_CollisionDetection: 0
 --- !u!114 &8084338151602380809
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -381,7 +381,7 @@ MonoBehaviour:
   pointTracker: {fileID: 0}
   shards: {fileID: 625696796484315286, guid: 66fa6a8bf736fe64381c2afca8637a45, type: 3}
   breakValue: 15
-  impactThreshold: 30
+  impactThreshold: 25
 --- !u!1001 &8084338152097368365
 PrefabInstance:
   m_ObjectHideFlags: 0
