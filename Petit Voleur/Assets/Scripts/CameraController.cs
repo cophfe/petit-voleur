@@ -39,7 +39,9 @@ public partial class CameraController : MonoBehaviour
 	public float zoomInSpeed = 15;
 	[Tooltip("The speed the camera zooms out.")]
 	public float zoomOutSpeed = 15;
-	[Tooltip("Affects the amount of noise applied to the screen shake."), Range(0,1)]
+	[Tooltip("Propertional to the speed camera shake deteriorates")]
+	public float shakeDeteriorateSpeed = 1;
+	[Tooltip("Affects the amount of random movement applied to the screen shake (multiplied by shake magnitude)."), Range(0,1)]
 	public float shakeNoiseMag = 0;
 	[Tooltip("If rotation should be smoothed.")]
 	public bool smoothCameraRotation = false;
@@ -61,15 +63,12 @@ public partial class CameraController : MonoBehaviour
 	Quaternion targetOrbit;
 	Quaternion currentOrbit = Quaternion.identity;
 	Vector3 currentPivotPosition;
-	//used for camera shake
-	Vector3 shakeDir = Vector3.zero;
-	float shakeMag = 0;
-	float shakeTime = 0;
-	float shakeTimer = 0;
 	
 	//used to stop camera from clipping into walls
 	Vector3 cameraBoxHalfExtents;
-	public bool physicsShake = true;
+	
+	//camera shake
+	Vector3 cameraShake = Vector3.zero;
 
 	void Start()
 	{
@@ -109,19 +108,14 @@ public partial class CameraController : MonoBehaviour
 		//set camera position
 		transform.position = currentPivotPosition + orbitVector;
 		//camera shake
-		if (shakeTimer > 0)
+		float m = UpdateCameraShake();
+		if (m > 0.001f)
 		{
-			shakeTimer -= Time.deltaTime;
-			float t = (shakeTimer) / shakeTime;
-			Vector3 shakeVector = (shakeDir + t * shakeMag * shakeNoiseMag * Random.insideUnitSphere) * (shakeMag * t);
-			float shakeMagnitude = shakeVector.magnitude;
-			//if camera shake would put camera into the ground, cancel shake.
-			//Note: this should be added to max ray distance: 2 * Vector3.Dot(transform.rotation * cameraBoxHalfExtents, shakeVector / shakeMagnitude)
-			if (physicsShake && Physics.Raycast(new Ray(transform.position, shakeVector / shakeMagnitude), out var hit, shakeMagnitude, obstructionLayers.value))
+			Vector3 shakeVector = cameraShake + cameraShake.magnitude * Random.insideUnitSphere * shakeNoiseMag;
+			if (!Physics.BoxCast(transform.position, cameraBoxHalfExtents, shakeVector.normalized, transform.rotation, shakeVector.magnitude, obstructionLayers.value))
 			{
-				shakeVector = Vector3.zero;
+				transform.position += shakeVector;
 			}
-			transform.position += shakeVector;
 		}
 	}
 
@@ -143,6 +137,8 @@ public partial class CameraController : MonoBehaviour
 			input *= sensitivity;
 		rotation += input;
 		//up rotation is clamped
+		//float upRotation = Vector2.Dot(rotation, Vector3.ProjectOnPlane(target.up, cam.transform.forward));
+		//Debug.Log(upRotation);
 		rotation.y = Mathf.Clamp(rotation.y, -maximumUpRotation, -minimumUpRotation);
 		//set target quaternion
 		targetOrbit = Quaternion.Euler(rotation.y, rotation.x, 0);
@@ -222,18 +218,20 @@ public partial class CameraController : MonoBehaviour
 		orbitVector *= currentDistance;
 	}
 
-	//
 	public void SetCameraShake(Vector2 screenSpaceDirection, float magnitude, float time)
 	{
-		//shakeDir = Vector3.ProjectOnPlane(worldSpaceDirection, cam.transform.forward).normalized;
-		shakeDir = screenSpaceDirection;
-		shakeMag = magnitude;
-		shakeTime = time;
-		shakeTimer = shakeTime;
 	}
 
-	//public void OnAaa()
-	//{
-	//	SetCameraShake(target.forward, 3, 0.5f);
-	//}
+	public void AddCameraShake(Vector3 shake)
+	{
+		cameraShake += shake;
+	}
+
+	//returns magnitude of camera shake
+	float UpdateCameraShake()
+	{
+		float magnitude = cameraShake.magnitude;
+		cameraShake = Vector3.MoveTowards(cameraShake, Vector3.zero, magnitude * Time.deltaTime * shakeDeteriorateSpeed);
+		return magnitude;
+	}
 }

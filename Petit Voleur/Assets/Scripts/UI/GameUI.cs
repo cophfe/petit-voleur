@@ -65,16 +65,12 @@ public class GameUI : MonoBehaviour
 	ScreenState screenState = ScreenState.NOTHING;
 	//the timer used for transitioning menus
 	float screenTransitionTimer = 0;
-	//the time scale before pausing
-	float lastTimeScale = 1;
-	//The player's input component
-	PlayerInput playerInput = null;
-	//The camera's input component
-	PlayerInput cameraInput = null;
 
 	//manager used for blurring background
 	BlurManager blurManager;
-
+	//other stuff
+	GameManager gM;
+	TimeManager tM;
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 	//~~~~~~~~~~~~~POINTS STUFF~~~~~~~~~~~~~~~~~
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -112,13 +108,15 @@ public class GameUI : MonoBehaviour
 	public GameObject healthPrefab = null;
 	[Tooltip("The object that holds the health unit objects. Should have a horizontal or vertical layout group attached.")]
 	public RectTransform healthParent = null;
-
 	//private variables
 	List<GameObject> healthChildren = null;
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 	private void Start()
 	{
+		gM = FindObjectOfType<GameManager>();
+		tM = FindObjectOfType<TimeManager>();
+
 		//initialise menu values
 		pausePanelDefaultHeight = pausePanel.rect.height;
 		winPanelDefaultHeight = winPanel.rect.height;
@@ -134,17 +132,6 @@ public class GameUI : MonoBehaviour
 
 		//find the blur manager
 		blurManager = GetComponent<BlurManager>();
-
-		//find the player's input
-		try
-		{
-			playerInput = GameObject.FindGameObjectWithTag("Player").GetComponentInChildren<PlayerInput>();
-			cameraInput = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<PlayerInput>();
-		}
-		catch
-		{
-			Debug.LogWarning("Error in finding input components.");
-		}
 	}
 	
 	private void Update()
@@ -195,16 +182,12 @@ public class GameUI : MonoBehaviour
 						var color = screenOverlay.color;
 						color.a = 0;
 						screenOverlay.color = color;
-						Time.timeScale = lastTimeScale;
+						tM.Unpause();
 
 						EnableScreen(ScreenState.NOTHING);
 
 						//enable input from player
-						if (playerInput)
-							playerInput.enabled = true;
-
-						if (cameraInput)
-							cameraInput.enabled = true;
+						gM.GameInputEnabled = true;
 
 						blurManager.SetBlurAmount(0);
 						blurManager.DisableBlur();
@@ -401,8 +384,7 @@ public class GameUI : MonoBehaviour
 						return false;
 
 					//lock cursor
-					Cursor.lockState = CursorLockMode.Locked;
-					Cursor.visible = false;
+					gM.CursorLocked = true;
 
 					screenTransitionTimer = 0;
 					screenState = ScreenState.TPAUSEOUT;
@@ -415,27 +397,22 @@ public class GameUI : MonoBehaviour
 						return false;
 
 					//free cursor
-					Cursor.lockState = CursorLockMode.None;
-					Cursor.visible = true;
+					gM.CursorLocked = false;
 
 					//enable blur forward renderer (quicker than a second camera apparently, and waaaaaaay quicker than disabling a render feature i think)
 					blurManager.EnableBlur();
 					blurManager.SetBlurAmount(0);
 
 					//disable input from player
-					if (playerInput)
-						playerInput.enabled = false;
-
-					if (cameraInput)
-						cameraInput.enabled = false;
+					gM.GameInputEnabled = false;
 
 					EnableScreen(ScreenState.PAUSE);
 
 					screenState = ScreenState.TPAUSEIN;
 
 					//pause time
-					lastTimeScale = Time.timeScale;
-					Time.timeScale = 0;
+					tM.Pause();
+
 					screenTransitionTimer = 0;
 
 					//set initial values for transition
@@ -516,7 +493,8 @@ public class GameUI : MonoBehaviour
 
 		try
 		{
-			Time.timeScale = 1;
+			tM.Unpause();
+
 			SceneManager.LoadScene(menuSceneName);
 		}
 		catch
@@ -530,10 +508,14 @@ public class GameUI : MonoBehaviour
 		EnableScreen(ScreenState.WIN);
 		screenState = ScreenState.TWININ;
 		blurManager.EnableBlur();
+		gM.GameInputEnabled = false;
+
+		//unlock cursor
+		gM.CursorLocked = false;
 
 		//pause time
-		lastTimeScale = Time.timeScale;
-		Time.timeScale = 0;
+		tM.Pause();
+
 		screenTransitionTimer = 0;
 
 		//set initial values for transition
