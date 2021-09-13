@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class TimeManager : MonoBehaviour
 {
-	public bool isPaused = false;
 	//Just used to visualise in inspector
 	public float timeScale = 1.0f;
 	public float targetTimeScale = 1.0f;
@@ -13,6 +12,9 @@ public class TimeManager : MonoBehaviour
 	private float timer = 0;
 	private float currentTransitionRatio = 0;
 	private float currentDuration = 0;
+
+	private bool isPaused = false;
+	private float prePauseTimeScale = 1;
 
     // Update is called once per frame
     void Update()
@@ -85,4 +87,23 @@ public class TimeManager : MonoBehaviour
 	{
 		StartTimeModifier(timeScale, duration, defaultTransitionRatio);
 	}
+
+	public void Pause()
+	{
+		if (!isPaused)
+		{
+			prePauseTimeScale = Time.timeScale;
+			Time.timeScale = 0;
+		}
+	}
+
+	public void Unpause()
+	{
+		if (isPaused)
+		{
+			Time.timeScale = prePauseTimeScale;
+		}
+	}
+
+
 }
