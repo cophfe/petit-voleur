@@ -23,13 +23,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1457790041}
-  m_LocalRotation: {x: -0.004118936, y: -0.7070079, z: 0.7070988, w: 0.011590343}
+  m_LocalRotation: {x: -0.7070969, y: 0.011591104, z: -0.0041195997, w: 0.7070098}
   m_LocalPosition: {x: 0.00047, y: 0.0228, z: 0.00125}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 5143658653582465815}
   m_RootOrder: 5
-  m_LocalEulerAnglesHint: {x: 88.727, y: 270.639, z: -269.966}
+  m_LocalEulerAnglesHint: {x: -91.273, y: 270.63098, z: -270.026}
 --- !u!1 &1688901809
 GameObject:
   m_ObjectHideFlags: 0
@@ -292,11 +292,10 @@ MonoBehaviour:
   inspectDuration: 1
   ferretVisibleDuration: 1.5
   ferretGroundedThreshold: 5
-  throwDelay: 4
   inspectRange: 10
   wanderRange: 5
   kickRange: 8
-  throwRange: 30
+  kickDamage: 1
   kickRagdollDuration: 5
   kickVelocity: {x: 0, y: 30, z: 50}
   kickLayer:
@@ -306,7 +305,9 @@ MonoBehaviour:
   - {fileID: 1395391770021163244, guid: ae50990e27f9ebd49be38fed27186e51, type: 3}
   currentThrowable: {fileID: 0}
   throwPoint: {fileID: 1457790042}
-  throwSpeed: 5
+  throwRange: 50
+  throwDelay: 0
+  throwSpeed: 60
   deadReckoningSamples: 5
   wanderIndex: 0
   wanderPointContainer: {fileID: 0}
