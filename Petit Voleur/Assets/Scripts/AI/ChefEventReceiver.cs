@@ -15,4 +15,9 @@ public class ChefEventReceiver : MonoBehaviour
     {
         chef.Throw();
     }
+
+	public void WieldFrameReached()
+	{
+		chef.WieldThrowable();
+	}
 }

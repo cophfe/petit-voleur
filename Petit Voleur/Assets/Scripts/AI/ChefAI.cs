@@ -5,7 +5,7 @@ using UnityEngine.AI;
 
 public class ChefAI : MonoBehaviour
 {
-	public enum State
+	public enum State : int
 	{
 		Wander,
 		Inspect,
@@ -23,6 +23,7 @@ public class ChefAI : MonoBehaviour
 	public float inspectDuration = 1.0f;
 	public float ferretVisibleDuration = 1.5f;
 	public float ferretGroundedThreshold = -10.0f;
+	public float throwDelay = 4.0f;
 	public float inspectRange = 2.0f;
 	public float wanderRange = 2.0f;
 	public float kickRange = 3.0f;
@@ -57,6 +58,7 @@ public class ChefAI : MonoBehaviour
 	private float throwTimer;
 	private Vector3 soundPoint;
 	private Vector3 lastSeenPosition;
+	private Vector3 desiredLookDir;
 
 	// Start is called before the first frame update
 	void Start()
@@ -64,6 +66,8 @@ public class ChefAI : MonoBehaviour
 		agent = GetComponent<NavMeshAgent>();
 		target = FindObjectOfType<FerretController>();
 		targetTransform = target.transform;
+
+		agent.updateRotation = false;
 
 		//Generate wander point array based on transforms in the container
 		wanderPoints = new Vector3[wanderPointContainer.childCount];
@@ -74,43 +78,71 @@ public class ChefAI : MonoBehaviour
 	// Update is called once per frame
 	void Update()
 	{
+		animator.SetFloat("walkBlend", agent.velocity.magnitude / agent.speed);
+
 		if (animator.GetBool("animationPlaying"))
 			return;
 
-		animator.SetFloat("walkBlend", agent.velocity.magnitude / agent.speed);
+		UpdateRotation();
 
 		UpdateVisibility();
 
 		//Start tree
-		BaseBehaviour();	
+		BaseBehaviour();
 	}
 
 	public void Kick()
 	{
 		//Checks if the player is in range
-		if (Physics.CheckBox(kickCollider.transform.TransformPoint(kickCollider.center), Vector3.Scale(kickCollider.size, kickCollider.transform.localScale) / 2, kickCollider.transform.rotation, kickLayer))
+		Collider[] colliders = Physics.OverlapBox(kickCollider.transform.TransformPoint(kickCollider.center), Vector3.Scale(kickCollider.size, kickCollider.transform.localScale) / 2, kickCollider.transform.rotation, kickLayer);
+		Rigidbody rb;
+		for (int i = 0; i < colliders.Length; ++i)
 		{
-			target.velocity = Quaternion.LookRotation(transform.forward, Vector3.up) * kickVelocity;
-			target.StartRagdoll(kickRagdollDuration);
-			target.rigidbody.AddTorque(transform.forward * 10, ForceMode.Impulse);
+			rb = colliders[i].attachedRigidbody;
+			if (rb)
+			{
+				if (rb.GetComponent<FerretController>())
+				{
+					target.StartRagdoll(kickRagdollDuration);
+				}
+				
+				rb.velocity = Quaternion.LookRotation(transform.forward, Vector3.up) * kickVelocity;
+				rb.AddTorque(transform.forward * 10, ForceMode.Impulse);
+			}
 		}
 	}
 
 	public void Throw()
 	{
-		currentThrowable.transform.SetParent(null);
-		//Calculate dead reckoning here
+		if (currentThrowable)
+		{
+			currentThrowable.transform.SetParent(null);
+			//Calculate dead reckoning here
 
-		Vector3 targetPoint = target.transform.position;
-		Vector3 offset = targetPoint - currentThrowable.transform.position;
-		float distance = offset.magnitude;
-		float timeTaken = distance / throwSpeed;
+			Vector3 targetPoint = target.transform.position;
+			Vector3 offset = targetPoint - currentThrowable.transform.position;
+			float distance = offset.magnitude;
+			float timeTaken = distance / throwSpeed;
 
-		Vector3 initialVelocity = (offset - Physics.gravity * 0.5f * timeTaken * timeTaken) / timeTaken;
+			//zubat equations
+			Vector3 initialVelocity = (offset - Physics.gravity * 0.5f * timeTaken * timeTaken) / timeTaken;
 
-		currentThrowable.isKinematic = false;
-		currentThrowable.velocity = initialVelocity;
-		currentThrowable.angularVelocity = Vector3.right * 5.0f;
+			currentThrowable.isKinematic = false;
+			currentThrowable.velocity = initialVelocity;
+			//currentThrowable.angularVelocity = Vector3.right * 5.0f;
+
+			currentThrowable = null;
+		}
+	}
+
+	public void WieldThrowable()
+	{
+		if (!currentThrowable)
+		{
+			currentThrowable = Instantiate(throwablePrefabs[Random.Range(0, throwablePrefabs.Length)], throwPoint, true).GetComponent<Rigidbody>();
+			currentThrowable.transform.localPosition = Vector3.zero;
+			currentThrowable.transform.localRotation = Quaternion.identity;
+		}
 	}
 
 	public void SetSoundPoint(Vector3 point)
@@ -176,9 +208,13 @@ public class ChefAI : MonoBehaviour
 		currentState = State.Inspect;
 
 		if (Vector3.Distance(soundPoint, transform.position) <= inspectRange)
+		{
 			PlayLookAnim();
+		}
 		else
+		{
 			agent.SetDestination(soundPoint);
+		}
 	}
 
 	void DoWander()
@@ -224,7 +260,7 @@ public class ChefAI : MonoBehaviour
 	void DoKicking()
 	{
 		currentState = State.Kick;
-		if (Vector3.Distance(targetTransform.position, transform.position) < kickRange)
+		if ((targetTransform.position - transform.position).sqrMagnitude < kickRange * kickRange)
 		{
 			PlayKickAnim();
 		}
@@ -243,7 +279,10 @@ public class ChefAI : MonoBehaviour
 			if (throwTimer > 0)
 				throwTimer -= Time.deltaTime;
 			else
+			{
+				throwTimer = throwDelay;
 				PlayThrowAnim();
+			}
 		}
 		else
 		{
@@ -271,14 +310,34 @@ public class ChefAI : MonoBehaviour
 		agent.SetDestination(transform.position);
 		animator.SetBool("animationPlaying", true);
 		animator.SetTrigger("throw");
-
-		currentThrowable = Instantiate(throwablePrefabs[Random.Range(0, throwablePrefabs.Length)], throwPoint, true).GetComponent<Rigidbody>();
-		currentThrowable.transform.localPosition = Vector3.zero;
-		currentThrowable.transform.localRotation = Quaternion.identity;
 	}
 
 	void SetWanderPoint()
 	{
 		wanderIndex = Random.Range(0, wanderPoints.Length);
+	}
+
+	void UpdateRotation()
+	{
+		//Update rotation
+		switch(currentState)
+		{
+			case State.Throw:
+				desiredLookDir = Vector3.ProjectOnPlane(targetTransform.position - transform.position, Vector3.up).normalized;
+				break;
+			
+			case State.Kick:
+				desiredLookDir = Vector3.ProjectOnPlane(targetTransform.position - transform.position, Vector3.up).normalized;
+				break;
+			
+			default:
+				if (agent.velocity.sqrMagnitude > Mathf.Epsilon * Mathf.Epsilon)
+				{
+					desiredLookDir = Vector3.ProjectOnPlane(agent.velocity, Vector3.up).normalized;
+				}
+			break;
+		}
+
+		transform.rotation = Quaternion.RotateTowards(transform.rotation, Quaternion.LookRotation(desiredLookDir, Vector3.up), agent.angularSpeed * Time.deltaTime);
 	}
 }

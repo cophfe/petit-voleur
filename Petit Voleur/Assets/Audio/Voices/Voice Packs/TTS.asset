@@ -1,0 +1,45 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dec45d3446128c64e9391197e23d38fd, type: 3}
+  m_Name: TTS
+  m_EditorClassIdentifier: 
+  voiceSets:
+  - clips:
+    - clip: {fileID: 8300000, guid: 480462af8cad41d4dadfa482950a59db, type: 3}
+      weight: 1
+    - clip: {fileID: 8300000, guid: dc22606aafc5d0b4e96b14d0a3c2aa0a, type: 3}
+      weight: 1
+    delayPerPlay: 15
+  - clips:
+    - clip: {fileID: 8300000, guid: 8c8a88ae12a98414c881756283a56e4c, type: 3}
+      weight: 1
+    delayPerPlay: 5
+  - clips:
+    - clip: {fileID: 8300000, guid: fe2a7ef5f8cb0c6489e798c3f78c3e9c, type: 3}
+      weight: 10
+    - clip: {fileID: 8300000, guid: e52ee08c38abff84e9f6c2668c1c240f, type: 3}
+      weight: 10
+    - clip: {fileID: 8300000, guid: 1f4468a43266b8c4c94395ac2f163f0f, type: 3}
+      weight: 2
+    delayPerPlay: 5
+  - clips:
+    - clip: {fileID: 8300000, guid: 16ac467666c4d5146abc2da13c161979, type: 3}
+      weight: 10
+    - clip: {fileID: 8300000, guid: fe2a7ef5f8cb0c6489e798c3f78c3e9c, type: 3}
+      weight: 10
+    - clip: {fileID: 8300000, guid: 28335a4463667634186d8736a71c3242, type: 3}
+      weight: 2
+    delayPerPlay: 5
+  - clips:
+    - clip: {fileID: 8300000, guid: 0b702ae099fea6e42bed164cc26bc47b, type: 3}
+      weight: 1
+    delayPerPlay: 5
