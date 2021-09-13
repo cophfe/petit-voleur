@@ -63,8 +63,10 @@ public class FerretController : MonoBehaviour
 	public float dashImpactMaxAngle = 20.0f;
 	public Vector3 dashImpactBox = Vector3.one;
 	public float dashImpactForce = 100.0f;
+	public float dashImpactShake = 1.0f;
 	public LayerMask dashImpactLayers;
 	public float dashRecoil = 3.0f;
+	public float dashRecoilShake = 2.0f;
 	public float dashRecoilRagdollDuration = 2.0f;
 	public LayerMask dashRagdollLayers;
 	public AnimationCurve dashSpeedCurve;
@@ -80,6 +82,7 @@ public class FerretController : MonoBehaviour
 	new public Rigidbody rigidbody;
 	private FerretPickup ferretPickup;
 	private TimeManager timeManager;
+	private CameraController cameraController;
 	private Vector3 forward;
 	private Vector3 projectedInput;
 	private Vector3 targetVelocity;
@@ -99,6 +102,7 @@ public class FerretController : MonoBehaviour
 		ferretPickup = GetComponent<FerretPickup>();
 		timeManager = FindObjectOfType<TimeManager>();
 		health = GetComponent<FerretHealth>();
+		cameraController = FindObjectOfType<CameraController>();
 		StopClimbing();
 		stats.Reset();
     }
@@ -415,9 +419,15 @@ public class FerretController : MonoBehaviour
 
 		//Ragdoll player
 		if (ragdoll)
+		{
 			StartRagdoll(dashRecoilRagdollDuration);
+			cameraController.SetCameraShake(Vector2.up, dashRecoil, 3);
+		}
 		else
+		{
 			timeManager.StartTimeModifier(dashImpactSlowdown, dashImpactSlowdownDuration, 0f);
+			cameraController.SetCameraShake(Vector2.up, dashImpactShake, 3);
+		}
 
 		//Get all colliders in the impact area
 		Collider[] results = Physics.OverlapBox(point, dashImpactBox, Quaternion.LookRotation(impulseDirection, floorNormal), dashImpactLayers);

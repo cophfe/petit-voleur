@@ -23,11 +23,12 @@ public class ChefAI : MonoBehaviour
 	public float inspectDuration = 1.0f;
 	public float ferretVisibleDuration = 1.5f;
 	public float ferretGroundedThreshold = -10.0f;
-	public float throwDelay = 4.0f;
 	public float inspectRange = 2.0f;
 	public float wanderRange = 2.0f;
+
+	[Header("Kicking")]
 	public float kickRange = 3.0f;
-	public float throwRange = 10.0f;
+	public int kickDamage = 1;
 	public float kickRagdollDuration = 10.0f;
 	public Vector3 kickVelocity = Vector3.forward;
 	public LayerMask kickLayer;
@@ -36,6 +37,8 @@ public class ChefAI : MonoBehaviour
 	public GameObject[] throwablePrefabs;
 	public Rigidbody currentThrowable;
 	public Transform throwPoint;
+	public float throwRange = 10.0f;
+	public float throwDelay = 4.0f;
 	public float throwSpeed;
 	public int deadReckoningSamples;
 	
@@ -103,6 +106,7 @@ public class ChefAI : MonoBehaviour
 			{
 				if (rb.GetComponent<FerretController>())
 				{
+					target.health.Damage(kickDamage);
 					target.StartRagdoll(kickRagdollDuration);
 				}
 				
@@ -276,6 +280,7 @@ public class ChefAI : MonoBehaviour
 		aiToTarget.y = 0;
 		if (aiToTarget.magnitude < throwRange)
 		{
+			agent.SetDestination(transform.position);
 			if (throwTimer > 0)
 				throwTimer -= Time.deltaTime;
 			else

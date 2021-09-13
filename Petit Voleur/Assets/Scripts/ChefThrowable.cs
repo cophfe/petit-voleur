@@ -9,23 +9,30 @@ public class ChefThrowable : MonoBehaviour
     public LayerMask ferretLayer;
 	public float ragdollDuration;
 	public float impulse;
+	public int damage = 1;
+	private bool hitPlayer = false;
 
 	void OnCollisionEnter(Collision collision)
 	{
-		if (gameObject.layer != 0)
+		if (!hitPlayer)
 		{
-			gameObject.layer = 0;
-
-			foreach(Transform t in colliders)
-				t.gameObject.layer = 0;
-
-			if ((ferretLayer.value & (1 << collision.gameObject.layer)) > 0)
+			if (gameObject.layer != 0)
 			{
-				if (collision.rigidbody)
+				//gameObject.layer = 0;
+
+				foreach(Transform t in colliders)
+					t.gameObject.layer = 0;
+
+				if ((ferretLayer.value & (1 << collision.gameObject.layer)) > 0)
 				{
-					FerretController ferret = collision.rigidbody.GetComponent<FerretController>();
-					ferret.StartRagdoll(ragdollDuration);
-					ferret.rigidbody.velocity = rb.velocity.normalized * impulse;
+					if (collision.rigidbody)
+					{
+						FerretController ferret = collision.rigidbody.GetComponent<FerretController>();
+						ferret.health.Damage(damage);
+						ferret.StartRagdoll(ragdollDuration);
+						ferret.rigidbody.velocity = rb.velocity.normalized * impulse;
+						hitPlayer = true;
+					}
 				}
 			}
 		}
