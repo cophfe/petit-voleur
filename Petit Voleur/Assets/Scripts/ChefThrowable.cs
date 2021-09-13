@@ -6,7 +6,9 @@ public class ChefThrowable : MonoBehaviour
 {
 	public Rigidbody rb;
 	public Transform colliders;
+	public AudioSource audioSource;
     public LayerMask ferretLayer;
+	public float velocityThreshold;
 	public float ragdollDuration;
 	public float impulse;
 	public int damage = 1;
@@ -14,24 +16,29 @@ public class ChefThrowable : MonoBehaviour
 
 	void OnCollisionEnter(Collision collision)
 	{
-		if (!hitPlayer)
+		if (gameObject.layer != 0)
 		{
-			if (gameObject.layer != 0)
+			gameObject.layer = 0;
+
+			foreach (Transform t in colliders)
+				t.gameObject.layer = 0;
+		}
+		if (!hitPlayer && (rb.velocity.sqrMagnitude > velocityThreshold * velocityThreshold))
+		{
+
+			if ((ferretLayer.value & (1 << collision.gameObject.layer)) > 0)
 			{
-				//gameObject.layer = 0;
-
-				foreach(Transform t in colliders)
-					t.gameObject.layer = 0;
-
-				if ((ferretLayer.value & (1 << collision.gameObject.layer)) > 0)
+				if (collision.rigidbody)
 				{
-					if (collision.rigidbody)
+					FerretController ferret = collision.rigidbody.GetComponent<FerretController>();
+					ferret.health.Damage(damage);
+					ferret.StartRagdoll(ragdollDuration);
+					ferret.rigidbody.velocity = rb.velocity.normalized * impulse;
+					hitPlayer = true;
+
+					if (audioSource)
 					{
-						FerretController ferret = collision.rigidbody.GetComponent<FerretController>();
-						ferret.health.Damage(damage);
-						ferret.StartRagdoll(ragdollDuration);
-						ferret.rigidbody.velocity = rb.velocity.normalized * impulse;
-						hitPlayer = true;
+						audioSource.Play();
 					}
 				}
 			}

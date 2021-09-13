@@ -28,7 +28,9 @@ public class BreakableItem : MonoBehaviour
 		}
 	}
 
-	// ~~~~~ Break object and add points ~~~~~ //
+	/// <summary>
+	/// Break object and add points
+	/// </summary>
 	void Break()
 	{
 		pointTracker.AddPoints(breakValue);

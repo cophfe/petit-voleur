@@ -200,8 +200,8 @@ ModelImporter:
       name: Chef_LookAround
       takeName: ChefRig|ChefRigAction
       internalID: 0
-      firstFrame: 140
-      lastFrame: 179
+      firstFrame: 145
+      lastFrame: 185
       wrapMode: 0
       orientationOffsetY: 0
       level: 0

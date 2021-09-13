@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+using EaseIt;
+
 public class TimeManager : MonoBehaviour
 {
 	//Just used to visualise in inspector
@@ -44,7 +46,7 @@ public class TimeManager : MonoBehaviour
 			}
 
 			//Set timescale
-			timeScale = Mathf.Lerp(1.0f, targetTimeScale, lerpValue);
+			timeScale = Mathf.Lerp(1.0f, targetTimeScale, Easing.SmoothStop3(lerpValue));
 			Time.timeScale = timeScale;
 
 			//timer done, time to pack up
@@ -55,9 +57,9 @@ public class TimeManager : MonoBehaviour
 		}
     }
 
-	// ========================================================|
-	//		--- Reset All TimeScale variables---
-	//--------------------------------------------------------/
+	/// <summary>
+	/// Reset all time scale variables
+	/// </summary>
 	public void ResetTimeModifier()
 	{
 		timeScale = 1.0f;
@@ -71,6 +73,12 @@ public class TimeManager : MonoBehaviour
 	//--------------------------------------------------------/
 	//Transition ratio affects the duration of the transition; a ratio of 0.1 will dedicated 10%
 	//		of the duration to the entry transition and a further 10% to the exit transition
+	/// <summary>
+	/// Start a time mod period
+	/// </summary>
+	/// <param name="timeScale">Target time scale</param>
+	/// <param name="duration">How long the effect will last, including transitions</param>
+	/// <param name="transitionRatio">Individual percentage of the duration that is taken up by the ease in and then the ease out</param>
 	public void StartTimeModifier(float timeScale, float duration, float transitionRatio)
 	{
 		currentDuration = duration;
@@ -82,15 +90,19 @@ public class TimeManager : MonoBehaviour
 		//If the transition ratio makes the transitionDuration too high, then limit it to the max transition time
 		currentTransitionRatio = Mathf.Min(currentDuration * transitionRatio, maxTransitionTime) / currentDuration;
 	}
-	//Uses default transition ratio
+	/// <summary>
+	/// Start a time mod period, with default transition ratios
+	/// </summary>
+	/// <param name="timeScale">Target time scale</param>
+	/// <param name="duration">How long the effect will last, including transitions</param>
 	public void StartTimeModifier(float timeScale, float duration)
 	{
 		StartTimeModifier(timeScale, duration, defaultTransitionRatio);
 	}
 
-	// ========================================================|
-	//		--- Start Pause ---
-	//--------------------------------------------------------/
+	/// <summary>
+	/// Pauses the time management and sets time scale to 0
+	/// </summary>
 	public void Pause()
 	{
 		if (!isPaused)
@@ -101,9 +113,9 @@ public class TimeManager : MonoBehaviour
 		}
 	}
 
-	// ========================================================|
-	//		--- Stop Pause State ---
-	//--------------------------------------------------------/
+	/// <summary>
+	/// Restores time scale to the value before pausing
+	/// </summary>
 	public void Unpause()
 	{
 		if (isPaused)

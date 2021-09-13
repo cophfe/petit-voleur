@@ -3,7 +3,12 @@ guid: 638ac7ae538ad024dbd22724f5c97454
 ModelImporter:
   serializedVersion: 20101
   internalIDToNameTable: []
-  externalObjects: {}
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: SusShelf_text_a
+    second: {fileID: 2100000, guid: c0abd512f93435a458b22539dfb6342b, type: 2}
   materials:
     materialImportMode: 1
     materialName: 0

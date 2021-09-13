@@ -5,20 +5,12 @@ using UnityEngine.AI;
 
 public class ChefAI : MonoBehaviour
 {
-	public enum State : int
-	{
-		Wander,
-		Inspect,
-		Kick,
-		Throw,
-		LastSeenPos
-	}
-	
 	public State currentState;
 	private NavMeshAgent agent;
 	private FerretController target;
 	public Animator animator;
 	public BoxCollider kickCollider;
+	public float alertedBeginDuration = 1.0f;
 	public float alertedDuration = 5.0f;
 	public float inspectDuration = 1.0f;
 	public float ferretVisibleDuration = 1.5f;
@@ -57,13 +49,13 @@ public class ChefAI : MonoBehaviour
 	private Transform targetTransform;
 	private float inspectingTimer;
 	private float alertedTimer;
-	private float ferretVisibleTimer;
+	private float ferretAlertVisibleTimer;
+	private float ferretStartAlertVisibleTimer;
 	private float throwTimer;
 	private Vector3 soundPoint;
 	private Vector3 lastSeenPosition;
 	private Vector3 desiredLookDir;
 
-	// Start is called before the first frame update
 	void Start()
 	{
 		agent = GetComponent<NavMeshAgent>();
@@ -78,13 +70,19 @@ public class ChefAI : MonoBehaviour
 			wanderPoints[i] = wanderPointContainer.GetChild(i).position;
 	}
 
-	// Update is called once per frame
 	void Update()
 	{
+		//Update blend float
 		animator.SetFloat("walkBlend", agent.velocity.magnitude / agent.speed);
 
+		//Don't run functionality when animations are playing, but still rotate when throwing
 		if (animator.GetBool("animationPlaying"))
+		{
+			if (currentState == State.Throw)
+				UpdateRotation();
+
 			return;
+		}
 
 		UpdateRotation();
 
@@ -94,20 +92,33 @@ public class ChefAI : MonoBehaviour
 		BaseBehaviour();
 	}
 
+
+	// ====================================================== //
+	// ================== Public methods   ================== //
+	// ====================================================== //
+	
+	/// <summary>
+	/// Kicks all objects in the kick box, including player
+	/// </summary>
 	public void Kick()
 	{
 		//Checks if the player is in range
 		Collider[] colliders = Physics.OverlapBox(kickCollider.transform.TransformPoint(kickCollider.center), Vector3.Scale(kickCollider.size, kickCollider.transform.localScale) / 2, kickCollider.transform.rotation, kickLayer);
 		Rigidbody rb;
+		bool playerKicked = false;
 		for (int i = 0; i < colliders.Length; ++i)
 		{
+			//Yeet all rigidbodies
 			rb = colliders[i].attachedRigidbody;
 			if (rb)
 			{
-				if (rb.GetComponent<FerretController>())
+				//Turn the player into a ragdoll then kick, but only once and not per collider
+				if (!playerKicked && rb.GetComponent<FerretController>())
 				{
 					target.health.Damage(kickDamage);
 					target.StartRagdoll(kickRagdollDuration);
+					target.ferretAudio.PlayFerretKicked();
+					playerKicked = true;
 				}
 				
 				rb.velocity = Quaternion.LookRotation(transform.forward, Vector3.up) * kickVelocity;
@@ -116,6 +127,9 @@ public class ChefAI : MonoBehaviour
 		}
 	}
 
+	/// <summary>
+	/// Throws an object if it's equipped
+	/// </summary>
 	public void Throw()
 	{
 		if (currentThrowable)
@@ -139,33 +153,49 @@ public class ChefAI : MonoBehaviour
 		}
 	}
 
+	/// <summary>
+	/// Equips a throwable
+	/// </summary>
 	public void WieldThrowable()
 	{
 		if (!currentThrowable)
 		{
+			//Create the throwable and reset its values
 			currentThrowable = Instantiate(throwablePrefabs[Random.Range(0, throwablePrefabs.Length)], throwPoint, true).GetComponent<Rigidbody>();
 			currentThrowable.transform.localPosition = Vector3.zero;
 			currentThrowable.transform.localRotation = Quaternion.identity;
 		}
 	}
 
+	/// <summary>
+	/// Set the point that the chef inspects and starts inspecting
+	/// </summary>
+	/// <param name="point">Point in world space</param>
 	public void SetSoundPoint(Vector3 point)
 	{
 		soundPoint = point;
 		inspectingTimer = inspectDuration;
 	}
 
+	// ====================================================== //
+	// =================== Private Methods ================== //
+	// ====================================================== //
+
+	/// <summary>
+	/// Does full visibility check on ferret from chef's eye point
+	/// </summary>
 	void UpdateVisibility()
 	{
+		//Assume the player isn't in view
 		bool playerVisible = false;
 		Vector3 eyeToPlayer = targetTransform.position - viewLaserPoint.position;
 		float distance = eyeToPlayer.magnitude;
 		//Check if the player is in view distance
 		if (distance < viewDistance)
 		{
-			//Check if the player is within the horizontal view angle
 			eyeToPlayer /= distance;
-			Vector3 eyeToPlayerOnPlane = Vector3.ProjectOnPlane(eyeToPlayer, Vector3.up);
+			//Check if the player is within the horizontal view angle
+			Vector3 eyeToPlayerOnPlane = Vector3.ProjectOnPlane(eyeToPlayer, Vector3.up).normalized;
 			if (Vector3.Angle(transform.forward, eyeToPlayerOnPlane) < viewAngle)
 			{
 				//Check line of sight
@@ -177,17 +207,33 @@ public class ChefAI : MonoBehaviour
 			}
 		}
 		
+		// ~~~~~~ Update visibility timers ~~~~~ //
 		if (playerVisible)
 		{
-			ferretVisibleTimer = ferretVisibleDuration;
-			alertedTimer = alertedDuration;
+			//Count up start alert timer
+			ferretStartAlertVisibleTimer += Time.deltaTime;
+			//Reset alert visibility timer
+			ferretAlertVisibleTimer = ferretVisibleDuration;
 		}
 		else
-			ferretVisibleTimer -= Time.deltaTime;
+		{
+			//Reset start alert timer
+			ferretStartAlertVisibleTimer = 0;
+			//Count down alert visibility timer
+			ferretAlertVisibleTimer -= Time.deltaTime;
+		}
+
+		//Player was seen for long enough, start the hunt!
+		if (ferretStartAlertVisibleTimer >= alertedBeginDuration)
+			alertedTimer = alertedDuration;
 	}
 
+	/// <summary>
+	/// Entry node for the "decision" tree
+	/// </summary>
 	void BaseBehaviour()
 	{
+		//Inspecting takes precedence
 		if (inspectingTimer > 0)
 		{
 			inspectingTimer -= Time.deltaTime;
@@ -195,6 +241,7 @@ public class ChefAI : MonoBehaviour
 		}
 		else
 		{
+			//Chef is alerted
 			if (alertedTimer > 0)
 			{
 				alertedTimer -= Time.deltaTime;
@@ -207,26 +254,30 @@ public class ChefAI : MonoBehaviour
 		}
 	}
 
+	/// <summary>
+	/// Travels to inspection point and looks around
+	/// </summary>
 	void DoInspect()
 	{
 		currentState = State.Inspect;
 
 		if (Vector3.Distance(soundPoint, transform.position) <= inspectRange)
-		{
 			PlayLookAnim();
-		}
 		else
-		{
 			agent.SetDestination(soundPoint);
-		}
 	}
 
+	/// <summary>
+	/// Picks a random point, travels to it and looks around
+	/// </summary>
 	void DoWander()
 	{
 		currentState = State.Wander;
 
+		//Travels to point at wander index if an index is valid, otherwise find a new index
 		if (wanderIndex >= 0)
 		{
+			//Look around if at wander point, otherwise keep going
 			if (Vector3.Distance(wanderPoints[wanderIndex], transform.position) < wanderRange)
 			{
 				PlayLookAnim();
@@ -243,12 +294,16 @@ public class ChefAI : MonoBehaviour
 		}
 	}
 
+	/// <summary>
+	/// Attacks if the ferret's current position is known, or travels to last seen position
+	/// </summary>
 	void DoAlertState()
 	{
-		if (ferretVisibleTimer > 0)
+		if (ferretAlertVisibleTimer > 0)
 		{
 			alertedTimer = alertedDuration;
-		
+
+			//Kick or throw based on how close to the floor the player is
 			if (target.transform.position.y < ferretGroundedThreshold)
 				DoKicking();
 			else
@@ -261,17 +316,28 @@ public class ChefAI : MonoBehaviour
 		}
 	}
 
+	/// <summary>
+	/// Travel to player and play the kick animation
+	/// </summary>
 	void DoKicking()
 	{
 		currentState = State.Kick;
-		if ((targetTransform.position - transform.position).sqrMagnitude < kickRange * kickRange)
+
+		//Get distance to player ignoring the y pos
+		Vector3 aiToTarget = targetTransform.position - transform.position;
+		aiToTarget.y = 0;
+		if (aiToTarget.sqrMagnitude < kickRange * kickRange)
 		{
-			PlayKickAnim();
+			if (Vector3.Angle(transform.forward, aiToTarget) < 15.0f)
+				PlayKickAnim();
 		}
 		else
 			agent.SetDestination(targetTransform.position);
 	}
 
+	/// <summary>
+	/// Travel close enough to the player, then start playing the throw animation with a delay between throws
+	/// </summary>
 	void DoThrowing()
 	{
 		currentState = State.Throw;
@@ -295,6 +361,9 @@ public class ChefAI : MonoBehaviour
 		}
 	}
 
+	/// <summary>
+	/// Plays look animation and stops in place
+	/// </summary>
 	void PlayLookAnim()
 	{
 		agent.SetDestination(transform.position);
@@ -302,6 +371,9 @@ public class ChefAI : MonoBehaviour
 		animator.SetTrigger("lookAround");
 	}
 
+	/// <summary>
+	/// Plays kick animation and stops in place
+	/// </summary>
 	void PlayKickAnim()
 	{
 		agent.SetDestination(transform.position);
@@ -310,6 +382,9 @@ public class ChefAI : MonoBehaviour
 
 	}
 
+	/// <summary>
+	/// Plays throw animation and stops in place
+	/// </summary>
 	void PlayThrowAnim()
 	{
 		agent.SetDestination(transform.position);
@@ -317,32 +392,52 @@ public class ChefAI : MonoBehaviour
 		animator.SetTrigger("throw");
 	}
 
+	/// <summary>
+	/// Picks a random wander point in the wander point array
+	/// </summary>
 	void SetWanderPoint()
 	{
 		wanderIndex = Random.Range(0, wanderPoints.Length);
 	}
 
+	/// <summary>
+	/// Rotate the chef based on the current state, uses delta time to limit rotation each frame
+	/// </summary>
 	void UpdateRotation()
 	{
 		//Update rotation
 		switch(currentState)
 		{
+			//Look at the player
 			case State.Throw:
 				desiredLookDir = Vector3.ProjectOnPlane(targetTransform.position - transform.position, Vector3.up).normalized;
 				break;
 			
+			//Look at the player
 			case State.Kick:
 				desiredLookDir = Vector3.ProjectOnPlane(targetTransform.position - transform.position, Vector3.up).normalized;
 				break;
 			
+			//Look toward velocity
 			default:
 				if (agent.velocity.sqrMagnitude > Mathf.Epsilon * Mathf.Epsilon)
-				{
 					desiredLookDir = Vector3.ProjectOnPlane(agent.velocity, Vector3.up).normalized;
-				}
 			break;
 		}
 
+		//Rotate towards the desired direction
 		transform.rotation = Quaternion.RotateTowards(transform.rotation, Quaternion.LookRotation(desiredLookDir, Vector3.up), agent.angularSpeed * Time.deltaTime);
+	}
+
+	/// <summary>
+	/// All states that the AI can be in
+	/// </summary>
+	public enum State : int
+	{
+		Wander,
+		Inspect,
+		Kick,
+		Throw,
+		LastSeenPos
 	}
 }

@@ -46,6 +46,7 @@ public class FerretController : MonoBehaviour
 	//Measured in dot product
 	public float maxVelocityFollowAngle = 0.9f;
 	public float maxVelocity = 300.0f;
+	public float airTimeSoundThreshold = 20.0f;
 
 	[Header("Jumping")]
 	public JumpArc fallingArc;
@@ -79,7 +80,10 @@ public class FerretController : MonoBehaviour
 	[HideInInspector]
 	public FerretHealth health;
 	private CharacterController characterController;
+	[HideInInspector]
 	new public Rigidbody rigidbody;
+	[HideInInspector]
+	public FerretAudio ferretAudio;
 	private FerretPickup ferretPickup;
 	private TimeManager timeManager;
 	private CameraController cameraController;
@@ -93,6 +97,8 @@ public class FerretController : MonoBehaviour
 	private float dashTimer = 0f;
 	private float dashCDTimer = 0f;
 	private float ragdollTimer = 0f;
+	private float airTimeTimer = 0f;
+	private bool isDead = false;
 
     // Start is called before the first frame update
     void Start()
@@ -100,8 +106,9 @@ public class FerretController : MonoBehaviour
         characterController = GetComponent<CharacterController>();
 		rigidbody = GetComponent<Rigidbody>();
 		ferretPickup = GetComponent<FerretPickup>();
-		timeManager = FindObjectOfType<TimeManager>();
 		health = GetComponent<FerretHealth>();
+		ferretAudio = GetComponent<FerretAudio>();
+		timeManager = FindObjectOfType<TimeManager>();
 		cameraController = FindObjectOfType<CameraController>();
 		StopClimbing();
 		stats.Reset();
@@ -110,6 +117,18 @@ public class FerretController : MonoBehaviour
 	//Called every frame
     void Update()
     {
+		if (isDead)
+			return;
+		
+		//Player deaaad
+		if (health.CurrentHealth <= 0)
+		{
+			isDead = true;
+			StartRagdoll(999);
+			ferretAudio.PlayFerretDead();
+			timeManager.StartTimeModifier(0.3f, 10.0f, 0.2f);
+		}
+
 		stats.Update();
 		if (isRagdolled)
 		{
@@ -129,6 +148,10 @@ public class FerretController : MonoBehaviour
 					CancelDash();
 			}
 
+			//Tick up air time timer (used for jump sound)
+			if (!grounded)
+				airTimeTimer += Time.deltaTime;
+
 			Move();
 			
 			DoRotation();
@@ -136,10 +159,6 @@ public class FerretController : MonoBehaviour
 			//Decrement dash timer when on the ground
 			if (!isDashing && dashCDTimer > 0)
 				dashCDTimer -= Time.deltaTime * stats.DashFrequency;
-
-			//Player deaaad
-			if (health.CurrentHealth <= 0)
-				StartRagdoll(999);
 		}
     }
 
@@ -168,6 +187,11 @@ public class FerretController : MonoBehaviour
 			{
 				bool ragdoll = ((1 << hit.gameObject.layer) & dashRagdollLayers.value) > 0;
 				DashImpact(hit.point, dashVelocity.normalized, ragdoll);
+				
+				if (ragdoll)
+					ferretAudio.PlayWallImpact();
+				else
+					ferretAudio.PlayItemImpact();
 			}
 		}
 		else
@@ -195,9 +219,9 @@ public class FerretController : MonoBehaviour
 		}
 	}
 
-	// ========================================================|
-	//		--- Main Movement Loop ---
-	//--------------------------------------------------------/
+	/// <summary>
+	/// Main movement loop
+	/// </summary>
 	void Move()
 	{
 		//Reset these
@@ -215,6 +239,12 @@ public class FerretController : MonoBehaviour
 			floorNormal = rayhit.normal;
 			floorObject = rayhit.collider;
 			grounded = true;
+
+			if (airTimeTimer >= airTimeSoundThreshold)
+			{
+				ferretAudio.PlayFerretLanded(Mathf.Min(airTimeTimer / airTimeSoundThreshold, 3.0f));
+				airTimeTimer = 0;
+			}
 		}
 		else
 		{
@@ -241,9 +271,9 @@ public class FerretController : MonoBehaviour
 		// ====================================================== //
 		// === //  Calculating Desired Change in Velocity  // === //
 		// ====================================================== //
-			//Desired change in velocity is defined by the difference between how fast we are going and how fast we want to go.
-			//By using this desired change in velocity every frame, but limited by the max acceleration per frame we can ensure
-			//that constant acceleration is maintained, and the velocity never overshoots
+		//Desired change in velocity is defined by the difference between how fast we are going and how fast we want to go.
+		//By using this desired change in velocity every frame, then limiting it to the max acceleration per frame, we can ensure
+		//that constant acceleration is maintained when trying to reach a target, and the velocity never overshoots
 		
 		//Override input if control is blocked
 		if (!inputEnabled)
@@ -254,7 +284,7 @@ public class FerretController : MonoBehaviour
 			// ~~~~~~~ Generate target velocity ~~~~~~ //
 			projectedInput = forward * input.y;									//Forward component
 			projectedInput -= Vector3.Cross(forward, floorNormal) * input.x;	//Cross product the forward and floorNormal to get the left component
-			targetVelocity = projectedInput * (targetSpeed * stats.Speed);						//Multiply by target speed to set the magnitude of targetVelocity
+			targetVelocity = projectedInput * (targetSpeed * stats.Speed);		//Multiply by target speed to set the magnitude of targetVelocity
 			
 			//Desired change in velocity along the plane
 			deltaVelocity = targetVelocity - planarVelocity;
@@ -320,9 +350,9 @@ public class FerretController : MonoBehaviour
 			speed = 0;
 	}
 
-	// ========================================================|
-	//		--- Character Rotation ---
-	//--------------------------------------------------------/
+	/// <summary>
+	/// Character rotation cycle
+	/// </summary>
 	void DoRotation()
 	{
 		//Propose a new lookDirection
@@ -366,18 +396,18 @@ public class FerretController : MonoBehaviour
 		transform.rotation = Quaternion.RotateTowards(transform.rotation, Quaternion.LookRotation(lookDirection, floorNormal), lookSpeed * Time.deltaTime);
 	}
 
-	// ========================================================|
-	//		--- Add Velocity ---
-	//--------------------------------------------------------/
+	/// <summary>
+	/// Accelerates the character controller
+	/// </summary>
+	/// <param name="addedAcceleration"></param>
 	public void AddVelocity(Vector3 addedAcceleration)
 	{
 		velocity += addedAcceleration;
 	}
 
-	// ========================================================|
-	//		--- Start Dash ---
-	//--------------------------------------------------------/
-	//Starts a dash if the dash cooldown is done
+	/// <summary>
+	/// Starts a dash if the cooldown is done
+	/// </summary>
 	void StartDash()
 	{
 		if (!isDashing)
@@ -393,14 +423,15 @@ public class FerretController : MonoBehaviour
 				dashVelocity = dashDirection * dashSpeed;
 				dashTimer = dashDuration;
 				isDashing = true;
+
+				ferretAudio.PlayFerretDash();
 			}
 		}
 	}
 
-	// ========================================================|
-	//		--- Cancel Dash ---
-	//--------------------------------------------------------/
-	//Resets dash state and starts cooldown
+	/// <summary>
+	/// Resets dash state and starts cooldown
+	/// </summary>
 	void CancelDash()
 	{
 		isDashing = false;
@@ -408,10 +439,12 @@ public class FerretController : MonoBehaviour
 		dashCDTimer = dashCooldown;
 	}
 
-	// ========================================================|
-	//		--- Dash has hit a wall ---
-	//--------------------------------------------------------/
-	//Cancels dash and adds an impulse to nearby rigidbodies
+	/// <summary>
+	///Cancels dash and adds an impulse to nearby rigidbodies
+	/// </summary>
+	/// <param name="point">Point of impact</param>
+	/// <param name="impulseDirection">Direction of impulse applied to rigidbodies</param>
+	/// <param name="ragdoll">Should the player recoil</param>
 	void DashImpact(Vector3 point, Vector3 impulseDirection, bool ragdoll = false)
 	{
 		//Recoil player from impact
@@ -446,43 +479,43 @@ public class FerretController : MonoBehaviour
 
 	}
 
-	// ========================================================|
-	//		--- Reset Dash ---
-	//--------------------------------------------------------/
-	//Simply clears the dash cooldown
+	/// <summary>
+	/// Clears dash cooldown
+	/// </summary>
 	void ResetDashCooldown()
 	{
 		dashCDTimer = 0;
 	}
 
-	// ========================================================|
-	//		--- Starts a jump ---
-	//--------------------------------------------------------/
-	//Change gravity value based on the jump arc
-	//Removes the vertical component of velocity and adds an impulse based on jump arc
+	/// <summary>
+	/// Starts a variable height jump
+	/// </summary>
 	void StartJump()
 	{
+		//Change gravity value based on the jump arc
+		//Removes the vertical component of velocity and adds an impulse based on jump arc
+
 		gravity = jumpArc.GetGravity();
-		//Reset "vertical" velocity
 		velocity -= upDirection * Vector3.Dot(velocity, upDirection);
 		velocity += upDirection * jumpArc.GetJumpForce() * stats.Jump;
 		isJumping = true;
+
+		ferretAudio.PlayFerretJump();
 	}
 
-	// ========================================================|
-	//		--- Cancels a jump ---
-	//--------------------------------------------------------/
-	//Resets gravity to normal and cancels the jump
+	/// <summary>
+	/// Cancel a jump and reset gravity
+	/// </summary>
 	void CancelJump()
 	{
 		gravity = fallingArc.GetGravity();
 		isJumping = false;
 	}
 
-	// ========================================================|
-	//		--- Try to start climbing ---
-	//--------------------------------------------------------/
-	//Will cast spheres to check surrounding walls and try to stick to one
+	/// <summary>
+	/// Tries to stick to nearby walls
+	/// </summary>
+	/// <returns>Climb was succesful</returns>
 	bool TryClimb()
 	{
 		//No need to climb if youo're already climbing
@@ -511,11 +544,10 @@ public class FerretController : MonoBehaviour
 		return false;
 	}
 
-	// ========================================================|
-	//		--- Start Climbing ---
-	//--------------------------------------------------------/
-	//Begins a climb where newUp is the newUpdirection or the normal of the plane
-	//Also changes friction value
+	/// <summary>
+	/// Begins a climb where newUp is the newUpdirection or the normal of the plane
+	/// </summary>
+	/// <param name="newUp">Normal of the wall</param>
 	void StartClimbing(Vector3 newUp)
 	{
 		isClimbing = true;
@@ -524,10 +556,9 @@ public class FerretController : MonoBehaviour
 		friction = climbFriction;
 	}
 	
-	// ========================================================|
-	//		--- Resets Climbing ---
-	//--------------------------------------------------------/
-	//Resets the upDirection and floorNormal, and resets friction
+	/// <summary>
+	///Resets the upDirection and floorNormal, and resets friction
+	/// </summary>
 	void StopClimbing()
 	{
 		isClimbing = false;
@@ -539,11 +570,16 @@ public class FerretController : MonoBehaviour
 	// ========================================================|
 	//		--- RAGDOLL MOMENT ---
 	//--------------------------------------------------------/
-	//Disables character controller and enables physics when true
-	//Enables character controller and disables physics when false
-	//Preserves velocity between states
+	/// <summary>
+	/// Switches between ragdoll states while preserving velocity
+	/// </summary>
+	/// <param name="state">Desired ragdoll state</param>
 	void SetRagdollState(bool state)
 	{
+		//Disables character controller and enables physics when true
+		//Enables character controller and disables physics when false
+		//Preserves velocity between states
+
 		isRagdolled = state;
 
 		characterController.enabled = !isRagdolled;
@@ -554,6 +590,7 @@ public class FerretController : MonoBehaviour
 			velocity = rigidbody.velocity;
 			//This is important to prevent the player from having incorrect gravity
 			StopClimbing();
+			CancelDash();
 		}
 
 		rigidbody.isKinematic = !isRagdolled;
@@ -565,21 +602,19 @@ public class FerretController : MonoBehaviour
 		}
 	}
 
-	// ========================================================|
-	//		--- START RAGDOLL ---
-	//--------------------------------------------------------/
+	/// <summary>
+	/// Begins ragdolling for desired duration
+	/// </summary>
+	/// <param name="time">Ragdoll duration</param>
 	public void StartRagdoll(float time)
 	{
-		if (isRagdolled)
-			return;
-		
 		ragdollTimer = time;
 		SetRagdollState(true);
 	}
 
-	// ========================================================|
-	//		--- CANCEL RAGDOLL ---
-	//--------------------------------------------------------/
+	/// <summary>
+	/// Unragdolls player
+	/// </summary>
 	public void CancelRagdoll()
 	{
 		ragdollTimer = 0.0f;
@@ -598,7 +633,7 @@ public class FerretController : MonoBehaviour
 	public void OnJump()
 	{
 		//Try climb first, otherwise jump
-		if (!TryClimb() && grounded)
+		if (!isRagdolled && !TryClimb() && grounded)
 		{
 			StartJump();
 		}
@@ -611,7 +646,8 @@ public class FerretController : MonoBehaviour
 
 	public void OnDash()
 	{
-		StartDash();
+		if (!isRagdolled)
+			StartDash();
 	}
 
 	public void OnRagdoll()
@@ -623,6 +659,9 @@ public class FerretController : MonoBehaviour
 	// ############################## STRUCTS ############################## //
 	// ##################################################################### //
 
+	/// <summary>
+	/// Defines a jump arc using a height and a time to the peak of the arc
+	/// </summary>
 	[System.Serializable]
 	public struct JumpArc
 	{
@@ -640,6 +679,9 @@ public class FerretController : MonoBehaviour
 		}
 	}
 
+	/// <summary>
+	/// Defines all stats for the player controller
+	/// </summary>
 	[System.Serializable]
 	public class FerretStats
 	{
@@ -647,7 +689,7 @@ public class FerretController : MonoBehaviour
 		private float[] stats = new float[4];
 		private float[] statTimers = new float[4];
 
-		//Getters
+		//Just easy access for the stats
 		public float Speed
 		{
 			get
@@ -690,7 +732,9 @@ public class FerretController : MonoBehaviour
 			}
 		}
 
-		//Decrement all stats and reset if timer is complete
+		/// <summary>
+		///Decrement all stats and reset if timer is complete
+		/// </summary>
 		public void Update()
 		{
 			for (int i = 0; i < 4; ++i)
@@ -705,13 +749,22 @@ public class FerretController : MonoBehaviour
 			}
 		}
 
-		//Return a stat by enum value
+		/// <summary>
+		///Return a stat by enum value
+		/// </summary>
+		/// <param name="stat"></param>
+		/// <returns></returns>
 		public float GetStat(Stat stat)
 		{
 			return stats[(int)stat];
 		}
 		
-		//Sets a stat value for *duration* seconds
+		/// <summary>
+		/// Sets a stat value for some time
+		/// </summary>
+		/// <param name="stat">Stat to change</param>
+		/// <param name="newValue">New stat value</param>
+		/// <param name="duration">Duration of stat change</param>
 		public void SetStat(Stat stat, float newValue, float duration)
 		{
 			stats[(int)stat] = newValue;

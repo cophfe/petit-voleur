@@ -1,0 +1,39 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dec45d3446128c64e9391197e23d38fd, type: 3}
+  m_Name: Sangheili
+  m_EditorClassIdentifier: 
+  voiceSets:
+  - clips:
+    - clip: {fileID: 8300000, guid: f1b4fc8d95721324eadcb9c4cea478cd, type: 3}
+      weight: 1
+    delayPerPlay: 10
+  - clips:
+    - clip: {fileID: 8300000, guid: ac4f6dfccd9cf5c40b84ccebe57ba8fc, type: 3}
+      weight: 1
+    delayPerPlay: 5
+  - clips:
+    - clip: {fileID: 8300000, guid: ac4f6dfccd9cf5c40b84ccebe57ba8fc, type: 3}
+      weight: 1
+    - clip: {fileID: 8300000, guid: 7b949532631162e4aaa07dd200fdfbb2, type: 3}
+      weight: 1
+    delayPerPlay: 5
+  - clips:
+    - clip: {fileID: 8300000, guid: ac4f6dfccd9cf5c40b84ccebe57ba8fc, type: 3}
+      weight: 1
+    - clip: {fileID: 8300000, guid: d0420c497f3fc674ba916cb3355df27e, type: 3}
+      weight: 1
+    delayPerPlay: 5
+  - clips:
+    - clip: {fileID: 8300000, guid: 9e493d7f842896b46a85683f36422352, type: 3}
+      weight: 1
+    delayPerPlay: 5

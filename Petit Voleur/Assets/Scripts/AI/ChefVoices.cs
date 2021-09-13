@@ -40,7 +40,11 @@ public class ChefVoices : MonoBehaviour
 		}
 	}
 
-	//Calculate sum of all weights
+	/// <summary>
+	/// Calculates the sum of all weights in a voice set
+	/// </summary>
+	/// <param name="set"></param>
+	/// <returns></returns>
 	private int SumWeights(VoiceSet set)
 	{
 		int sum = 0;
@@ -52,7 +56,11 @@ public class ChefVoices : MonoBehaviour
 		return sum;
 	}
 
-	//Get a weighted random clip
+	/// <summary>
+	/// Get a random weighted clip from the voice set at given index
+	/// </summary>
+	/// <param name="index">Index of voice set from the list. Usually based on AI state.</param>
+	/// <returns></returns>
 	private AudioClip GetRandomClip(int index)
 	{
 		VoiceSet set = voicePack.voiceSets[index];
@@ -70,6 +78,7 @@ public class ChefVoices : MonoBehaviour
 				break;
 		}
 
+		//Since the index is added one final time if it reaches the end of the loop, we restore the index to its proper range
 		if (i >= set.clips.Length)
 		{
 			i--;
