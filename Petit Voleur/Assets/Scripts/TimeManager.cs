@@ -88,20 +88,28 @@ public class TimeManager : MonoBehaviour
 		StartTimeModifier(timeScale, duration, defaultTransitionRatio);
 	}
 
+	// ========================================================|
+	//		--- Start Pause ---
+	//--------------------------------------------------------/
 	public void Pause()
 	{
 		if (!isPaused)
 		{
 			prePauseTimeScale = Time.timeScale;
 			Time.timeScale = 0;
+			isPaused = true;
 		}
 	}
 
+	// ========================================================|
+	//		--- Stop Pause State ---
+	//--------------------------------------------------------/
 	public void Unpause()
 	{
 		if (isPaused)
 		{
 			Time.timeScale = prePauseTimeScale;
+			isPaused = false;
 		}
 	}
 
