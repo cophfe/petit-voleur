@@ -168,7 +168,7 @@ GameObject:
   - component: {fileID: 3325050860461725331}
   - component: {fileID: 3325050860461725341}
   - component: {fileID: 3325050860461725330}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Cube.002
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -783,6 +783,8 @@ GameObject:
   - component: {fileID: 8982256970999162880}
   - component: {fileID: 3325050860681079637}
   - component: {fileID: 3325050860681079626}
+  - component: {fileID: -6720698799753836767}
+  - component: {fileID: 838436249}
   m_Layer: 8
   m_Name: Character Controller
   m_TagString: Player
@@ -948,10 +950,12 @@ MonoBehaviour:
   dashImpactMaxAngle: 50
   dashImpactBox: {x: 2, y: 2, z: 2}
   dashImpactForce: 50
+  dashImpactShake: 1
   dashImpactLayers:
     serializedVersion: 2
     m_Bits: 5633
   dashRecoil: 15
+  dashRecoilShake: 1
   dashRecoilRagdollDuration: 2
   dashRagdollLayers:
     serializedVersion: 2
@@ -1014,6 +1018,7 @@ MonoBehaviour:
   defaultImpactMultiplier: 1
   health: {fileID: 0}
   rigidbody: {fileID: 0}
+  ferretAudio: {fileID: 0}
 --- !u!114 &8982256970999162880
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1062,6 +1067,122 @@ MonoBehaviour:
   lookTarget: {fileID: 0}
   maxAngle: 75
   lookSpeed: 300
+--- !u!114 &-6720698799753836767
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3325050860681079624}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aaf4eadfa4ac67644bde9cb0368d6caa, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  source: {fileID: 838436249}
+  wallImpact: {fileID: 8300000, guid: 46dee72e8917c3841ade2f6182285673, type: 3}
+  itemImpact: {fileID: 8300000, guid: 4f644ead280d4464abc5b490dd542dee, type: 3}
+  ferretDash: {fileID: 0}
+  ferretJump: {fileID: 8300000, guid: 454c075a929abc6449e85521ee301fdc, type: 3}
+  ferretLanded: {fileID: 8300000, guid: 50cc9b943ee3d5c49984d5958f3c31cf, type: 3}
+  ferretKicked: {fileID: 8300000, guid: 46dee72e8917c3841ade2f6182285673, type: 3}
+  ferretDead: {fileID: 8300000, guid: 3b0138f5725bd8243ac98bdc76ffe6bf, type: 3}
+--- !u!82 &838436249
+AudioSource:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3325050860681079624}
+  m_Enabled: 1
+  serializedVersion: 4
+  OutputAudioMixerGroup: {fileID: 5233063776069876069, guid: 3c03042c2931a8e43ac41147a5988e4f, type: 2}
+  m_audioClip: {fileID: 0}
+  m_PlayOnAwake: 1
+  m_Volume: 1
+  m_Pitch: 1
+  Loop: 0
+  Mute: 0
+  Spatialize: 0
+  SpatializePostEffects: 0
+  Priority: 128
+  DopplerLevel: 1
+  MinDistance: 2.8474393
+  MaxDistance: 500
+  Pan2D: 0
+  rolloffMode: 0
+  BypassEffects: 0
+  BypassListenerEffects: 0
+  BypassReverbZones: 0
+  rolloffCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 1
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  panLevelCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  spreadCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  reverbZoneMixCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
 --- !u!1 &3325050860696965551
 GameObject:
   m_ObjectHideFlags: 0
@@ -1243,7 +1364,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3325050860767994465}
   m_LocalRotation: {x: -0.7071068, y: 0, z: 0, w: 0.7071068}
-  m_LocalPosition: {x: 0, y: 0.457, z: -1.618}
+  m_LocalPosition: {x: 0, y: 0.457, z: -1.101}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 3325050862237495415}
@@ -2698,7 +2819,7 @@ GameObject:
   - component: {fileID: 3325050861833822567}
   - component: {fileID: 3325050861833822561}
   - component: {fileID: 3325050861833822566}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Cube.003
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -3318,7 +3439,7 @@ GameObject:
   - component: {fileID: 3325050862183936145}
   - component: {fileID: 3325050862183936147}
   - component: {fileID: 3325050862183936144}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Cube.001
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -3872,7 +3993,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3325050862429240191}
   m_LocalRotation: {x: 0.00000010004904, y: 0.9924285, z: 0.12282403, w: -0.0000011951835}
-  m_LocalPosition: {x: -1.785464e-17, y: 0.002695414, z: -1.8626451e-11}
+  m_LocalPosition: {x: -0, y: 0.00378, z: -0.0024}
   m_LocalScale: {x: 1, y: 0.99999994, z: 1}
   m_Children:
   - {fileID: 3325050860747130804}

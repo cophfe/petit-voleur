@@ -79,7 +79,10 @@ public class FerretController : MonoBehaviour
 	[HideInInspector]
 	public FerretHealth health;
 	private CharacterController characterController;
+	[HideInInspector]
 	new public Rigidbody rigidbody;
+	[HideInInspector]
+	public FerretAudio ferretAudio;
 	private FerretPickup ferretPickup;
 	private TimeManager timeManager;
 	private CameraController cameraController;
@@ -100,8 +103,9 @@ public class FerretController : MonoBehaviour
         characterController = GetComponent<CharacterController>();
 		rigidbody = GetComponent<Rigidbody>();
 		ferretPickup = GetComponent<FerretPickup>();
-		timeManager = FindObjectOfType<TimeManager>();
 		health = GetComponent<FerretHealth>();
+		ferretAudio = GetComponent<FerretAudio>();
+		timeManager = FindObjectOfType<TimeManager>();
 		cameraController = FindObjectOfType<CameraController>();
 		StopClimbing();
 		stats.Reset();
@@ -139,7 +143,10 @@ public class FerretController : MonoBehaviour
 
 			//Player deaaad
 			if (health.CurrentHealth <= 0)
+			{
 				StartRagdoll(999);
+				ferretAudio.PlayFerretDead();
+			}
 		}
     }
 
@@ -168,6 +175,11 @@ public class FerretController : MonoBehaviour
 			{
 				bool ragdoll = ((1 << hit.gameObject.layer) & dashRagdollLayers.value) > 0;
 				DashImpact(hit.point, dashVelocity.normalized, ragdoll);
+				
+				if (ragdoll)
+					ferretAudio.PlayWallImpact();
+				else
+					ferretAudio.PlayItemImpact();
 			}
 		}
 		else
@@ -214,7 +226,12 @@ public class FerretController : MonoBehaviour
 		{
 			floorNormal = rayhit.normal;
 			floorObject = rayhit.collider;
-			grounded = true;
+
+			if (!grounded)
+			{
+				grounded = true;
+				ferretAudio.PlayFerretLanded();
+			}
 		}
 		else
 		{
@@ -393,6 +410,8 @@ public class FerretController : MonoBehaviour
 				dashVelocity = dashDirection * dashSpeed;
 				dashTimer = dashDuration;
 				isDashing = true;
+
+				ferretAudio.PlayFerretDash();
 			}
 		}
 	}
@@ -467,6 +486,8 @@ public class FerretController : MonoBehaviour
 		velocity -= upDirection * Vector3.Dot(velocity, upDirection);
 		velocity += upDirection * jumpArc.GetJumpForce() * stats.Jump;
 		isJumping = true;
+
+		ferretAudio.PlayFerretJump();
 	}
 
 	// ========================================================|

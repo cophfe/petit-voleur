@@ -6,6 +6,7 @@ public class ChefThrowable : MonoBehaviour
 {
 	public Rigidbody rb;
 	public Transform colliders;
+	public AudioSource audioSource;
     public LayerMask ferretLayer;
 	public float ragdollDuration;
 	public float impulse;
@@ -32,6 +33,11 @@ public class ChefThrowable : MonoBehaviour
 						ferret.StartRagdoll(ragdollDuration);
 						ferret.rigidbody.velocity = rb.velocity.normalized * impulse;
 						hitPlayer = true;
+
+						if (audioSource)
+						{
+							audioSource.Play();
+						}
 					}
 				}
 			}

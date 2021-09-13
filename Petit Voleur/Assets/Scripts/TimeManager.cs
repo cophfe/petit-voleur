@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+using EaseIt;
+
 public class TimeManager : MonoBehaviour
 {
 	//Just used to visualise in inspector
@@ -44,7 +46,7 @@ public class TimeManager : MonoBehaviour
 			}
 
 			//Set timescale
-			timeScale = Mathf.Lerp(1.0f, targetTimeScale, lerpValue);
+			timeScale = Mathf.Lerp(1.0f, targetTimeScale, Easing.SmoothStop3(lerpValue));
 			Time.timeScale = timeScale;
 
 			//timer done, time to pack up

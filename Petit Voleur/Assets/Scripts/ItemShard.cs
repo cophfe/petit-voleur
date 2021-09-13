@@ -6,8 +6,10 @@ using EaseIt;
 public class ItemShard : MonoBehaviour
 {
 	public static float fadePoint = 0.5f;
-
+	
 	public float destroyTime;
+	public AudioSource audioSource;
+	public AudioClip[] breakSounds;
 	public Rigidbody[] pieces;
 	public float minExplodeVelocity;
 	public float maxExplodeVelocity;
@@ -17,6 +19,11 @@ public class ItemShard : MonoBehaviour
 	// Start is called before the first frame update
 	void Start()
 	{
+		if (audioSource)
+		{
+			audioSource.PlayOneShot(breakSounds[Random.Range(0, breakSounds.Length)]);
+		}
+		
 		timer = destroyTime;
 		Destroy(gameObject, destroyTime);
 		foreach(Rigidbody piece in pieces)

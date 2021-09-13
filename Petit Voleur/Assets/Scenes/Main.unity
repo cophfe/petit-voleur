@@ -266,7 +266,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh18006
+  m_Name: pb_Mesh100540
   serializedVersion: 10
   m_SubMeshes:
   - serializedVersion: 2
@@ -10307,7 +10307,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh18188
+  m_Name: pb_Mesh100722
   serializedVersion: 10
   m_SubMeshes:
   - serializedVersion: 2
@@ -11354,7 +11354,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh17992
+  m_Name: pb_Mesh100526
   serializedVersion: 10
   m_SubMeshes:
   - serializedVersion: 2
@@ -12077,7 +12077,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh17892
+  m_Name: pb_Mesh100426
   serializedVersion: 10
   m_SubMeshes:
   - serializedVersion: 2
@@ -16260,7 +16260,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh18236
+  m_Name: pb_Mesh100770
   serializedVersion: 10
   m_SubMeshes:
   - serializedVersion: 2
@@ -16787,12 +16787,12 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 781148982, guid: ae4e6d43ee428f741899759d462ca05d, type: 3}
       propertyPath: m_Enabled
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4015407378647977322, guid: ae4e6d43ee428f741899759d462ca05d, type: 3}
       propertyPath: m_Game
       value: 
-      objectReference: {fileID: 1761492418}
+      objectReference: {fileID: 0}
     - target: {fileID: 6339344871598700592, guid: ae4e6d43ee428f741899759d462ca05d, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -16852,20 +16852,6 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 6339344871598700599, guid: ae4e6d43ee428f741899759d462ca05d, type: 3}
   m_PrefabInstance: {fileID: 1761492416}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &1761492418
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1761492417}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d39ac8138bfadbc43ab798d0b822d4d1, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  lockCursor: 1
-  enableMenuToggle: 1
 --- !u!114 &1761492419 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 4015407378647977322, guid: ae4e6d43ee428f741899759d462ca05d, type: 3}
@@ -17435,7 +17421,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh18272
+  m_Name: pb_Mesh100806
   serializedVersion: 10
   m_SubMeshes:
   - serializedVersion: 2
@@ -17792,7 +17778,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh17924
+  m_Name: pb_Mesh100458
   serializedVersion: 10
   m_SubMeshes:
   - serializedVersion: 2
@@ -18241,7 +18227,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh17968
+  m_Name: pb_Mesh100502
   serializedVersion: 10
   m_SubMeshes:
   - serializedVersion: 2
@@ -18533,67 +18519,6 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 7ba6008a92f4d9f4db9cd317475eb6f2, type: 3}
---- !u!1001 &1395391768920873886
-PrefabInstance:
-  m_ObjectHideFlags: 0
-  serializedVersion: 2
-  m_Modification:
-    m_TransformParent: {fileID: 0}
-    m_Modifications:
-    - target: {fileID: 1395391770021163242, guid: ae50990e27f9ebd49be38fed27186e51, type: 3}
-      propertyPath: m_IsKinematic
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1395391770021163244, guid: ae50990e27f9ebd49be38fed27186e51, type: 3}
-      propertyPath: m_Name
-      value: Frying Pan
-      objectReference: {fileID: 0}
-    - target: {fileID: 1395391770021163245, guid: ae50990e27f9ebd49be38fed27186e51, type: 3}
-      propertyPath: m_LocalPosition.x
-      value: -0.7
-      objectReference: {fileID: 0}
-    - target: {fileID: 1395391770021163245, guid: ae50990e27f9ebd49be38fed27186e51, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 17.5
-      objectReference: {fileID: 0}
-    - target: {fileID: 1395391770021163245, guid: ae50990e27f9ebd49be38fed27186e51, type: 3}
-      propertyPath: m_LocalPosition.z
-      value: -0.1
-      objectReference: {fileID: 0}
-    - target: {fileID: 1395391770021163245, guid: ae50990e27f9ebd49be38fed27186e51, type: 3}
-      propertyPath: m_LocalRotation.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1395391770021163245, guid: ae50990e27f9ebd49be38fed27186e51, type: 3}
-      propertyPath: m_LocalRotation.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1395391770021163245, guid: ae50990e27f9ebd49be38fed27186e51, type: 3}
-      propertyPath: m_LocalRotation.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1395391770021163245, guid: ae50990e27f9ebd49be38fed27186e51, type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 1395391770021163245, guid: ae50990e27f9ebd49be38fed27186e51, type: 3}
-      propertyPath: m_RootOrder
-      value: 12
-      objectReference: {fileID: 0}
-    - target: {fileID: 1395391770021163245, guid: ae50990e27f9ebd49be38fed27186e51, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1395391770021163245, guid: ae50990e27f9ebd49be38fed27186e51, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1395391770021163245, guid: ae50990e27f9ebd49be38fed27186e51, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
-      objectReference: {fileID: 0}
-    m_RemovedComponents: []
-  m_SourcePrefab: {fileID: 100100000, guid: ae50990e27f9ebd49be38fed27186e51, type: 3}
 --- !u!1001 &3325050861806063173
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -18601,6 +18526,14 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: -6720698799753836767, guid: c588ce2a75014da48a5257fefbe567ad, type: 3}
+      propertyPath: ferretLanded
+      value: 
+      objectReference: {fileID: 8300000, guid: 51cc8749bbea4c14084b247f3be97e1b, type: 3}
+    - target: {fileID: -6720698799753836767, guid: c588ce2a75014da48a5257fefbe567ad, type: 3}
+      propertyPath: ferretDash
+      value: 
+      objectReference: {fileID: 8300000, guid: f9cbe833eeee2a64c928416f513037d8, type: 3}
     - target: {fileID: 3325050860589975291, guid: c588ce2a75014da48a5257fefbe567ad, type: 3}
       propertyPath: m_Materials.Array.data[0]
       value: 
@@ -18608,14 +18541,6 @@ PrefabInstance:
     - target: {fileID: 3325050860681079624, guid: c588ce2a75014da48a5257fefbe567ad, type: 3}
       propertyPath: m_Name
       value: Ferret
-      objectReference: {fileID: 0}
-    - target: {fileID: 3325050860681079636, guid: c588ce2a75014da48a5257fefbe567ad, type: 3}
-      propertyPath: dashRecoilShake
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 3325050860681079636, guid: c588ce2a75014da48a5257fefbe567ad, type: 3}
-      propertyPath: dashImpactShake
-      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 3325050861552015953, guid: c588ce2a75014da48a5257fefbe567ad, type: 3}
       propertyPath: m_Materials.Array.data[0]
@@ -18710,6 +18635,14 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: -270.026
       objectReference: {fileID: 0}
+    - target: {fileID: 6354315350578367726, guid: 84ffc813f6d7cb34a8c276f02ca14f4a, type: 3}
+      propertyPath: MinDistance
+      value: 19.69906
+      objectReference: {fileID: 0}
+    - target: {fileID: 6354315350578367726, guid: 84ffc813f6d7cb34a8c276f02ca14f4a, type: 3}
+      propertyPath: MaxDistance
+      value: 149.04874
+      objectReference: {fileID: 0}
     - target: {fileID: 6354315351796493652, guid: 84ffc813f6d7cb34a8c276f02ca14f4a, type: 3}
       propertyPath: m_LocalPosition.x
       value: 28.86
@@ -18774,5 +18707,9 @@ PrefabInstance:
       propertyPath: m_Name
       value: Chef
       objectReference: {fileID: 0}
+    - target: {fileID: 8279133776123759010, guid: 84ffc813f6d7cb34a8c276f02ca14f4a, type: 3}
+      propertyPath: voicePack
+      value: 
+      objectReference: {fileID: 11400000, guid: 38cab0bd550e30646b8c4895141018e8, type: 2}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 84ffc813f6d7cb34a8c276f02ca14f4a, type: 3}

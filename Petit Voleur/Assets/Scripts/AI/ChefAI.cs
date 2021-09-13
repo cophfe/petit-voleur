@@ -84,7 +84,12 @@ public class ChefAI : MonoBehaviour
 		animator.SetFloat("walkBlend", agent.velocity.magnitude / agent.speed);
 
 		if (animator.GetBool("animationPlaying"))
+		{
+			if (currentState == State.Throw)
+				UpdateRotation();
+
 			return;
+		}
 
 		UpdateRotation();
 
@@ -99,15 +104,18 @@ public class ChefAI : MonoBehaviour
 		//Checks if the player is in range
 		Collider[] colliders = Physics.OverlapBox(kickCollider.transform.TransformPoint(kickCollider.center), Vector3.Scale(kickCollider.size, kickCollider.transform.localScale) / 2, kickCollider.transform.rotation, kickLayer);
 		Rigidbody rb;
+		bool playerKicked = false;
 		for (int i = 0; i < colliders.Length; ++i)
 		{
 			rb = colliders[i].attachedRigidbody;
 			if (rb)
 			{
-				if (rb.GetComponent<FerretController>())
+				if (!playerKicked && rb.GetComponent<FerretController>())
 				{
 					target.health.Damage(kickDamage);
 					target.StartRagdoll(kickRagdollDuration);
+					target.ferretAudio.PlayFerretKicked();
+					playerKicked = true;
 				}
 				
 				rb.velocity = Quaternion.LookRotation(transform.forward, Vector3.up) * kickVelocity;
@@ -195,7 +203,7 @@ public class ChefAI : MonoBehaviour
 		}
 		else
 		{
-			if (alertedTimer > 0)
+			if (target.health.CurrentHealth > 0 && alertedTimer > 0)
 			{
 				alertedTimer -= Time.deltaTime;
 				DoAlertState();
