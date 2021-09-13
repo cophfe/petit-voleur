@@ -1082,9 +1082,9 @@ MonoBehaviour:
   source: {fileID: 838436249}
   wallImpact: {fileID: 8300000, guid: 46dee72e8917c3841ade2f6182285673, type: 3}
   itemImpact: {fileID: 8300000, guid: 4f644ead280d4464abc5b490dd542dee, type: 3}
-  ferretDash: {fileID: 0}
+  ferretDash: {fileID: 8300000, guid: f9cbe833eeee2a64c928416f513037d8, type: 3}
   ferretJump: {fileID: 8300000, guid: 454c075a929abc6449e85521ee301fdc, type: 3}
-  ferretLanded: {fileID: 8300000, guid: 50cc9b943ee3d5c49984d5958f3c31cf, type: 3}
+  ferretLanded: {fileID: 8300000, guid: 51cc8749bbea4c14084b247f3be97e1b, type: 3}
   ferretKicked: {fileID: 8300000, guid: 46dee72e8917c3841ade2f6182285673, type: 3}
   ferretDead: {fileID: 8300000, guid: 3b0138f5725bd8243ac98bdc76ffe6bf, type: 3}
 --- !u!82 &838436249
@@ -1143,7 +1143,7 @@ AudioSource:
     m_Curve:
     - serializedVersion: 3
       time: 0
-      value: 0
+      value: 0.5
       inSlope: 0
       outSlope: 0
       tangentMode: 0

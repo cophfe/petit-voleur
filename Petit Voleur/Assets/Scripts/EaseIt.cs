@@ -1,4 +1,8 @@
-﻿using UnityEngine;
+﻿//--------------------------------------------------
+//		--Actively updated by Rahul--
+//------------------------------------------------/
+
+using UnityEngine;
 using System;
 
 namespace EaseIt

@@ -13,16 +13,28 @@ public class FerretAudio : MonoBehaviour
 	public AudioClip ferretKicked;
 	public AudioClip ferretDead;
 	
+	/// <summary>
+	/// Sets the clip to the audio source and plays it. For longer sfx
+	/// </summary>
+	/// <param name="clip"></param>
 	void PlaySound(AudioClip clip)
 	{
 		source.clip = clip;
 		source.Play();
 	}
 
+	/// <summary>
+	/// Plays a clip as a one shot, not being interrupted
+	/// </summary>
+	/// <param name="clip"></param>
 	void PlayQuickSound(AudioClip clip)
 	{
 		source.PlayOneShot(clip);
 	}
+
+	// ====================================================== //
+	// =========== These are all self explanatory =========== //
+	// ============VVVVVVVVVVVVVVVVVVVVVVVVVVVVVV============ //
 
 	public void PlayWallImpact()
 	{

@@ -132,8 +132,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   destroyTime: 20
-  audioSource: {fileID: 0}
-  breakSounds: []
+  audioSource: {fileID: 150440093155074860}
+  breakSounds:
+  - {fileID: 8300000, guid: 41ad34e1d42396a46909267185f4fc49, type: 3}
+  - {fileID: 8300000, guid: b6d8473db1ab55f419cd7b149962e042, type: 3}
   pieces:
   - {fileID: 5803449361370784263}
   - {fileID: 5803449361854152344}
@@ -153,7 +155,7 @@ AudioSource:
   m_GameObject: {fileID: 625696796484315286}
   m_Enabled: 1
   serializedVersion: 4
-  OutputAudioMixerGroup: {fileID: 0}
+  OutputAudioMixerGroup: {fileID: 5233063776069876069, guid: 3c03042c2931a8e43ac41147a5988e4f, type: 2}
   m_audioClip: {fileID: 0}
   m_PlayOnAwake: 1
   m_Volume: 1
@@ -164,8 +166,8 @@ AudioSource:
   SpatializePostEffects: 0
   Priority: 128
   DopplerLevel: 1
-  MinDistance: 1
-  MaxDistance: 500
+  MinDistance: 2.8645797
+  MaxDistance: 338.55566
   Pan2D: 0
   rolloffMode: 0
   BypassEffects: 0
@@ -200,7 +202,7 @@ AudioSource:
     m_Curve:
     - serializedVersion: 3
       time: 0
-      value: 0
+      value: 1
       inSlope: 0
       outSlope: 0
       tangentMode: 0

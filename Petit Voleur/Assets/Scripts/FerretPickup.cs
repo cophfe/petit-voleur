@@ -36,9 +36,12 @@ public class FerretPickup : MonoBehaviour
 		}
     }
 
-	// ========================================================|
-	//		--- Try and grab an item ---
-	//--------------------------------------------------------/
+	/// <summary>
+	/// Try and grab an item
+	/// </summary>
+	/// <param name="point">Where to try and grab</param>
+	/// <param name="range">How far from point we are checking</param>
+	/// <returns></returns>
 	bool GrabItem(Vector3 point, float range)
 	{
 		//Get list of colliders in range of the point
@@ -83,9 +86,9 @@ public class FerretPickup : MonoBehaviour
 		return false;
 	}
 
-	// ========================================================|
-	//		--- Release Item ---
-	//--------------------------------------------------------/
+	/// <summary>
+	/// Drop the item
+	/// </summary>
 	void ReleaseItem()
 	{
 		heldItem.Release(controller.velocity);

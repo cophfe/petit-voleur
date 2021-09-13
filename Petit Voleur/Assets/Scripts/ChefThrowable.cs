@@ -15,29 +15,29 @@ public class ChefThrowable : MonoBehaviour
 
 	void OnCollisionEnter(Collision collision)
 	{
+		if (gameObject.layer != 0)
+		{
+			gameObject.layer = 0;
+
+			foreach (Transform t in colliders)
+				t.gameObject.layer = 0;
+		}
 		if (!hitPlayer)
 		{
-			if (gameObject.layer != 0)
+
+			if ((ferretLayer.value & (1 << collision.gameObject.layer)) > 0)
 			{
-				//gameObject.layer = 0;
-
-				foreach(Transform t in colliders)
-					t.gameObject.layer = 0;
-
-				if ((ferretLayer.value & (1 << collision.gameObject.layer)) > 0)
+				if (collision.rigidbody)
 				{
-					if (collision.rigidbody)
-					{
-						FerretController ferret = collision.rigidbody.GetComponent<FerretController>();
-						ferret.health.Damage(damage);
-						ferret.StartRagdoll(ragdollDuration);
-						ferret.rigidbody.velocity = rb.velocity.normalized * impulse;
-						hitPlayer = true;
+					FerretController ferret = collision.rigidbody.GetComponent<FerretController>();
+					ferret.health.Damage(damage);
+					ferret.StartRagdoll(ragdollDuration);
+					ferret.rigidbody.velocity = rb.velocity.normalized * impulse;
+					hitPlayer = true;
 
-						if (audioSource)
-						{
-							audioSource.Play();
-						}
+					if (audioSource)
+					{
+						audioSource.Play();
 					}
 				}
 			}

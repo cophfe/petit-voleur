@@ -109,6 +109,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   destroyTime: 5
+  audioSource: {fileID: 0}
+  breakSounds: []
   pieces: []
   minExplodeVelocity: 0
   maxExplodeVelocity: 0
@@ -132,7 +134,7 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 256
   ragdollDuration: 2
-  impulse: 30
+  impulse: 60
   damage: 1
 --- !u!82 &-3353401159079907935
 AudioSource:
@@ -190,7 +192,7 @@ AudioSource:
     m_Curve:
     - serializedVersion: 3
       time: 0
-      value: 0
+      value: 1
       inSlope: 0
       outSlope: 0
       tangentMode: 0

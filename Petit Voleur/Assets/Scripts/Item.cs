@@ -19,12 +19,19 @@ public class Item : MonoBehaviour
 		rbody = GetComponent<Rigidbody>();
 	}
 
+	/// <summary>
+	/// Set the item to a grabbed state
+	/// </summary>
 	public void Grab()
 	{
 		SetLayerRecursively(gameObject, heldItemLayer);
 		rbody.useGravity = false;
 	}
 
+	/// <summary>
+	/// Drop the item
+	/// </summary>
+	/// <param name="velocity">What velocity to assign to the object after dropping</param>
 	public void Release(Vector3 velocity)
 	{
 		SetLayerRecursively(gameObject, itemLayer);
