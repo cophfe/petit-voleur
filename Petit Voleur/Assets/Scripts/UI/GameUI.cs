@@ -543,7 +543,7 @@ public class GameUI : MonoBehaviour
 		try
 		{
 			tM.Unpause();
-
+			Time.timeScale = 1;
 			SceneManager.LoadScene(menuSceneName);
 		}
 		catch
