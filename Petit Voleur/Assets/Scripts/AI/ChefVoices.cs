@@ -11,11 +11,12 @@ public class ChefVoices : MonoBehaviour
 	private ChefAI chefAI;
 	private float playTimer;
 	private int[] sumWeights;
-
+	private ChefAI.State lastState;
 	// Start is called before the first frame update
 	void Start()
 	{
 		chefAI = GetComponent<ChefAI>();
+		lastState = chefAI.currentState;
 
 		sumWeights = new int[voicePack.voiceSets.Length];
 		//Update lengths!
@@ -29,6 +30,12 @@ public class ChefVoices : MonoBehaviour
 	void Update()
 	{
 		playTimer += Time.deltaTime;
+
+		if (lastState != chefAI.currentState)
+		{
+			playTimer = 150.0f;
+			lastState = chefAI.currentState;
+		}
 
 		//Play a random clip if the play delay threshold is reached
 		if (playTimer > voicePack.voiceSets[(int)chefAI.currentState].delayPerPlay)

@@ -45,12 +45,15 @@ public class ChefAI : MonoBehaviour
 	public float viewAngle = 60.0f;
 	public LayerMask viewLaserMask;
 	public Transform viewLaserPoint;
+	[Tooltip("Controls the multiplier applied to the alert by LoS timer, based on distance.")]
+	public AnimationCurve distanceToViewAlertCurve;
 
 	private Transform targetTransform;
 	private float inspectingTimer;
 	private float alertedTimer;
 	private float ferretAlertVisibleTimer;
-	private float ferretStartAlertVisibleTimer;
+	[HideInInspector]
+	public float ferretStartAlertTimer;
 	private float throwTimer;
 	private Vector3 soundPoint;
 	private Vector3 lastSeenPosition;
@@ -74,6 +77,8 @@ public class ChefAI : MonoBehaviour
 	{
 		//Update blend float
 		animator.SetFloat("walkBlend", agent.velocity.magnitude / agent.speed);
+		
+		UpdateVisibility();
 
 		//Don't run functionality when animations are playing, but still rotate when throwing
 		if (animator.GetBool("animationPlaying"))
@@ -86,7 +91,6 @@ public class ChefAI : MonoBehaviour
 
 		UpdateRotation();
 
-		UpdateVisibility();
 
 		//Start tree
 		BaseBehaviour();
@@ -211,20 +215,21 @@ public class ChefAI : MonoBehaviour
 		if (playerVisible)
 		{
 			//Count up start alert timer
-			ferretStartAlertVisibleTimer += Time.deltaTime;
+			ferretStartAlertTimer += Time.deltaTime * distanceToViewAlertCurve.Evaluate(distance / viewDistance);
 			//Reset alert visibility timer
 			ferretAlertVisibleTimer = ferretVisibleDuration;
 		}
 		else
 		{
-			//Reset start alert timer
-			ferretStartAlertVisibleTimer = 0;
+			//Tick down start alert timer
+			if (ferretStartAlertTimer > 0)
+				ferretStartAlertTimer -= Time.deltaTime;
 			//Count down alert visibility timer
 			ferretAlertVisibleTimer -= Time.deltaTime;
 		}
 
 		//Player was seen for long enough, start the hunt!
-		if (ferretStartAlertVisibleTimer >= alertedBeginDuration)
+		if (ferretStartAlertTimer >= alertedBeginDuration)
 			alertedTimer = alertedDuration;
 	}
 

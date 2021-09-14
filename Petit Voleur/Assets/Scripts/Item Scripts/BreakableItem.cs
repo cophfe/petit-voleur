@@ -7,6 +7,7 @@ public class BreakableItem : MonoBehaviour
 {
 	public PointTracker pointTracker;
 	public GameObject shards;
+	public ChefAI chef;
 	public int breakValue = 0;
 	public float impactThreshold = 10;
 	private bool broken = false;
@@ -37,5 +38,10 @@ public class BreakableItem : MonoBehaviour
 		Destroy(gameObject);
 		GameObject newShards = Instantiate(shards, transform.position, transform.rotation);
 		newShards.transform.localScale = transform.localScale;
+
+		if (chef)
+		{
+			chef.SetSoundPoint(transform.position);
+		}
 	}
 }

@@ -1,4 +1,9 @@
-﻿using System.Collections;
+﻿//========================================================================
+//			------------------------------------------
+//				Rahul Jhugroo				2021
+//______________________________________________________________________/
+
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -46,7 +51,7 @@ public class TimeManager : MonoBehaviour
 			}
 
 			//Set timescale
-			timeScale = Mathf.Lerp(1.0f, targetTimeScale, Easing.SmoothStop3(lerpValue));
+			timeScale = Mathf.Lerp(1.0f, targetTimeScale, Easing.SmoothStop2(lerpValue));
 			Time.timeScale = timeScale;
 
 			//timer done, time to pack up
