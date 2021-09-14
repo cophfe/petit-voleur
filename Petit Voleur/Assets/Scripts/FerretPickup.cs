@@ -79,6 +79,10 @@ public class FerretPickup : MonoBehaviour
 				grabRotation = Quaternion.Inverse(grabTransform.transform.rotation) * heldItem.transform.rotation;
 				heldItem.Grab();
 			}
+			else
+			{
+				heldItem = null;
+			}
 
 			return true;
 		}
