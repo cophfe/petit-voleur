@@ -1,49 +1,18 @@
 fileFormatVersion: 2
-guid: 4f43b58f67f51594ea42b27b84a8ae2a
+guid: d9822c49c85fb3b44ac1500d57c371af
 ModelImporter:
   serializedVersion: 20101
   internalIDToNameTable:
   - first:
       74: -4720634922552875360
-    second: Idle
+    second: Ferret Idle
   - first:
       74: -639873375141106807
     second: FerretRig|LampAction
   - first:
-      74: 8814811631015332252
-    second: Run
-  - first:
-      74: 8628234142971173032
-    second: Ferret_Start_Run
-  - first:
-      74: 8672962583937049257
-    second: Ferret_Idle
-  - first:
-      74: 8814811631015332252
-    second: Ferret_Run
-  - first:
-      74: -4720634922552875360
-    second: FerretRig|FerretRigAction
-  - first:
-      74: -1432297332634072651
-    second: FerretRig|CylinderAction
-  - first:
-      74: -88723805440604879
-    second: Cylinder|CylinderAction
-  - first:
-      74: 206927336385924406
-    second: Cylinder|LampAction
-  externalObjects:
-  - first:
-      type: UnityEngine:Material
-      assembly: UnityEngine.CoreModule
-      name: ferrer_eye_a
-    second: {fileID: 2100000, guid: 08448aecdb2dffc46a2ef2b9280bd996, type: 2}
-  - first:
-      type: UnityEngine:Material
-      assembly: UnityEngine.CoreModule
-      name: ferret_text_a
-    second: {fileID: 2100000, guid: e79f94d82c3b82347b9006b5eb05a82b, type: 2}
+      74: 8242700113948241815
+    second: Ferret Run
+  externalObjects: {}
   materials:
     materialImportMode: 1
     materialName: 0
@@ -70,7 +39,65 @@ ModelImporter:
     animationWrapMode: 0
     extraExposedTransformPaths: []
     extraUserProperties: []
-    clipAnimations: []
+    clipAnimations:
+    - serializedVersion: 16
+      name: Ferret Idle
+      takeName: FerretRig|FerretRigAction
+      internalID: 0
+      firstFrame: 0
+      lastFrame: 30
+      wrapMode: 0
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      hasAdditiveReferencePose: 0
+      loopTime: 1
+      loopBlend: 1
+      loopBlendOrientation: 0
+      loopBlendPositionY: 0
+      loopBlendPositionXZ: 0
+      keepOriginalOrientation: 0
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 0
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events: []
+      transformMask: []
+      maskType: 3
+      maskSource: {instanceID: 0}
+      additiveReferencePoseFrame: 0
+    - serializedVersion: 16
+      name: Ferret Run
+      takeName: FerretRig|FerretRigAction
+      internalID: 0
+      firstFrame: 40
+      lastFrame: 80
+      wrapMode: 0
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      hasAdditiveReferencePose: 0
+      loopTime: 1
+      loopBlend: 1
+      loopBlendOrientation: 0
+      loopBlendPositionY: 0
+      loopBlendPositionXZ: 0
+      keepOriginalOrientation: 0
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 0
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events: []
+      transformMask: []
+      maskType: 3
+      maskSource: {instanceID: 0}
+      additiveReferencePoseFrame: 0
     isReadable: 0
   meshes:
     lODScreenPercentages: []

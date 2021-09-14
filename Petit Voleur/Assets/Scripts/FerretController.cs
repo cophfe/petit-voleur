@@ -18,18 +18,18 @@ public class FerretController : MonoBehaviour
 	public bool inputEnabled = true;
 	public Vector3 velocity;
 	public FerretStats stats = new FerretStats();
-	public float speed;
-	public float gravity = 10;
+	private float gravity = 10;
 	private float friction = 80;
-	public bool grounded = false;
-	public bool isJumping = false;
-	public bool isDashing = false;
-	public bool isClimbing = false;
 	public bool isRagdolled = false;
+	private bool grounded = false;
+	private bool isJumping = false;
+	private bool isDashing = false;
+	private bool isClimbing = false;
+	
 	public Vector3 upDirection = Vector3.up;
 	private Vector3 floorNormal = Vector3.up;
-	public Vector3 lookDirection = Vector3.forward;
-	public Vector2 input;
+	private Vector3 lookDirection = Vector3.forward;
+	private Vector2 input;
 
 	[Header("Ground Checking")]
 	public LayerMask groundCheckLayerMask;
@@ -39,13 +39,14 @@ public class FerretController : MonoBehaviour
 
 	[Header("Ferret forces")]
 	public float acceleration = 50;
+	//Desired speed of ferret
 	public float targetSpeed = 30;
 	public float floorFriction = 80;
 	public float airControl = 0.4f;
 	public float lookSpeed = 600f;
 	//Measured in dot product
 	public float maxVelocityFollowAngle = 0.9f;
-	public float maxVelocity = 300.0f;
+	public float maxHardVelocity = 300.0f;
 	public float airTimeSoundThreshold = 20.0f;
 
 	[Header("Jumping")]
@@ -76,6 +77,9 @@ public class FerretController : MonoBehaviour
 	public float dashImpactSlowdown = 0.0f;
 	public float dashImpactSlowdownDuration = 0.05f;
 	public float defaultImpactMultiplier = 0.5f;
+
+	[Header("Animations")]
+	public Animator animator;
 
 	[HideInInspector]
 	public FerretHealth health;
@@ -153,7 +157,9 @@ public class FerretController : MonoBehaviour
 				airTimeTimer += Time.deltaTime;
 
 			Move();
-			
+
+			animator.SetBool("m_FerretGrounded", grounded);
+
 			DoRotation();
 
 			//Decrement dash timer when on the ground
@@ -337,17 +343,15 @@ public class FerretController : MonoBehaviour
 
 		
 		//Hard limit to totalVelocity
-		if (velocity.sqrMagnitude > maxVelocity * maxVelocity)
+		if (velocity.sqrMagnitude > maxHardVelocity * maxHardVelocity)
 		{
-			velocity = velocity.normalized * maxVelocity;
+			velocity = velocity.normalized * maxHardVelocity;
 		}
 		
 		//lets goooooooooooooooooooooo
 		characterController.Move(velocity * Time.deltaTime);
-		
-		speed = velocity.magnitude;
-		if (speed < 0.0001)
-			speed = 0;
+
+		animator.SetFloat("m_FerretSpeed", velocity.magnitude / targetSpeed);
 	}
 
 	/// <summary>
@@ -425,6 +429,7 @@ public class FerretController : MonoBehaviour
 				isDashing = true;
 
 				ferretAudio.PlayFerretDash();
+				animator.SetTrigger("m_FerretDash");
 			}
 		}
 	}
@@ -501,6 +506,7 @@ public class FerretController : MonoBehaviour
 		isJumping = true;
 
 		ferretAudio.PlayFerretJump();
+		animator.SetTrigger("m_FerretJump");
 	}
 
 	/// <summary>
