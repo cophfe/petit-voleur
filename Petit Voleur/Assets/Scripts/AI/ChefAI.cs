@@ -49,6 +49,7 @@ public class ChefAI : MonoBehaviour
 	public AnimationCurve distanceToViewAlertCurve;
 
 	private Transform targetTransform;
+	[SerializeField]
 	private float inspectingTimer;
 	private float alertedTimer;
 	private float ferretAlertVisibleTimer;
@@ -90,7 +91,10 @@ public class ChefAI : MonoBehaviour
 		}
 
 		UpdateRotation();
-
+		
+		//Decrement inspection timer
+		if (inspectingTimer > 0)
+			inspectingTimer -= Time.deltaTime;
 
 		//Start tree
 		BaseBehaviour();
@@ -238,24 +242,19 @@ public class ChefAI : MonoBehaviour
 	/// </summary>
 	void BaseBehaviour()
 	{
-		//Inspecting takes precedence
-		if (inspectingTimer > 0)
+		//Chef is alerted
+		if (alertedTimer > 0)
 		{
-			inspectingTimer -= Time.deltaTime;
+			alertedTimer -= Time.deltaTime;
+			DoAlertState();
+		}
+		else if (inspectingTimer > 0)
+		{
 			DoInspect();
 		}
 		else
 		{
-			//Chef is alerted
-			if (alertedTimer > 0)
-			{
-				alertedTimer -= Time.deltaTime;
-				DoAlertState();
-			}
-			else
-			{
-				DoWander();
-			}
+			DoWander();
 		}
 	}
 
