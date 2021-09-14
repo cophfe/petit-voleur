@@ -26,6 +26,8 @@ public class GameUI : MonoBehaviour
 	public RectTransform winPanel = null;
 	[Tooltip("The options menu panel.")]
 	public RectTransform optionsPanel = null;
+	[Tooltip("The lose menu panel.")]
+	public RectTransform losePanel = null;
 	[Tooltip("The points notification text.")]
 	public TextMeshProUGUI notifyText = null;
 	[Tooltip("The points progress bar.")]
@@ -38,6 +40,8 @@ public class GameUI : MonoBehaviour
 	public Animator sceneTransitionAnimator;
 	[Tooltip("The amount of time it takes to transition to a new scene")]
 	public float sceneTransitionTime = 1;
+	[Tooltip("The amount of time it takes to open the death UI when you die")]
+	public float deathTransitionTime = 5;
 	[Tooltip("The maximum blur amount.")]
 	public float maxBlurAmount = 0.02f;
 
@@ -53,12 +57,16 @@ public class GameUI : MonoBehaviour
 		TOPTIONSIN,
 		TOPTIONSOUT,
 		OPTIONS,
+		TLOSEIN,
+		TLOSEOUT,
+		LOSE,
 		NOTHING
 	}
 	//default heights for panels (used for transitions)
 	float pausePanelDefaultHeight;
 	float winPanelDefaultHeight;
 	float optionsPanelDefaultHeight;
+	float losePanelDefaultHeight;
 	//the initial alpha of the screen overlay
 	float overlayDefaultAlpha;
 	//the current screen state
@@ -121,6 +129,7 @@ public class GameUI : MonoBehaviour
 		pausePanelDefaultHeight = pausePanel.rect.height;
 		winPanelDefaultHeight = winPanel.rect.height;
 		optionsPanelDefaultHeight = optionsPanel.rect.height;
+		losePanelDefaultHeight = losePanel.rect.height;
 		overlayDefaultAlpha = screenOverlay.color.a;
 		EnableScreen(ScreenState.NOTHING);
 
@@ -279,7 +288,36 @@ public class GameUI : MonoBehaviour
 					screenTransitionTimer += Time.unscaledDeltaTime;
 				}
 				break;
-			}
+			case ScreenState.TLOSEIN:
+				{
+					//end transition
+					if (screenTransitionTimer >= screenTransitionTime)
+					{
+						screenState = ScreenState.LOSE;
+						losePanel.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, losePanelDefaultHeight);
+						Color finalColor = screenOverlay.color;
+						finalColor.a = overlayDefaultAlpha;
+						screenOverlay.color = finalColor;
+						blurManager.SetBlurAmount(maxBlurAmount);
+
+						break;
+					}
+
+					float t = screenTransitionTimer / screenTransitionTime;
+					t = (1 - (1 - t) * (1 - t));
+
+					//transition panel height using ease out quad
+					losePanel.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, t * losePanelDefaultHeight);
+					//transition overlay alpha linearly
+					blurManager.SetBlurAmount(t * maxBlurAmount);
+					Color c = screenOverlay.color;
+					c.a = overlayDefaultAlpha * t;
+					screenOverlay.color = c;
+
+					screenTransitionTimer += Time.unscaledDeltaTime;
+				}
+				break;
+		}
 		//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 		//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -437,24 +475,35 @@ public class GameUI : MonoBehaviour
 				optionsPanel.gameObject.SetActive(false);
 				winPanel.gameObject.SetActive(true);
 				screenOverlay.gameObject.SetActive(true);
+				losePanel.gameObject.SetActive(false);
 				break;
 			case ScreenState.PAUSE:
 				pausePanel.gameObject.SetActive(true);
 				optionsPanel.gameObject.SetActive(false);
 				winPanel.gameObject.SetActive(false);
 				screenOverlay.gameObject.SetActive(true);
+				losePanel.gameObject.SetActive(false);
 				break;
 			case ScreenState.OPTIONS:
 				pausePanel.gameObject.SetActive(false);
 				optionsPanel.gameObject.SetActive(true);
 				winPanel.gameObject.SetActive(false);
 				screenOverlay.gameObject.SetActive(true);
+				losePanel.gameObject.SetActive(false);
 				break;
 			case ScreenState.NOTHING:
 				pausePanel.gameObject.SetActive(false);
 				optionsPanel.gameObject.SetActive(false);
 				winPanel.gameObject.SetActive(false);
 				screenOverlay.gameObject.SetActive(false);
+				losePanel.gameObject.SetActive(false);
+				break;		
+			case ScreenState.LOSE:
+				screenOverlay.gameObject.SetActive(true);
+				losePanel.gameObject.SetActive(true);
+				pausePanel.gameObject.SetActive(false);
+				optionsPanel.gameObject.SetActive(false);
+				winPanel.gameObject.SetActive(false);
 				break;		
 		}
 	}
@@ -502,6 +551,30 @@ public class GameUI : MonoBehaviour
 			Debug.LogError("Could not load scene '" + menuSceneName + "'.");
 		}
 	}
+
+	public void TransitionToRestart()
+	{
+		StartCoroutine(RestartGame());
+	}
+
+	IEnumerator RestartGame()
+	{
+		sceneTransitionAnimator.SetTrigger("Leave");
+
+		yield return new WaitForSecondsRealtime(sceneTransitionTime);
+
+		try
+		{
+			tM.Unpause();
+			Time.timeScale = 1;
+			SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+		}
+		catch
+		{
+			Debug.LogError("Could not load scene '" + menuSceneName + "'.");
+		}
+	}
+
 
 	public void OpenWinUI()
 	{
@@ -580,5 +653,31 @@ public class GameUI : MonoBehaviour
 				healthChildren[i].SetActive(i < currentHealth);
 			}
 		}
+	}
+
+	public void TransitionToLose()
+	{
+		StartCoroutine(LoseGame());
+	}
+
+	IEnumerator LoseGame()
+	{
+		yield return new WaitForSecondsRealtime(deathTransitionTime);
+		EnableScreen(ScreenState.LOSE);
+		screenState = ScreenState.TLOSEIN;
+
+		blurManager.EnableBlur();
+		gM.GameInputEnabled = false;
+
+		//unlock cursor
+		gM.CursorLocked = false;
+
+		screenTransitionTimer = 0;
+
+		//set initial values for transition
+		losePanel.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, 0);
+		var c = screenOverlay.color;
+		c.a = 0;
+		screenOverlay.color = c;
 	}
 }
