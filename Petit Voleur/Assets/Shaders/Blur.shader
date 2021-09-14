@@ -49,15 +49,15 @@ Shader "Custom/Blur"
             float _BlurAmount;
 			int _BlurSamples;
 
-			fixed4 frag(v2f i) : SV_Target
+			fixed4 frag(v2f input) : SV_Target
 			{
 				float aspect = _ScreenParams.x / _ScreenParams.y;
 				fixed4 col = 0;
 
-				for (float index = 0; index < _BlurSamples; index++)
+				for (float i = 0; i < _BlurSamples; i++)
 				{
 					//get uv coordinate of sample
-					float2 uv = i.uv + float2(0, aspect *(index / (_BlurSamples - 1) - 0.5) * _BlurAmount);
+					float2 uv = input.uv + float2(0, aspect *(i / (_BlurSamples - 1) - 0.5) * _BlurAmount);
 					//add color at position to color
 					col += tex2D(_MainTex, uv);
 				}
@@ -97,14 +97,14 @@ Shader "Custom/Blur"
 			float _BlurAmount;
 			int _BlurSamples;
 
-			fixed4 frag(v2f i) : SV_Target
+			fixed4 frag(v2f input) : SV_Target
 			{
 				fixed4 col = 0;
 
-				for (float index = 0; index < _BlurSamples; index++)
+				for (float i = 0; i < _BlurSamples; i++)
 				{
 					//get uv coordinate of sample
-					float2 uv = i.uv + float2((index / (_BlurSamples - 1) - 0.5) * _BlurAmount, 0);
+					float2 uv = input.uv + float2((i / (_BlurSamples - 1) - 0.5) * _BlurAmount, 0);
 					//add color at position to color
 					col += tex2D(_MainTex, uv);
 				}
