@@ -11,7 +11,7 @@ public class FerretHealth : MonoBehaviour
 	[Tooltip("The maximum and initial health value for the ferret.")]
 	public int maxHealth = 3;
 	int currentHealth;
-
+	bool dead = false;
 	public int CurrentHealth
 	{
 		get
@@ -43,8 +43,11 @@ public class FerretHealth : MonoBehaviour
 	public void Damage(int damageAmount = 1)
 	{
 		currentHealth -= damageAmount;
-		if (currentHealth <= 0)
+		if (!dead && currentHealth <= 0)
+		{
 			gM.OnDeath();
+			dead = true;
+		}
 
 		UI.SetHealthUI(currentHealth);
 	}

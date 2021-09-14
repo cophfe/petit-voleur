@@ -104,18 +104,19 @@ public class GameManager : MonoBehaviour
 	{
 		get
 		{
-			return playerInput.enabled && cameraInput.enabled;
+			return !(playerInput && cameraInput) || playerInput.enabled && cameraInput.enabled;
 		}
 		set
 		{
-			playerInput.enabled = value;
-			cameraInput.enabled = value;
+			if (playerInput)
+				playerInput.enabled = value;
+			if (cameraInput)
+				cameraInput.enabled = value;
 		}
 	}
 
 	public void OnDeath()
 	{
-		Debug.Log("PLAYER DIED!!");
-		//Call UI
+		UI.TransitionToLose();
 	}
 }
