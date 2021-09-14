@@ -90,6 +90,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f25e3d5334afe464ba30149a394dee4e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_ScoreMaxLimit: 300
   m_Game: {fileID: 781148982}
 --- !u!114 &781148982
 MonoBehaviour:
@@ -103,7 +104,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d39ac8138bfadbc43ab798d0b822d4d1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  lockCursor: 1
+  canLockCursor: 1
   enableMenuToggle: 1
 --- !u!114 &781148987
 MonoBehaviour:
@@ -147,7 +148,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 053fa281caf5afb45a38a313c926c0e2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  isPaused: 0
   timeScale: 1
   targetTimeScale: 1
   defaultTransitionRatio: 0.1
