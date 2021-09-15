@@ -5,12 +5,17 @@ using UnityEngine;
 [RequireComponent(typeof(Item))]
 public class BreakableItem : MonoBehaviour
 {
-	public PointTracker pointTracker;
+	private PointTracker pointTracker;
 	public GameObject shards;
 	public ChefAI chef;
 	public int breakValue = 0;
 	public float impactThreshold = 10;
 	private bool broken = false;
+
+	void Start()
+	{
+		pointTracker = FindObjectOfType<PointTracker>();
+	}
 
 	void OnCollisionEnter(Collision collision)
 	{
