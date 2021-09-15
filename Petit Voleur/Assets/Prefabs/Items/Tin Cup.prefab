@@ -333,7 +333,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2eb3e36fd1b7d17448aef987ceabb32b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  pointValue: 50
+  pointValue: 40
 --- !u!1001 &6681744933148046319
 PrefabInstance:
   m_ObjectHideFlags: 0

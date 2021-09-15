@@ -32,6 +32,7 @@ public class PointTracker : MonoBehaviour
     //=============================================
     
     private int m_PlayerScore;
+	[SerializeField]
     private int m_ScoreMaxLimit;
     private int m_ScoreMinLimit;
     private int m_ScorePrevious;
@@ -48,7 +49,6 @@ public class PointTracker : MonoBehaviour
 
     void Start()
     {
-        m_ScoreMaxLimit = 100; 
         m_ScoreMinLimit = 0; 
         m_PlayerScore = 0;
         m_ScorePrevious = 0;

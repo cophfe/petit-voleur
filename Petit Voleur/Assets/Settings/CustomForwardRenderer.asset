@@ -115,7 +115,7 @@ MonoBehaviour:
       overrideCamera: 0
       restoreCamera: 1
       offset: {x: 0, y: 0, z: 0, w: 0}
-      cameraFieldOfView: 60
+      cameraFieldOfView: 11.7
 --- !u!114 &8970522981842051057
 MonoBehaviour:
   m_ObjectHideFlags: 0

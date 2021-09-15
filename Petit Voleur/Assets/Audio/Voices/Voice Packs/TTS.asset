@@ -15,31 +15,53 @@ MonoBehaviour:
   voiceSets:
   - clips:
     - clip: {fileID: 8300000, guid: 480462af8cad41d4dadfa482950a59db, type: 3}
-      weight: 1
+      weight: 10
     - clip: {fileID: 8300000, guid: dc22606aafc5d0b4e96b14d0a3c2aa0a, type: 3}
-      weight: 1
-    delayPerPlay: 15
+      weight: 10
+    - clip: {fileID: 8300000, guid: fd75bbefbf2c1384c82743830cd2ea2e, type: 3}
+      weight: 10
+    - clip: {fileID: 8300000, guid: acee551dfe26d0f4f834fd4fb3529798, type: 3}
+      weight: 10
+    - clip: {fileID: 8300000, guid: 17bdb5041ee0d7a4aa1bdc17013fca44, type: 3}
+      weight: 5
+    delayPerPlay: 10
   - clips:
     - clip: {fileID: 8300000, guid: 8c8a88ae12a98414c881756283a56e4c, type: 3}
       weight: 1
+    - clip: {fileID: 8300000, guid: 1f4468a43266b8c4c94395ac2f163f0f, type: 3}
+      weight: 1
     delayPerPlay: 5
   - clips:
     - clip: {fileID: 8300000, guid: fe2a7ef5f8cb0c6489e798c3f78c3e9c, type: 3}
-      weight: 10
-    - clip: {fileID: 8300000, guid: e52ee08c38abff84e9f6c2668c1c240f, type: 3}
       weight: 10
     - clip: {fileID: 8300000, guid: 1f4468a43266b8c4c94395ac2f163f0f, type: 3}
-      weight: 2
-    delayPerPlay: 5
-  - clips:
-    - clip: {fileID: 8300000, guid: 16ac467666c4d5146abc2da13c161979, type: 3}
       weight: 10
-    - clip: {fileID: 8300000, guid: fe2a7ef5f8cb0c6489e798c3f78c3e9c, type: 3}
+    - clip: {fileID: 8300000, guid: ddeca36da3521d349a964288867e9365, type: 3}
+      weight: 10
+    - clip: {fileID: 8300000, guid: 7c4554b803587b44dbe7faa7011f5b22, type: 3}
       weight: 10
     - clip: {fileID: 8300000, guid: 28335a4463667634186d8736a71c3242, type: 3}
       weight: 2
     delayPerPlay: 5
   - clips:
+    - clip: {fileID: 8300000, guid: e52ee08c38abff84e9f6c2668c1c240f, type: 3}
+      weight: 10
+    - clip: {fileID: 8300000, guid: 44cd5d82668827142817cb42fb41899e, type: 3}
+      weight: 10
+    - clip: {fileID: 8300000, guid: bc3fce9d2b5be494aac638555ede3ba9, type: 3}
+      weight: 10
+    - clip: {fileID: 8300000, guid: 9f013b58902da1a48bd86cca39994943, type: 3}
+      weight: 3
+    - clip: {fileID: 8300000, guid: 766b713da03b4a8438e44d6900103f97, type: 3}
+      weight: 3
+    delayPerPlay: 5
+  - clips:
     - clip: {fileID: 8300000, guid: 0b702ae099fea6e42bed164cc26bc47b, type: 3}
+      weight: 1
+    - clip: {fileID: 8300000, guid: f0df6655bacef524aa5c649a07ded7ff, type: 3}
+      weight: 1
+    - clip: {fileID: 8300000, guid: 4fad517a13ee4b5449aacd1f714fee2b, type: 3}
+      weight: 1
+    - clip: {fileID: 8300000, guid: f57d0be5d67216746b4bcbd4cc1eec08, type: 3}
       weight: 1
     delayPerPlay: 5

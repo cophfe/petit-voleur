@@ -1,0 +1,127 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!319 &31900000
+AvatarMask:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: mask 1
+  m_Mask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+  m_Elements:
+  - m_Path: 
+    m_Weight: 1
+  - m_Path: Cylinder
+    m_Weight: 0
+  - m_Path: FerretRig
+    m_Weight: 0
+  - m_Path: FerretRig/Spine6
+    m_Weight: 0
+  - m_Path: FerretRig/Spine6/Spine5
+    m_Weight: 0
+  - m_Path: FerretRig/Spine6/Spine5/Spine4
+    m_Weight: 0
+  - m_Path: FerretRig/Spine6/Spine5/Spine4/Spine3
+    m_Weight: 0
+  - m_Path: FerretRig/Spine6/Spine5/Spine4/Spine3/Spine2
+    m_Weight: 0
+  - m_Path: FerretRig/Spine6/Spine5/Spine4/Spine3/Spine2/Spine1
+    m_Weight: 0
+  - m_Path: FerretRig/Spine6/Spine5/Spine4/Spine3/Spine2/Spine1/LeftShoulder
+    m_Weight: 0
+  - m_Path: FerretRig/Spine6/Spine5/Spine4/Spine3/Spine2/Spine1/LeftShoulder/LeftUpperArm
+    m_Weight: 0
+  - m_Path: FerretRig/Spine6/Spine5/Spine4/Spine3/Spine2/Spine1/LeftShoulder/LeftUpperArm/LeftArmLower
+    m_Weight: 0
+  - m_Path: FerretRig/Spine6/Spine5/Spine4/Spine3/Spine2/Spine1/LeftShoulder/LeftUpperArm/LeftArmLower/LeftHand
+    m_Weight: 0
+  - m_Path: FerretRig/Spine6/Spine5/Spine4/Spine3/Spine2/Spine1/LeftShoulder/LeftUpperArm/LeftArmLower/LeftHand/LeftHand_end
+    m_Weight: 0
+  - m_Path: FerretRig/Spine6/Spine5/Spine4/Spine3/Spine2/Spine1/Neck4
+    m_Weight: 0
+  - m_Path: FerretRig/Spine6/Spine5/Spine4/Spine3/Spine2/Spine1/Neck4/Neck3
+    m_Weight: 0
+  - m_Path: FerretRig/Spine6/Spine5/Spine4/Spine3/Spine2/Spine1/Neck4/Neck3/Neck2
+    m_Weight: 1
+  - m_Path: FerretRig/Spine6/Spine5/Spine4/Spine3/Spine2/Spine1/Neck4/Neck3/Neck2/Neck1
+    m_Weight: 1
+  - m_Path: FerretRig/Spine6/Spine5/Spine4/Spine3/Spine2/Spine1/Neck4/Neck3/Neck2/Neck1/Head
+    m_Weight: 1
+  - m_Path: FerretRig/Spine6/Spine5/Spine4/Spine3/Spine2/Spine1/Neck4/Neck3/Neck2/Neck1/Head/Bone
+    m_Weight: 1
+  - m_Path: FerretRig/Spine6/Spine5/Spine4/Spine3/Spine2/Spine1/Neck4/Neck3/Neck2/Neck1/Head/Bone/Bone_end
+    m_Weight: 1
+  - m_Path: FerretRig/Spine6/Spine5/Spine4/Spine3/Spine2/Spine1/Neck4/Neck3/Neck2/Neck1/Head/LeftEye
+    m_Weight: 1
+  - m_Path: FerretRig/Spine6/Spine5/Spine4/Spine3/Spine2/Spine1/Neck4/Neck3/Neck2/Neck1/Head/LeftEye/LeftEye_end
+    m_Weight: 1
+  - m_Path: FerretRig/Spine6/Spine5/Spine4/Spine3/Spine2/Spine1/Neck4/Neck3/Neck2/Neck1/Head/LeftEye/Sphere
+    m_Weight: 1
+  - m_Path: FerretRig/Spine6/Spine5/Spine4/Spine3/Spine2/Spine1/Neck4/Neck3/Neck2/Neck1/Head/RightEye
+    m_Weight: 1
+  - m_Path: FerretRig/Spine6/Spine5/Spine4/Spine3/Spine2/Spine1/Neck4/Neck3/Neck2/Neck1/Head/RightEye/RightEye_end
+    m_Weight: 1
+  - m_Path: FerretRig/Spine6/Spine5/Spine4/Spine3/Spine2/Spine1/Neck4/Neck3/Neck2/Neck1/Head/RightEye/Sphere.001
+    m_Weight: 1
+  - m_Path: FerretRig/Spine6/Spine5/Spine4/Spine3/Spine2/Spine1/RightShoulder
+    m_Weight: 0
+  - m_Path: FerretRig/Spine6/Spine5/Spine4/Spine3/Spine2/Spine1/RightShoulder/RightUpperArm
+    m_Weight: 0
+  - m_Path: FerretRig/Spine6/Spine5/Spine4/Spine3/Spine2/Spine1/RightShoulder/RightUpperArm/RightArmLower
+    m_Weight: 0
+  - m_Path: FerretRig/Spine6/Spine5/Spine4/Spine3/Spine2/Spine1/RightShoulder/RightUpperArm/RightArmLower/RightHand
+    m_Weight: 0
+  - m_Path: FerretRig/Spine6/Spine5/Spine4/Spine3/Spine2/Spine1/RightShoulder/RightUpperArm/RightArmLower/RightHand/RightHand_end
+    m_Weight: 0
+  - m_Path: FerretRig/Spine7
+    m_Weight: 0
+  - m_Path: FerretRig/Spine7/Back1
+    m_Weight: 0
+  - m_Path: FerretRig/Spine7/Back1/Back2
+    m_Weight: 0
+  - m_Path: FerretRig/Spine7/Back1/Back2/Back3
+    m_Weight: 0
+  - m_Path: FerretRig/Spine7/Back1/Back2/Back3/Tail9
+    m_Weight: 0
+  - m_Path: FerretRig/Spine7/Back1/Back2/Back3/Tail9/Tail8
+    m_Weight: 0
+  - m_Path: FerretRig/Spine7/Back1/Back2/Back3/Tail9/Tail8/Tail7
+    m_Weight: 0
+  - m_Path: FerretRig/Spine7/Back1/Back2/Back3/Tail9/Tail8/Tail7/Tail6
+    m_Weight: 0
+  - m_Path: FerretRig/Spine7/Back1/Back2/Back3/Tail9/Tail8/Tail7/Tail6/Tail5
+    m_Weight: 0
+  - m_Path: FerretRig/Spine7/Back1/Back2/Back3/Tail9/Tail8/Tail7/Tail6/Tail5/Tail4
+    m_Weight: 0
+  - m_Path: FerretRig/Spine7/Back1/Back2/Back3/Tail9/Tail8/Tail7/Tail6/Tail5/Tail4/Tail3.001
+    m_Weight: 0
+  - m_Path: FerretRig/Spine7/Back1/Back2/Back3/Tail9/Tail8/Tail7/Tail6/Tail5/Tail4/Tail3.001/Tail2
+    m_Weight: 0
+  - m_Path: FerretRig/Spine7/Back1/Back2/Back3/Tail9/Tail8/Tail7/Tail6/Tail5/Tail4/Tail3.001/Tail2/Tail1
+    m_Weight: 0
+  - m_Path: FerretRig/Spine7/Back1/Back2/Back3/Tail9/Tail8/Tail7/Tail6/Tail5/Tail4/Tail3.001/Tail2/Tail1/Tail1_end
+    m_Weight: 0
+  - m_Path: FerretRig/Spine7/LeftHip
+    m_Weight: 0
+  - m_Path: FerretRig/Spine7/LeftHip/LeftUpperLeg
+    m_Weight: 0
+  - m_Path: FerretRig/Spine7/LeftHip/LeftUpperLeg/LeftLowerLeg
+    m_Weight: 0
+  - m_Path: FerretRig/Spine7/LeftHip/LeftUpperLeg/LeftLowerLeg/LeftAnkle
+    m_Weight: 0
+  - m_Path: FerretRig/Spine7/LeftHip/LeftUpperLeg/LeftLowerLeg/LeftAnkle/LeftFoot
+    m_Weight: 0
+  - m_Path: FerretRig/Spine7/LeftHip/LeftUpperLeg/LeftLowerLeg/LeftAnkle/LeftFoot/LeftFoot_end
+    m_Weight: 0
+  - m_Path: FerretRig/Spine7/RightHip
+    m_Weight: 0
+  - m_Path: FerretRig/Spine7/RightHip/RightUpperLe
+    m_Weight: 0
+  - m_Path: FerretRig/Spine7/RightHip/RightUpperLe/RightLowerLeg
+    m_Weight: 0
+  - m_Path: FerretRig/Spine7/RightHip/RightUpperLe/RightLowerLeg/RightAnkle
+    m_Weight: 0
+  - m_Path: FerretRig/Spine7/RightHip/RightUpperLe/RightLowerLeg/RightAnkle/RightFoot
+    m_Weight: 0
+  - m_Path: FerretRig/Spine7/RightHip/RightUpperLe/RightLowerLeg/RightAnkle/RightFoot/RightFoot_end
+    m_Weight: 0
