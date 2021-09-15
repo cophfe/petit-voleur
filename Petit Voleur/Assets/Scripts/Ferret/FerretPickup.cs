@@ -25,6 +25,9 @@ public class FerretPickup : MonoBehaviour
     {
         if (heldItem)
 		{
+			if (controller.isRagdolled)
+				ReleaseItem();
+			
 			//Travel towards the target point
 			Vector3 targetPoint = Vector3.MoveTowards(heldItem.rbody.position, grabTransform.TransformPoint(grabPoint), maxTravelSpeed * Time.deltaTime);
 			heldItem.rbody.MovePosition(targetPoint);

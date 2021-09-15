@@ -8,8 +8,10 @@ public class VisualiseChefAlertLevel : MonoBehaviour
 	public ChefAI chefAI;
 	public Slider slider;
 
+	public float val;
+
 	void Update()
 	{
-		slider.value = chefAI.ferretStartAlertTimer / chefAI.alertedBeginDuration;
+		val = chefAI.ferretStartAlertTimer / chefAI.alertedBeginDuration;
 	}
 }

@@ -49,9 +49,10 @@ public class ChefAI : MonoBehaviour
 	public AnimationCurve distanceToViewAlertCurve;
 
 	private Transform targetTransform;
-	[SerializeField]
-	private float inspectingTimer;
-	private float alertedTimer;
+	public float inspectingTimer;
+	[HideInInspector]
+	public float alertedTimer;
+	[HideInInspector]
 	public float ferretAlertVisibleTimer;
 	[HideInInspector]
 	public float ferretStartAlertTimer;
