@@ -52,7 +52,7 @@ public class ChefAI : MonoBehaviour
 	[SerializeField]
 	private float inspectingTimer;
 	private float alertedTimer;
-	private float ferretAlertVisibleTimer;
+	public float ferretAlertVisibleTimer;
 	[HideInInspector]
 	public float ferretStartAlertTimer;
 	private float throwTimer;

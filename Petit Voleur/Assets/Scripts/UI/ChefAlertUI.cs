@@ -1,0 +1,27 @@
+﻿using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+using UnityEngine.UI;
+
+public class ChefAlertUI : MonoBehaviour
+{
+	public Image suspicionLevelImage;
+	public Image alertLevelImage;
+	public float alertFillSpeed = 1;
+
+	ChefAI chef;
+
+    void Start()
+    {
+		chef = FindObjectOfType<ChefAI>();
+	}
+
+    void Update()
+    {
+		suspicionLevelImage.fillAmount = chef.ferretStartAlertTimer / chef.alertedBeginDuration;
+		
+		float tAlert = chef.ferretAlertVisibleTimer / chef.ferretVisibleDuration;
+		float alertFill = alertLevelImage.fillAmount;
+		alertLevelImage.fillAmount = Mathf.MoveTowards(alertFill, tAlert, Mathf.Abs(tAlert - alertFill) * Time.deltaTime * alertFillSpeed);
+	}
+}
