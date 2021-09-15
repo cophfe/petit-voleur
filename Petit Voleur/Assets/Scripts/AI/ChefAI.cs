@@ -80,6 +80,10 @@ public class ChefAI : MonoBehaviour
 		animator.SetFloat("walkBlend", agent.velocity.magnitude / agent.speed);
 		
 		UpdateVisibility();
+		
+		//Decrement inspection timer
+		if (inspectingTimer > 0)
+			inspectingTimer -= Time.deltaTime;
 
 		//Don't run functionality when animations are playing, but still rotate when throwing
 		if (animator.GetBool("animationPlaying"))
@@ -91,10 +95,6 @@ public class ChefAI : MonoBehaviour
 		}
 
 		UpdateRotation();
-		
-		//Decrement inspection timer
-		if (inspectingTimer > 0)
-			inspectingTimer -= Time.deltaTime;
 
 		//Start tree
 		BaseBehaviour();
