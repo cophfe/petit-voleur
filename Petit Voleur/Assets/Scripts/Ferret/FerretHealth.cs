@@ -12,6 +12,7 @@ public class FerretHealth : MonoBehaviour
 	public int maxHealth = 3;
 	int currentHealth;
 	bool dead = false;
+
 	public int CurrentHealth
 	{
 		get
@@ -47,9 +48,13 @@ public class FerretHealth : MonoBehaviour
 		{
 			gM.OnDeath();
 			dead = true;
+			UI.SetHealthUI(0);
+		}
+		else
+		{
+			UI.SetHealthUI(currentHealth);
 		}
 
-		UI.SetHealthUI(currentHealth);
 	}
 
 	public void Heal(int healAmount = 1)

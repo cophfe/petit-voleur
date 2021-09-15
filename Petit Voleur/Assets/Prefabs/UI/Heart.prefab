@@ -88,7 +88,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d24366ac376616a45b43002036331378, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  floatMagnitude: 4
+  floatMagnitude: 2
   floatTime: 4
   floatTimeOffset: 0
   randTimeOffset: 1

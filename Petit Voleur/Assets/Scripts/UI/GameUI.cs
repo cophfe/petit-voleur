@@ -44,6 +44,8 @@ public class GameUI : MonoBehaviour
 	public float deathTransitionTime = 5;
 	[Tooltip("The maximum blur amount.")]
 	public float maxBlurAmount = 0.02f;
+	[Tooltip("The Hit Overlay Animator")]
+	public Animator hitAnimator = null;
 
 	//private variables
 	enum ScreenState
@@ -652,6 +654,8 @@ public class GameUI : MonoBehaviour
 			{
 				healthChildren[i].SetActive(i < currentHealth);
 			}
+			if (hitAnimator)
+				hitAnimator.SetTrigger("Hit");
 		}
 	}
 
