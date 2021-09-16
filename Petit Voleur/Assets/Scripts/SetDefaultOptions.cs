@@ -37,9 +37,9 @@ public class SetDefaultOptions : MonoBehaviour
 		//FULLSCREEN
 		if (!PlayerPrefs.HasKey("isFullscreen"))
 		{
-			int val = Screen.fullScreen ? 1 : 0;
-			PlayerPrefs.SetInt("isFullscreen", val);
-			PlayerPrefs.SetInt("DefaultIsFullscreen", val);
+			//int val = Screen.fullScreen ? 1 : 0;
+			PlayerPrefs.SetInt("isFullscreen", 1);
+			PlayerPrefs.SetInt("DefaultIsFullscreen", 1);
 		}
 
 		//CAMERA SENSITIVITY

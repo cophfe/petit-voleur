@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.InputSystem.EnhancedTouch;
+using TMPro;
 
 [RequireComponent(typeof(Camera))]
 public partial class CameraController : MonoBehaviour
@@ -144,12 +145,6 @@ public partial class CameraController : MonoBehaviour
 	{
 		float distance = Vector3.Distance(currentPivotPosition, target.position);
 		currentPivotPosition = Vector3.MoveTowards(currentPivotPosition, target.position, Time.deltaTime * followSpeed * distance);
-
-		if (UnityEngine.InputSystem.EnhancedTouch.Touch.activeFingers.Count == 1)
-		{
-			UnityEngine.InputSystem.EnhancedTouch.Touch activeTouch = UnityEngine.InputSystem.EnhancedTouch.Touch.activeFingers[0].currentTouch;
-			Debug.Log($"Phase: {activeTouch.phase} | Position: {activeTouch.startScreenPosition}");
-		}
 	}
 
 	//Called through unity input system
@@ -179,15 +174,20 @@ public partial class CameraController : MonoBehaviour
 		}
 	}
 
+	public TextMeshProUGUI tMP;
 	void OnFingerLook(Finger finger)
 	{
 		if (!enableInput) return;
 
 		if (finger.currentTouch.phase == UnityEngine.InputSystem.TouchPhase.Moved)
 		{
-			if (finger.touchHistory.Count <= 0 || finger.touchHistory[0].screenPosition.x/Screen.width < 1- androidInputScreenPercentage) return;
 
-			Vector2 input = finger.currentTouch.screenPosition - finger.touchHistory[0].screenPosition;
+			if (finger.touchHistory.Count <= 1 || finger.touchHistory[0].screenPosition.x / Screen.width < 1 - androidInputScreenPercentage)
+			{
+				return; 
+			}
+
+			Vector2 input = finger.currentTouch.screenPosition - finger.touchHistory[1].screenPosition;
 
 			InputMove(input);
 		}
