@@ -22,6 +22,8 @@ public partial class CameraController : MonoBehaviour
 
 	[Header("Control")]
 	[Space(5)]
+	[Tooltip("Whether the camera accepts input or not.")]
+	public bool enableInput = true;
 	[Tooltip("The camera sensitivity multiplier.")]
 	[Range(0, 1)] public float sensitivity = 0.1f;
 	[Tooltip("If input is inverted or not.")]
@@ -128,8 +130,11 @@ public partial class CameraController : MonoBehaviour
 	//Called through unity input system
 	public void OnLook(InputValue value)
 	{
+		if (!enableInput) return;
+
 		//get input from look axis
 		Vector2 input = value.Get<Vector2>();
+
 		//have to check invert everytime, it could change
 		if (inverted)
 			input *= -sensitivity;

@@ -14,6 +14,11 @@ public class ChefAlertUI : MonoBehaviour
     void Start()
     {
 		chef = FindObjectOfType<ChefAI>();
+		if (chef == null)
+		{
+			Debug.LogWarning("Alert UI could not find ChefAI component.");
+			enabled = false;
+		}
 	}
 
     void Update()

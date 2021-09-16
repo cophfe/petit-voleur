@@ -10,6 +10,7 @@ using UnityEngine.UI;
 using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
 using UnityEngine.Rendering.Universal;
+using UnityEngine.Events;
 
 public class GameUI : MonoBehaviour
 {
@@ -46,6 +47,7 @@ public class GameUI : MonoBehaviour
 	public float maxBlurAmount = 0.02f;
 	[Tooltip("The Hit Overlay Animator")]
 	public Animator hitAnimator = null;
+	public UnityEvent onLeaveMenu = null;
 
 	//private variables
 	enum ScreenState
@@ -398,6 +400,8 @@ public class GameUI : MonoBehaviour
 			case ScreenState.PAUSE:
 				{
 					Pause(false);
+					if (onLeaveMenu != null)
+						onLeaveMenu.Invoke();
 				}
 				break;
 			case ScreenState.OPTIONS:
