@@ -960,6 +960,17 @@ RectTransform:
   m_CorrespondingSourceObject: {fileID: 925964555869728361, guid: 01749fe90be29ae47a7b784c74d31aec, type: 3}
   m_PrefabInstance: {fileID: 614984533}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &614984535 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 6810591609299928440, guid: 01749fe90be29ae47a7b784c74d31aec, type: 3}
+  m_PrefabInstance: {fileID: 614984533}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 64ce8c2eba4e13f49852f0b59a2b6b87, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &680280084
 GameObject:
   m_ObjectHideFlags: 0
@@ -2677,6 +2688,7 @@ GameObject:
   - component: {fileID: 8533943690099982436}
   - component: {fileID: 8533943690099982438}
   - component: {fileID: 8533943690099982437}
+  - component: {fileID: 8533943690099982439}
   m_Layer: 5
   m_Name: Canvas
   m_TagString: Untagged
@@ -2760,6 +2772,23 @@ MonoBehaviour:
   noiseSpeed: 0.2
   maxYRotation: 20
   maxXRotation: -10
+--- !u!114 &8533943690099982439
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8533943690099982435}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9c103f9bb4af7354ab8f2b2b26b6a326, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  cameraControllerPrefab: {fileID: 3225189145465032139, guid: eb0a18701aeffc54d9d1d0e0b87389cc, type: 3}
+  mixer: {fileID: 24100000, guid: 3c03042c2931a8e43ac41147a5988e4f, type: 2}
+  masterParameterName: Volume Master
+  musicParameterName: Volume Music
+  oUI: {fileID: 614984535}
 --- !u!223 &8533943690099982446
 Canvas:
   m_ObjectHideFlags: 0
