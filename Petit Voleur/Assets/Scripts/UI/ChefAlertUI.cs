@@ -25,7 +25,7 @@ public class ChefAlertUI : MonoBehaviour
     {
 		suspicionLevelImage.fillAmount = chef.ferretStartAlertTimer / chef.alertedBeginDuration;
 		
-		float tAlert = chef.ferretAlertVisibleTimer / chef.ferretVisibleDuration;
+		float tAlert = chef.alertedTimer / chef.alertedDuration;
 		float alertFill = alertLevelImage.fillAmount;
 		alertLevelImage.fillAmount = Mathf.MoveTowards(alertFill, tAlert, Mathf.Abs(tAlert - alertFill) * Time.deltaTime * alertFillSpeed);
 	}

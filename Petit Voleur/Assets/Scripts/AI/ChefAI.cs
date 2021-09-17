@@ -286,7 +286,7 @@ public class ChefAI : MonoBehaviour
 			if (Vector3.Distance(wanderPoints[wanderIndex], transform.position) < wanderRange)
 			{
 				PlayLookAnim();
-				wanderIndex = -1;
+				SetWanderPoint();
 			}
 			else
 			{
