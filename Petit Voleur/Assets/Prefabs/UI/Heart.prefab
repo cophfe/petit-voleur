@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 5951436015676805668}
   - component: {fileID: 5089375960928925832}
   - component: {fileID: 1780965729508726046}
+  - component: {fileID: 2298403650819709130}
   m_Layer: 5
   m_Name: Image
   m_TagString: Untagged
@@ -92,6 +93,25 @@ MonoBehaviour:
   floatTime: 4
   floatTimeOffset: 0
   randTimeOffset: 1
+--- !u!95 &2298403650819709130
+Animator:
+  serializedVersion: 3
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3944374022776678886}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 66104bd6af4adcb4190dd2de01b05c52, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorControllerStateOnDisable: 0
 --- !u!1 &5386459329545777766
 GameObject:
   m_ObjectHideFlags: 0
@@ -127,7 +147,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 50, y: 50}
+  m_SizeDelta: {x: 80, y: 80}
   m_Pivot: {x: 1, y: 1}
 --- !u!222 &571672636328822434
 CanvasRenderer:

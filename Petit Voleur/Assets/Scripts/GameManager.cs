@@ -16,24 +16,15 @@ public class GameManager : MonoBehaviour
 	GameUI UI = null;
 	bool canWin = false;
 
-	PlayerInput playerInput;
-	PlayerInput cameraInput;
-
+	PlayerInput[] inputs;
+	
 	private void Start()
 	{
 		UI = FindObjectOfType<GameUI>();
 		CursorLocked = true;
 
-		//find the player's input
-		try
-		{
-			playerInput = GameObject.FindGameObjectWithTag("Player").GetComponentInChildren<PlayerInput>();
-			cameraInput = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<PlayerInput>();
-		}
-		catch
-		{
-			Debug.LogWarning("Error in finding input components.");
-		}
+		//find the player inputs
+		inputs = FindObjectsOfType<PlayerInput>(false);
 	}
 
 	public void UpdatePointUI()
@@ -104,19 +95,31 @@ public class GameManager : MonoBehaviour
 	{
 		get
 		{
-			return !(playerInput && cameraInput) || playerInput.enabled && cameraInput.enabled;
+			for (int i = 0; i < inputs.Length; i++)
+			{
+				if (inputs[i].gameObject != gameObject)
+				{
+					return inputs[i].enabled;
+				}
+			}
+
+			return false;
 		}
 		set
 		{
-			if (playerInput)
-				playerInput.enabled = value;
-			if (cameraInput)
-				cameraInput.enabled = value;
+			for (int i = 0; i < inputs.Length; i++)
+			{
+				if (inputs[i].gameObject != gameObject)
+				{
+					inputs[i].enabled = value;
+				}
+			}
 		}
 	}
 
 	public void OnDeath()
 	{
 		UI.TransitionToLose();
+
 	}
 }

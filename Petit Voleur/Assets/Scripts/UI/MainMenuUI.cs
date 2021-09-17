@@ -137,7 +137,7 @@ public class MainMenuUI : MonoBehaviour
 		yield return new WaitForSecondsRealtime(sceneTransitionTime);
 
 		#if UNITY_EDITOR
-		UnityEditor.EditorApplication.ExitPlaymode();
+			UnityEditor.EditorApplication.ExitPlaymode();
 		#else
 			Application.Quit();
 		#endif

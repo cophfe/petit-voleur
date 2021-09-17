@@ -30,10 +30,16 @@ public partial class CameraController : MonoBehaviour
 	[Range(0, 1)] public float sensitivity = 0.1f;
 	[Tooltip("If input is inverted or not.")]
 	public bool inverted = false;
-	[Tooltip("Y rotation cannot be higher than this value.")]
+	[Tooltip("Up rotation cannot be higher than this value.")]
 	[Range(-90, 90)] public float maximumUpRotation = 87;
-	[Tooltip("Y rotation cannot be less than this value.")]
+	[Tooltip("Up rotation cannot be less than this value.")]
 	[Range(-90, 90)] public float minimumUpRotation = -87;
+	//[Tooltip("Up rotation cannot be higher than this value (when climbing).")]
+	//[Range(-90, 90)] public float maximumUpRotationClimbing = 87;
+	//[Tooltip("Up rotation cannot be less than this value (when climbing).")]
+	//[Range(-90, 90)] public float minimumUpRotationClimbing = -87;
+	[Tooltip("The minimum angle off of the wall the camera can have when climbing.")]
+	[Range(0, 10)] public float minAngleFromWallWhenClimbing = 0;
 	[Tooltip("The percent of the screen the camera takes input from on android")]
 	[Range(0,1)] public float androidInputScreenPercentage = 0.7f;
 
@@ -41,6 +47,10 @@ public partial class CameraController : MonoBehaviour
 	[Space(5)]
 	[Tooltip("Camera movement speed.")]
 	public float followSpeed = 15;
+	[Tooltip("The max amount the camera will turn to look away from the floor.")]
+	public float cameraAvoidFloorRotationPower = 15;
+	[Tooltip("The angular distance in which the camera avoids the floor.")]
+	public float cameraAvoidFloorRotationAngleRange = 30;
 	[Tooltip("The speed the camera zooms in. Setting this too low will cause clipping issues.")]
 	public float zoomInSpeed = 15;
 	[Tooltip("The speed the camera zooms out.")]
@@ -56,6 +66,7 @@ public partial class CameraController : MonoBehaviour
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 	Camera cam;
+	FerretController ferretController = null;
 
 	//The rotation of the targetQuaternion
 	Vector2 rotation;
@@ -69,7 +80,9 @@ public partial class CameraController : MonoBehaviour
 	Quaternion targetOrbit;
 	Quaternion currentOrbit = Quaternion.identity;
 	Vector3 currentPivotPosition;
-	
+	float xRotationAddition = 0;
+	float xRotationAdditionCurrent = 0;
+
 	//used to stop camera from clipping into walls
 	Vector3 cameraBoxHalfExtents;
 	
@@ -80,15 +93,14 @@ public partial class CameraController : MonoBehaviour
 	{
 		//hook into touch
 		EnhancedTouchSupport.Enable();
-		TouchSimulation.Enable();
 		UnityEngine.InputSystem.EnhancedTouch.Touch.onFingerMove += OnFingerLook;
 	}
 
 	private void OnDisable()
 	{
 		//unhook into touch
-		EnhancedTouchSupport.Disable();
-		TouchSimulation.Disable();
+		if (EnhancedTouchSupport.enabled)
+			EnhancedTouchSupport.Disable();
 		UnityEngine.InputSystem.EnhancedTouch.Touch.onFingerMove -= OnFingerLook;
 	}
 
@@ -98,10 +110,11 @@ public partial class CameraController : MonoBehaviour
 		Debug.Assert(target != null);
 
 		cam = GetComponent<Camera>();
+		ferretController = target.gameObject.GetComponentInChildren<FerretController>();
 
 		//set default values for camera
-		rotation = new Vector2(180 + target.rotation.eulerAngles.y, -15);
-		targetOrbit = Quaternion.Euler(rotation.y, rotation.x, 0);
+		rotation = new Vector2(-15, 180 + target.rotation.eulerAngles.y);
+		targetOrbit = Quaternion.Euler(rotation);
 		currentOrbit = targetOrbit;
 		orbitVector = currentOrbit * Vector3.forward;
 		currentPivotPosition = target.position;
@@ -120,10 +133,12 @@ public partial class CameraController : MonoBehaviour
 			float sphericalDistance = Quaternion.Angle(currentOrbit, targetOrbit);
 
 			currentOrbit = Quaternion.RotateTowards(currentOrbit, targetOrbit, sphericalDistance * Time.deltaTime * rotateSpeed);
+			xRotationAdditionCurrent = Mathf.MoveTowardsAngle(xRotationAdditionCurrent, xRotationAddition, Mathf.Abs(xRotationAdditionCurrent - xRotationAddition) * Time.deltaTime * rotateSpeed);
 			//set the orbit vector 
 			orbitVector = currentOrbit * Vector3.forward;
 			//the camera will look in the opposite direction of the orbit vector, toward the target position
 			transform.forward = -orbitVector;
+			transform.Rotate(new Vector3(-xRotationAdditionCurrent, 0, 0));
 		}
 
 		SetOrbitDistance();
@@ -160,21 +175,66 @@ public partial class CameraController : MonoBehaviour
 		if (!enableInput) return;
 
 		input *= inverted ? -sensitivity : sensitivity;
-		rotation += input;
-		//up rotation is clamped
-		rotation.y = Mathf.Clamp(rotation.y, -maximumUpRotation, -minimumUpRotation);
+		rotation += new Vector2(input.y, input.x);
+
+		rotation.x = Mathf.Clamp(rotation.x, -maximumUpRotation, -minimumUpRotation);
+		//if (ferretController.upDirection == Vector3.up)
+		//{
+		//	//clamp up rotation
+		//	rotation.x = Mathf.Clamp(rotation.x, -maximumUpRotation, -minimumUpRotation);
+		
+		//}
+		//else
+		//{
+		//	//clamp up rotation
+		//	//rotation.x = Mathf.Clamp(rotation.x, -maximumUpRotationClimbing, -minimumUpRotationClimbing);
+		//	rotation.x = Mathf.Clamp(rotation.x, -87, 87);
+
+		//	//cancel rotation that is going into climb surface
+		//	if (Vector3.Dot(Quaternion.Euler(rotation) * Vector3.forward, ferretController.upDirection) < 0)
+		//	{				
+		//	}
+
+		//	var yVec = Vector3.ProjectOnPlane(ferretController.upDirection, Vector3.up).normalized;
+		//	float yAngle = Mathf.Atan2(yVec.y, yVec.x) * Mathf.Rad2Deg;
+
+		//	var xVec = Vector3.ProjectOnPlane(ferretController.upDirection, Vector3.right).normalized;
+		//	float xAngle = Mathf.Atan2(xVec.y, xVec.x) * Mathf.Rad2Deg;
+
+		//	//rotation.x = Mathf.Clamp(rotation.x, xAngle - 90, xAngle + 90);
+		//	//rotation.y = Mathf.Clamp(rotation.y, yAngle - 90, yAngle + 90);
+		//	Debug.Log("x: " + xAngle + ", y: " + yAngle);
+		//}
+
 		//set target quaternion
-		targetOrbit = Quaternion.Euler(rotation.y, rotation.x, 0);
+		targetOrbit = Quaternion.Euler(rotation);
+
+		//this is used to push camera away from floor when on ground so you can see more upward
+		float rotationFromMin = -(rotation.x - (minimumUpRotation));
+		if (rotationFromMin < cameraAvoidFloorRotationAngleRange)
+		{
+			xRotationAddition = cameraAvoidFloorRotationPower * (1 - rotationFromMin / cameraAvoidFloorRotationAngleRange);
+		}
+		else
+			xRotationAddition = 0;
 
 		if (!smoothCameraRotation)
 		{
 			currentOrbit = targetOrbit;
 			orbitVector = currentOrbit * Vector3.forward;
 			transform.forward = -orbitVector;
+			transform.Rotate(new Vector3(-xRotationAddition, 0, 0));
 		}
+
+		//clamp x rotation too
+		//rotation.x = Mathf.Repeat(rotation.x, 360);
 	}
 
-	public TextMeshProUGUI tMP;
+	public void OnUpdateClimb()
+	{
+		InputMove(Vector2.zero);
+	}
+
 	void OnFingerLook(Finger finger)
 	{
 		if (!enableInput) return;
@@ -254,7 +314,7 @@ public partial class CameraController : MonoBehaviour
 		}
 		else
 		{
-			currentDistance = Mathf.MoveTowards(currentDistance, targetDistance, Time.deltaTime * zoomInSpeed * (currentDistance - targetDistance));
+			currentDistance = targetDistance;
 		}
 		orbitVector.Normalize();
 		//now set orbit vec

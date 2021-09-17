@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+[DefaultExecutionOrder(-1)]
 public class PlatformEnabler : MonoBehaviour
 {
 	public enum PlatformOverride
@@ -18,20 +19,7 @@ public class PlatformEnabler : MonoBehaviour
 	public GameObject[] androidExclusive = new GameObject[0];
 	public GameObject[] windowsExclusive = new GameObject[0];
 
-	//private void OnValidate()
-	//{
-	//	RuntimePlatform platform = Application.platform;
-	//	var win = (platformOverride != PlatformOverride.NONE
-	//		&& (platformOverride == PlatformOverride.BOTH || platformOverride == PlatformOverride.WINDOWS || (platformOverride == PlatformOverride.NULL && (platform == RuntimePlatform.WindowsPlayer || platform == RuntimePlatform.WindowsEditor))));
-
-	//	var and = (platformOverride != PlatformOverride.NONE
-	//		&& (platformOverride == PlatformOverride.BOTH || platformOverride == PlatformOverride.ANDROID || (platformOverride == PlatformOverride.NULL && (platform == RuntimePlatform.Android))));
-	
-	//	Debug.Log("Platform: " + platform + ", Override: " + platformOverride + ", Windows: " + win + ", Android: " + and);
-
-	//}
-
-	void Start()
+	void Awake()
     {
 		RuntimePlatform platform = Application.platform;
 		
