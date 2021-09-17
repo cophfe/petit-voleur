@@ -6,6 +6,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.InputSystem.EnhancedTouch;
+using TMPro;
 
 [RequireComponent(typeof(Camera))]
 public partial class CameraController : MonoBehaviour
@@ -22,6 +24,8 @@ public partial class CameraController : MonoBehaviour
 
 	[Header("Control")]
 	[Space(5)]
+	[Tooltip("Whether the camera accepts input or not.")]
+	public bool enableInput = true;
 	[Tooltip("The camera sensitivity multiplier.")]
 	[Range(0, 1)] public float sensitivity = 0.1f;
 	[Tooltip("If input is inverted or not.")]
@@ -30,6 +34,8 @@ public partial class CameraController : MonoBehaviour
 	[Range(-90, 90)] public float maximumUpRotation = 87;
 	[Tooltip("Y rotation cannot be less than this value.")]
 	[Range(-90, 90)] public float minimumUpRotation = -87;
+	[Tooltip("The percent of the screen the camera takes input from on android")]
+	[Range(0,1)] public float androidInputScreenPercentage = 0.7f;
 
 	[Header("Movement")]
 	[Space(5)]
@@ -69,6 +75,22 @@ public partial class CameraController : MonoBehaviour
 	
 	//camera shake
 	Vector3 cameraShake = Vector3.zero;
+
+	private void OnEnable()
+	{
+		//hook into touch
+		EnhancedTouchSupport.Enable();
+		TouchSimulation.Enable();
+		UnityEngine.InputSystem.EnhancedTouch.Touch.onFingerMove += OnFingerLook;
+	}
+
+	private void OnDisable()
+	{
+		//unhook into touch
+		EnhancedTouchSupport.Disable();
+		TouchSimulation.Disable();
+		UnityEngine.InputSystem.EnhancedTouch.Touch.onFingerMove -= OnFingerLook;
+	}
 
 	void Start()
 	{
@@ -128,27 +150,48 @@ public partial class CameraController : MonoBehaviour
 	//Called through unity input system
 	public void OnLook(InputValue value)
 	{
-		//get input from look axis
 		Vector2 input = value.Get<Vector2>();
-		//have to check invert everytime, it could change
-		if (inverted)
-			input *= -sensitivity;
-		else
-			input *= sensitivity;
+		//get input from look axis
+		InputMove(input);
+	}
+
+	void InputMove(Vector2 input)
+	{
+		if (!enableInput) return;
+
+		input *= inverted ? -sensitivity : sensitivity;
 		rotation += input;
 		//up rotation is clamped
-		//float upRotation = Vector2.Dot(rotation, Vector3.ProjectOnPlane(target.up, cam.transform.forward));
-		//Debug.Log(upRotation);
 		rotation.y = Mathf.Clamp(rotation.y, -maximumUpRotation, -minimumUpRotation);
 		//set target quaternion
 		targetOrbit = Quaternion.Euler(rotation.y, rotation.x, 0);
-		
+
 		if (!smoothCameraRotation)
 		{
 			currentOrbit = targetOrbit;
 			orbitVector = currentOrbit * Vector3.forward;
 			transform.forward = -orbitVector;
 		}
+	}
+
+	public TextMeshProUGUI tMP;
+	void OnFingerLook(Finger finger)
+	{
+		if (!enableInput) return;
+
+		if (finger.currentTouch.phase == UnityEngine.InputSystem.TouchPhase.Moved)
+		{
+
+			if (finger.touchHistory.Count <= 1 || finger.touchHistory[0].screenPosition.x / Screen.width < 1 - androidInputScreenPercentage)
+			{
+				return; 
+			}
+
+			Vector2 input = finger.currentTouch.screenPosition - finger.touchHistory[1].screenPosition;
+
+			InputMove(input);
+		}
+		
 	}
 
 	//When inspector values are changed, check they are valid

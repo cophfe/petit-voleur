@@ -104,7 +104,7 @@ public class FerretPickup : MonoBehaviour
 	}
 
 	//Input
-	void OnGrab()
+	public void OnGrab()
 	{
 		if (heldItem)
 		{
