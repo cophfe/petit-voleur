@@ -121,7 +121,7 @@ public class GameUI : MonoBehaviour
 	[Tooltip("The object that holds the health unit objects. Should have a horizontal or vertical layout group attached.")]
 	public RectTransform healthParent = null;
 	//private variables
-	List<GameObject> healthChildren = null;
+	List<Animator> healthChildren = null;
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 	private void Start()
@@ -619,29 +619,16 @@ public class GameUI : MonoBehaviour
 		//if health UI has already been initialized
 		if (healthChildren != null)
 		{
-			if (maxHealth > healthChildren.Count)
-			{
-				for (int i = healthChildren.Count - 1; i < maxHealth; i++)
-				{
-					healthChildren.Add(Instantiate(healthPrefab, healthParent));
-				}
-			}
-			else if (maxHealth < healthChildren.Count)
-			{
-				for (int i = maxHealth; i < healthChildren.Count; i++)
-				{
-					GameObject.Destroy(healthChildren[i]);
-					healthChildren.RemoveAt(i);
-				}
-			}
+			return;
 		}
 		else if (maxHealth > 0)
 		{
-			healthChildren = new List<GameObject>(maxHealth);
+			healthChildren = new List<Animator>(maxHealth);
 
 			for (int i = 0; i < maxHealth; i++)
 			{
-				healthChildren.Add(Instantiate(healthPrefab, healthParent));
+				healthChildren.Add(Instantiate(healthPrefab, healthParent).GetComponentInChildren<Animator>());
+				healthChildren[i].Play("Alive", 0, (i % maxHealth) * 0.05f);
 			}
 		}
 	}
@@ -656,7 +643,7 @@ public class GameUI : MonoBehaviour
 		{
 			for (int i = 0; i < healthChildren.Count; i++)
 			{
-				healthChildren[i].SetActive(i < currentHealth);
+				healthChildren[healthChildren.Count - i - 1].SetBool("Living", currentHealth - i > 0);
 			}
 			if (hitAnimator)
 				hitAnimator.SetTrigger("Hit");
