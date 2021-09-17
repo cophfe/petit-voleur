@@ -10,6 +10,7 @@ public class FerretPickup : MonoBehaviour
 	public LayerMask grabLayers;
 	public Item heldItem;
 	public float maxTravelSpeed = 400.0f;
+	public float releaseVelocity = 4.0f;
 	private FerretController controller;
 	private Vector3 grabPoint;
 	private Quaternion grabRotation;
@@ -26,7 +27,10 @@ public class FerretPickup : MonoBehaviour
         if (heldItem)
 		{
 			if (controller.isRagdolled)
+			{
 				ReleaseItem();
+				return;
+			}
 			
 			//Travel towards the target point
 			Vector3 targetPoint = Vector3.MoveTowards(heldItem.rbody.position, grabTransform.TransformPoint(grabPoint), maxTravelSpeed * Time.deltaTime);
@@ -98,7 +102,7 @@ public class FerretPickup : MonoBehaviour
 	/// </summary>
 	void ReleaseItem()
 	{
-		heldItem.Release(controller.velocity);
+		heldItem.Release(controller.velocity + (transform.forward * releaseVelocity));
 		heldItem = null;
 	}
 

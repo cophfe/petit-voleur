@@ -81,8 +81,8 @@ AudioSource:
   SpatializePostEffects: 0
   Priority: 128
   DopplerLevel: 0
-  MinDistance: 19.69906
-  MaxDistance: 149.04874
+  MinDistance: 32.443665
+  MaxDistance: 154.75
   Pan2D: 0
   rolloffMode: 0
   BypassEffects: 0
@@ -261,7 +261,7 @@ NavMeshAgent:
   m_Enabled: 1
   m_AgentTypeID: 0
   m_Radius: 5
-  m_Speed: 15
+  m_Speed: 23
   m_Acceleration: 30
   avoidancePriority: 50
   m_AngularSpeed: 300
@@ -288,16 +288,16 @@ MonoBehaviour:
   currentState: 0
   animator: {fileID: 2074804435522239471}
   kickCollider: {fileID: 2086551215}
-  alertedBeginDuration: 0.5
+  alertedBeginDuration: 1
   alertedDuration: 6
-  inspectDuration: 1
+  inspectDuration: 10
   ferretVisibleDuration: 1.5
   ferretGroundedThreshold: 5
   inspectRange: 10
   wanderRange: 5
   kickRange: 8
   kickDamage: 1
-  kickRagdollDuration: 5
+  kickRagdollDuration: 3
   kickVelocity: {x: 0, y: 30, z: 50}
   kickLayer:
     serializedVersion: 2
@@ -307,7 +307,7 @@ MonoBehaviour:
   currentThrowable: {fileID: 0}
   throwPoint: {fileID: 1457790042}
   throwRange: 50
-  throwDelay: 1
+  throwDelay: 1.5
   throwSpeed: 40
   deadReckoningSamples: 5
   wanderIndex: 0
@@ -319,6 +319,34 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 5633
   viewLaserPoint: {fileID: 1688901810}
+  distanceToViewAlertCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 2
+      inSlope: -1.5
+      outSlope: -1.5
+      tangentMode: 34
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 1
+      value: 0.5
+      inSlope: -1.5
+      outSlope: -1.5
+      tangentMode: 34
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  inspectingTimer: 0
+  alertedTimer: 0
+  ferretAlertVisibleTimer: 0
+  ferretStartAlertTimer: 0
 --- !u!114 &8279133776123759010
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -417,6 +445,22 @@ PrefabInstance:
     - target: {fileID: -8679921383154817045, guid: 592738638d4ff4b48accb3934a7bd6f8, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -6605988621411289139, guid: 592738638d4ff4b48accb3934a7bd6f8, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0.4590593
+      objectReference: {fileID: 0}
+    - target: {fileID: -6605988621411289139, guid: 592738638d4ff4b48accb3934a7bd6f8, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0.05976738
+      objectReference: {fileID: 0}
+    - target: {fileID: 297128735270582366, guid: 592738638d4ff4b48accb3934a7bd6f8, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: -0.009950244
+      objectReference: {fileID: 0}
+    - target: {fileID: 297128735270582366, guid: 592738638d4ff4b48accb3934a7bd6f8, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 0.6993074
       objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: 592738638d4ff4b48accb3934a7bd6f8, type: 3}
       propertyPath: m_Name

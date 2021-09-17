@@ -134,7 +134,7 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 256
   velocityThreshold: 5
-  ragdollDuration: 2
+  ragdollDuration: 1.5
   impulse: 60
   damage: 1
 --- !u!82 &-3353401159079907935
