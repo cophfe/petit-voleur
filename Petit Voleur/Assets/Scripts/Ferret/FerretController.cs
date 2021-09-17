@@ -52,6 +52,8 @@ public class FerretController : MonoBehaviour
 	[Header("Jumping")]
 	public JumpArc fallingArc;
 	public JumpArc jumpArc;
+	public float coyoteJumpDuration = 0.1f;
+	public float jumpBufferDuration = 0.1f;
 
 	[Header("Wall Climbing")]
 	public LayerMask climbableLayers;
@@ -76,6 +78,7 @@ public class FerretController : MonoBehaviour
 	public float dashCooldown = 1.4f;
 	public float dashImpactSlowdown = 0.0f;
 	public float dashImpactSlowdownDuration = 0.05f;
+	public float dashImpactSlowdownRatio = 0.1f;
 	public float defaultImpactMultiplier = 0.5f;
 
 	[Header("Animations")]
@@ -90,7 +93,8 @@ public class FerretController : MonoBehaviour
 	public FerretAudio ferretAudio;
 	private FerretPickup ferretPickup;
 	private TimeManager timeManager;
-	private CameraController cameraController;
+	[HideInInspector]
+	public CameraController cameraController;
 	private Vector3 forward;
 	private Vector3 projectedInput;
 	private Vector3 targetVelocity;
@@ -102,7 +106,10 @@ public class FerretController : MonoBehaviour
 	private float dashCDTimer = 0f;
 	private float ragdollTimer = 0f;
 	private float airTimeTimer = 0f;
+	//Other
 	private bool isDead = false;
+	private float jumpBufferTimer;
+	private float coyoteJumpTimer;
 
     // Start is called before the first frame update
     void Start()
@@ -156,17 +163,29 @@ public class FerretController : MonoBehaviour
 			if (!grounded)
 				airTimeTimer += Time.deltaTime;
 
+			if (jumpBufferTimer > 0)
+				jumpBufferTimer -= Time.deltaTime;
+
 			Move();
 
 			animator.SetBool("m_FerretGrounded", grounded);
 
 			DoRotation();
 
-			//Decrement dash timer when on the ground
+			//Decrement dash timer
 			if (!isDashing && dashCDTimer > 0)
 				dashCDTimer -= Time.deltaTime * stats.DashFrequency;
 		}
     }
+
+	/// <summary>
+	/// Accelerates the character controller
+	/// </summary>
+	/// <param name="addedAcceleration"></param>
+	public void AddVelocity(Vector3 addedAcceleration)
+	{
+		velocity += addedAcceleration;
+	}
 
 	// ========================================================|
 	//		--- Collision Response ---
@@ -244,21 +263,29 @@ public class FerretController : MonoBehaviour
 		{
 			floorNormal = rayhit.normal;
 			floorObject = rayhit.collider;
-			grounded = true;
+			coyoteJumpTimer = coyoteJumpDuration;
 
-			if (airTimeTimer >= airTimeSoundThreshold)
+			if (!grounded)
 			{
-				ferretAudio.PlayFerretLanded(Mathf.Min(airTimeTimer / airTimeSoundThreshold, 3.0f));
-				airTimeTimer = 0;
+				grounded = true;
+				OnEnterGrounded();
 			}
 		}
 		else
 		{
-			//Reset floor normal
-			StopClimbing();
-			floorObject = null;
-			grounded = false;
+			if (grounded)
+			{
+				grounded = false;
+				OnExitGrounded();
+			}
+
+			if (coyoteJumpTimer > 0)
+				coyoteJumpTimer -= Time.deltaTime;
 		}
+
+		//Jumping
+		if (coyoteJumpTimer > 0 && jumpBufferTimer > 0)
+			StartJump();
 		
 		//Project camera's forward vector on virtual plane that is the "floor", use global up vector if wall climbing
 		//This is great for slopes, as the player will go up and down the slope, rather than trying to go into it
@@ -400,13 +427,22 @@ public class FerretController : MonoBehaviour
 		transform.rotation = Quaternion.RotateTowards(transform.rotation, Quaternion.LookRotation(lookDirection, floorNormal), lookSpeed * Time.deltaTime);
 	}
 
-	/// <summary>
-	/// Accelerates the character controller
-	/// </summary>
-	/// <param name="addedAcceleration"></param>
-	public void AddVelocity(Vector3 addedAcceleration)
+	void OnEnterGrounded()
 	{
-		velocity += addedAcceleration;
+		//Play sound
+		if (airTimeTimer >= airTimeSoundThreshold)
+		{
+			ferretAudio.PlayFerretLanded(Mathf.Min(airTimeTimer / airTimeSoundThreshold, 3.0f));
+			airTimeTimer = 0;
+		}
+	}
+
+	void OnExitGrounded()
+	{
+		//Reset floor normal
+		StopClimbing();
+		floorObject = null;
+		grounded = false;
 	}
 
 	/// <summary>
@@ -459,12 +495,12 @@ public class FerretController : MonoBehaviour
 		if (ragdoll)
 		{
 			StartRagdoll(dashRecoilRagdollDuration);
-			cameraController.SetCameraShake(Vector2.up, dashRecoil, 3);
+			cameraController.AddCameraShake(Vector3.forward * dashImpactShake);
 		}
 		else
 		{
-			timeManager.StartTimeModifier(dashImpactSlowdown, dashImpactSlowdownDuration, 0f);
-			cameraController.SetCameraShake(Vector2.up, dashImpactShake, 3);
+			timeManager.StartTimeModifier(dashImpactSlowdown, dashImpactSlowdownDuration, dashImpactSlowdownRatio);
+			cameraController.AddCameraShake(Vector3.forward * dashImpactShake);
 		}
 
 		//Get all colliders in the impact area
@@ -507,6 +543,10 @@ public class FerretController : MonoBehaviour
 
 		ferretAudio.PlayFerretJump();
 		animator.SetTrigger("m_FerretJump");
+
+		//Reset timers
+		coyoteJumpTimer = 0;
+		jumpBufferTimer = 0;
 	}
 
 	/// <summary>
@@ -639,9 +679,9 @@ public class FerretController : MonoBehaviour
 	public void OnJump()
 	{
 		//Try climb first, otherwise jump
-		if (!isRagdolled && !TryClimb() && grounded)
+		if (!isRagdolled && !TryClimb())
 		{
-			StartJump();
+			jumpBufferTimer = jumpBufferDuration;
 		}
 	}
 

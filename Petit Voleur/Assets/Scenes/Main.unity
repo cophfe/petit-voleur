@@ -27350,6 +27350,18 @@ PrefabInstance:
       propertyPath: dashSpeedCurve.m_Curve.Array.data[2].value
       value: 0.9971918
       objectReference: {fileID: 0}
+    - target: {fileID: 3325050860681079636, guid: c588ce2a75014da48a5257fefbe567ad, type: 3}
+      propertyPath: coyoteJumpDuration
+      value: 0.2
+      objectReference: {fileID: 0}
+    - target: {fileID: 3325050860681079636, guid: c588ce2a75014da48a5257fefbe567ad, type: 3}
+      propertyPath: dashImpactSlowdownDuration
+      value: 0.25
+      objectReference: {fileID: 0}
+    - target: {fileID: 3325050860681079636, guid: c588ce2a75014da48a5257fefbe567ad, type: 3}
+      propertyPath: dashImpactSlowdownRatio
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 3325050861378533860, guid: c588ce2a75014da48a5257fefbe567ad, type: 3}
       propertyPath: m_LocalPosition.z
       value: -0.6266885
@@ -28061,6 +28073,26 @@ PrefabInstance:
     - target: {fileID: 6354315351796493653, guid: 84ffc813f6d7cb34a8c276f02ca14f4a, type: 3}
       propertyPath: ferretGroundedThreshold
       value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 6354315351796493653, guid: 84ffc813f6d7cb34a8c276f02ca14f4a, type: 3}
+      propertyPath: distanceToViewAlertCurve.m_Curve.Array.data[0].value
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 6354315351796493653, guid: 84ffc813f6d7cb34a8c276f02ca14f4a, type: 3}
+      propertyPath: distanceToViewAlertCurve.m_Curve.Array.data[0].inSlope
+      value: -2.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 6354315351796493653, guid: 84ffc813f6d7cb34a8c276f02ca14f4a, type: 3}
+      propertyPath: distanceToViewAlertCurve.m_Curve.Array.data[0].outSlope
+      value: -2.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 6354315351796493653, guid: 84ffc813f6d7cb34a8c276f02ca14f4a, type: 3}
+      propertyPath: distanceToViewAlertCurve.m_Curve.Array.data[1].inSlope
+      value: -2.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 6354315351796493653, guid: 84ffc813f6d7cb34a8c276f02ca14f4a, type: 3}
+      propertyPath: distanceToViewAlertCurve.m_Curve.Array.data[1].outSlope
+      value: -2.5
       objectReference: {fileID: 0}
     - target: {fileID: 6354315351796493658, guid: 84ffc813f6d7cb34a8c276f02ca14f4a, type: 3}
       propertyPath: m_Name
