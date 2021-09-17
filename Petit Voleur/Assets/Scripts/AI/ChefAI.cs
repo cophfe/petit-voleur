@@ -402,7 +402,7 @@ public class ChefAI : MonoBehaviour
 	/// </summary>
 	void SetWanderPoint()
 	{
-		wanderIndex = Random.Range(0, wanderPoints.Length);
+		wanderIndex = (wanderIndex + 1) % wanderPoints.Length;
 	}
 
 	/// <summary>
