@@ -115,6 +115,7 @@ public class ChefAI : MonoBehaviour
 		Collider[] colliders = Physics.OverlapBox(kickCollider.transform.TransformPoint(kickCollider.center), Vector3.Scale(kickCollider.size, kickCollider.transform.localScale) / 2, kickCollider.transform.rotation, kickLayer);
 		Rigidbody rb;
 		bool playerKicked = false;
+		Vector3 velocity = Quaternion.LookRotation(transform.forward, Vector3.up) * kickVelocity;
 		for (int i = 0; i < colliders.Length; ++i)
 		{
 			//Yeet all rigidbodies
@@ -126,11 +127,13 @@ public class ChefAI : MonoBehaviour
 				{
 					target.health.Damage(kickDamage);
 					target.StartRagdoll(kickRagdollDuration);
+					Vector3 shakeDirection = target.cameraController.transform.InverseTransformDirection(velocity.normalized * 3);
+					target.cameraController.AddCameraShake(shakeDirection);
 					target.ferretAudio.PlayFerretKicked();
 					playerKicked = true;
 				}
 				
-				rb.velocity = Quaternion.LookRotation(transform.forward, Vector3.up) * kickVelocity;
+				rb.velocity = velocity;
 				rb.AddTorque(transform.forward * 10, ForceMode.Impulse);
 			}
 		}

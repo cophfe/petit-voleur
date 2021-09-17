@@ -36,6 +36,9 @@ public class ChefThrowable : MonoBehaviour
 					ferret.rigidbody.velocity = rb.velocity.normalized * impulse;
 					hitPlayer = true;
 
+					Vector3 shakeDirection = ferret.cameraController.transform.InverseTransformDirection(rb.velocity.normalized * 3);
+					ferret.cameraController.AddCameraShake(shakeDirection);
+
 					if (audioSource)
 					{
 						audioSource.Play();
