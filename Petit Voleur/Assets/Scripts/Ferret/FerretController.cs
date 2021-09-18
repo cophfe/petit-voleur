@@ -544,13 +544,18 @@ public class FerretController : MonoBehaviour
 		//Change gravity value based on the jump arc
 		//Removes the vertical component of velocity and adds an impulse based on jump arc
 
-		gravity = jumpArc.GetGravity();
 		velocity -= upDirection * Vector3.Dot(velocity, upDirection);
-		velocity += upDirection * jumpArc.GetJumpForce() * stats.Jump;
 
 		if (isClimbing)
 		{
+			gravity = fallingArc.GetGravity();
+			velocity += upDirection * jumpArc.GetJumpForce() * stats.Jump;
 			velocity += Vector3.up * jumpArc.GetJumpForce() * stats.Jump;
+		}
+		else
+		{
+			gravity = jumpArc.GetGravity();
+			velocity += upDirection * jumpArc.GetJumpForce() * stats.Jump;
 		}
 		isJumping = true;
 

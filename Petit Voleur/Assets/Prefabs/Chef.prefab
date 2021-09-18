@@ -292,7 +292,7 @@ MonoBehaviour:
   alertedDuration: 6
   inspectDuration: 10
   ferretVisibleDuration: 1.5
-  ferretGroundedThreshold: 5
+  ferretGroundedThreshold: 10
   inspectRange: 10
   wanderRange: 5
   kickRange: 8
@@ -324,9 +324,9 @@ MonoBehaviour:
     m_Curve:
     - serializedVersion: 3
       time: 0
-      value: 2
-      inSlope: -1.5
-      outSlope: -1.5
+      value: 3
+      inSlope: -2.5
+      outSlope: -2.5
       tangentMode: 34
       weightedMode: 0
       inWeight: 0
@@ -334,8 +334,8 @@ MonoBehaviour:
     - serializedVersion: 3
       time: 1
       value: 0.5
-      inSlope: -1.5
-      outSlope: -1.5
+      inSlope: -2.5
+      outSlope: -2.5
       tangentMode: 34
       weightedMode: 0
       inWeight: 0.33333334
