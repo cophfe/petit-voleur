@@ -9,7 +9,7 @@ using UnityEngine.InputSystem;
 using UnityEngine.InputSystem.EnhancedTouch;
 using TMPro;
 
-[RequireComponent(typeof(Camera))]
+[RequireComponent(typeof(Camera)),DefaultExecutionOrder(-1)]
 public partial class CameraController : MonoBehaviour
 {
 	//INSPECTOR STUFF

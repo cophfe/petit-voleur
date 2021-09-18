@@ -344,9 +344,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 54f3270b427472143bf543c6bd85a6c5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  biteTrigger: {fileID: 0}
-  dashTrigger: {fileID: 0}
-  jumpTrigger: {fileID: 0}
+  biteTrigger: {fileID: 1223594288859152809}
+  dashTrigger: {fileID: 8312179312192614099}
+  jumpTrigger: {fileID: 4227014256363178300}
 --- !u!1 &952424515848063005
 GameObject:
   m_ObjectHideFlags: 0
@@ -6723,6 +6723,10 @@ PrefabInstance:
     - target: {fileID: 669050949105386385, guid: 40b882a2201d2ad41aa10aa42d5e79d8, type: 3}
       propertyPath: m_Name
       value: Dash
+      objectReference: {fileID: 0}
+    - target: {fileID: 1510374400888622600, guid: 40b882a2201d2ad41aa10aa42d5e79d8, type: 3}
+      propertyPath: m_AnimationTriggers.m_DisabledTrigger
+      value: Disabled
       objectReference: {fileID: 0}
     - target: {fileID: 3181959759828451203, guid: 40b882a2201d2ad41aa10aa42d5e79d8, type: 3}
       propertyPath: m_LocalPosition.x

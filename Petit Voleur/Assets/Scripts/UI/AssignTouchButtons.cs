@@ -28,7 +28,7 @@ public class AssignTouchButtons : MonoBehaviour
 		//add dash
 		EventTrigger.Entry entry = new EventTrigger.Entry();
 		entry.eventID = EventTriggerType.PointerDown;
-		entry.callback.AddListener((data) => { ferret.OnDash(); StartCoroutine(DashTimout()); });
+		entry.callback.AddListener((data) => { ferret.OnDash(); });
 		dashTrigger.triggers.Add(entry);
 
 		//add jump
@@ -46,12 +46,5 @@ public class AssignTouchButtons : MonoBehaviour
 		entry.eventID = EventTriggerType.PointerDown;
 		entry.callback.AddListener((data) => { ferret.GetComponent<FerretPickup>().OnGrab(); });
 		biteTrigger.triggers.Add(entry);
-	}
-
-	IEnumerator DashTimout()
-	{
-		dashButton.interactable = false;
-		yield return new WaitForSeconds(ferret.dashDuration);
-		dashButton.interactable = true;
 	}
 }
