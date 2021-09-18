@@ -618,6 +618,7 @@ public class FerretController : MonoBehaviour
 		upDirection = newUp;
 		floorNormal = newUp;
 		friction = climbFriction;
+		cameraController.OnUpdateClimb();
 	}
 	
 	/// <summary>
@@ -629,6 +630,7 @@ public class FerretController : MonoBehaviour
 		upDirection = Vector3.up;
 		floorNormal = upDirection;
 		friction = floorFriction;
+		cameraController.OnUpdateClimb();
 	}
 
 	// ========================================================|
