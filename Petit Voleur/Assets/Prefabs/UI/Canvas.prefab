@@ -8418,19 +8418,19 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1510374400888622600, guid: 40b882a2201d2ad41aa10aa42d5e79d8, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.size
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 1510374400888622600, guid: 40b882a2201d2ad41aa10aa42d5e79d8, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 4143135717619213371}
     - target: {fileID: 1510374400888622600, guid: 40b882a2201d2ad41aa10aa42d5e79d8, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
       value: GameUI, Assembly-CSharp
       objectReference: {fileID: 0}
     - target: {fileID: 1510374400888622600, guid: 40b882a2201d2ad41aa10aa42d5e79d8, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
-      value: ToggleMenu
+      value: OnWinButtonClicked
       objectReference: {fileID: 0}
     - target: {fileID: 1510374400888622600, guid: 40b882a2201d2ad41aa10aa42d5e79d8, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Mode

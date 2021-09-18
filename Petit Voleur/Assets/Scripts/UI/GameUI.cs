@@ -623,6 +623,11 @@ public class GameUI : MonoBehaviour
 		return notifyTextAnimator;
 	}
 
+	public void OnWinButtonClicked()
+	{
+		gM.OnWin();
+	}
+
 	public bool CheckIsPaused()
 	{
 		return screenState == ScreenState.PAUSE;
