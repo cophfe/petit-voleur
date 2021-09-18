@@ -128,6 +128,13 @@ public class FerretController : MonoBehaviour
 	//Called every frame
     void Update()
     {
+		//Anim stuff
+		if (!isDead && grounded && !isDashing && input.sqrMagnitude > 0)
+			ferretAudio.PlayRunning();
+		else
+			ferretAudio.PauseRunning();
+
+		//Ignore the rest cos he ded
 		if (isDead)
 			return;
 		
@@ -273,6 +280,10 @@ public class FerretController : MonoBehaviour
 		}
 		else
 		{
+			//Reset floor normal
+			StopClimbing();
+			floorObject = null;
+			grounded = false;
 			if (grounded)
 			{
 				grounded = false;
@@ -439,10 +450,7 @@ public class FerretController : MonoBehaviour
 
 	void OnExitGrounded()
 	{
-		//Reset floor normal
-		StopClimbing();
-		floorObject = null;
-		grounded = false;
+		
 	}
 
 	/// <summary>
@@ -536,9 +544,19 @@ public class FerretController : MonoBehaviour
 		//Change gravity value based on the jump arc
 		//Removes the vertical component of velocity and adds an impulse based on jump arc
 
-		gravity = jumpArc.GetGravity();
 		velocity -= upDirection * Vector3.Dot(velocity, upDirection);
-		velocity += upDirection * jumpArc.GetJumpForce() * stats.Jump;
+
+		if (isClimbing)
+		{
+			gravity = fallingArc.GetGravity();
+			velocity += upDirection * jumpArc.GetJumpForce() * stats.Jump;
+			velocity += Vector3.up * jumpArc.GetJumpForce() * stats.Jump;
+		}
+		else
+		{
+			gravity = jumpArc.GetGravity();
+			velocity += upDirection * jumpArc.GetJumpForce() * stats.Jump;
+		}
 		isJumping = true;
 
 		ferretAudio.PlayFerretJump();
@@ -600,6 +618,7 @@ public class FerretController : MonoBehaviour
 		upDirection = newUp;
 		floorNormal = newUp;
 		friction = climbFriction;
+		cameraController.OnUpdateClimb();
 	}
 	
 	/// <summary>
@@ -611,6 +630,7 @@ public class FerretController : MonoBehaviour
 		upDirection = Vector3.up;
 		floorNormal = upDirection;
 		friction = floorFriction;
+		cameraController.OnUpdateClimb();
 	}
 
 	// ========================================================|

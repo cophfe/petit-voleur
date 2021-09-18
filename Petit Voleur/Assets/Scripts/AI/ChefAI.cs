@@ -22,6 +22,7 @@ public class ChefAI : MonoBehaviour
 	public float kickRange = 3.0f;
 	public int kickDamage = 1;
 	public float kickRagdollDuration = 10.0f;
+	public float kickCooldown = 1.0f;
 	public Vector3 kickVelocity = Vector3.forward;
 	public LayerMask kickLayer;
 
@@ -57,6 +58,7 @@ public class ChefAI : MonoBehaviour
 	[HideInInspector]
 	public float ferretStartAlertTimer;
 	private float throwTimer;
+	private float kickCooldownTimer;
 	private Vector3 soundPoint;
 	private Vector3 lastSeenPosition;
 	private Vector3 desiredLookDir;
@@ -97,6 +99,10 @@ public class ChefAI : MonoBehaviour
 
 		UpdateRotation();
 
+		//Decrement kick timer
+		if (kickCooldownTimer > 0)
+			kickCooldownTimer -= Time.deltaTime;
+		
 		//Start tree
 		BaseBehaviour();
 	}
@@ -131,6 +137,7 @@ public class ChefAI : MonoBehaviour
 					target.cameraController.AddCameraShake(shakeDirection);
 					target.ferretAudio.PlayFerretKicked();
 					playerKicked = true;
+					kickCooldownTimer = kickCooldown;
 				}
 				
 				rb.velocity = velocity;
@@ -336,7 +343,7 @@ public class ChefAI : MonoBehaviour
 		aiToTarget.y = 0;
 		if (aiToTarget.sqrMagnitude < kickRange * kickRange)
 		{
-			if (Vector3.Angle(transform.forward, aiToTarget) < 15.0f)
+			if (kickCooldownTimer <= 0 && Vector3.Angle(transform.forward, aiToTarget) < 15.0f)
 				PlayKickAnim();
 		}
 		else

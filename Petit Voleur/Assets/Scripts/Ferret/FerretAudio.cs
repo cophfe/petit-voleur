@@ -5,6 +5,7 @@ using UnityEngine;
 public class FerretAudio : MonoBehaviour
 {
     public AudioSource source;
+	public AudioSource runSource;
 	public AudioClip wallImpact;
 	public AudioClip itemImpact;
 	public AudioClip ferretDash;
@@ -35,6 +36,17 @@ public class FerretAudio : MonoBehaviour
 	// ====================================================== //
 	// =========== These are all self explanatory =========== //
 	// ============VVVVVVVVVVVVVVVVVVVVVVVVVVVVVV============ //
+
+	public void PauseRunning()
+	{
+		runSource.volume = 0.0f;
+	}
+
+	public void PlayRunning()
+	{
+		runSource.volume = 1.0f;
+
+	}
 
 	public void PlayWallImpact()
 	{
