@@ -11,6 +11,7 @@ using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
 using UnityEngine.Rendering.Universal;
 using UnityEngine.Events;
+using UnityEngine.Audio;
 
 public class GameUI : MonoBehaviour
 {
@@ -48,6 +49,8 @@ public class GameUI : MonoBehaviour
 	[Tooltip("The Hit Overlay Animator")]
 	public Animator hitAnimator = null;
 	public UnityEvent onLeaveMenu = null;
+	public GameObject androidWinButton;
+	public GameObject windowsWinNotify;
 
 	//private variables
 	enum ScreenState
@@ -77,6 +80,7 @@ public class GameUI : MonoBehaviour
 	ScreenState screenState = ScreenState.NOTHING;
 	//the timer used for transitioning menus
 	float screenTransitionTimer = 0;
+	Animator notifyTextAnimator = null;
 
 	//manager used for blurring background
 	BlurManager blurManager;
@@ -96,7 +100,7 @@ public class GameUI : MonoBehaviour
 	public float pointTransitionTime = 0.4f;
 	[Tooltip("Affects the change in font size when transitioning.")]
 	public float pointBounceMagnitude = 1;
-	
+
 	//private variables
 	float pointTransitionTimer = 0;
 	//the initial font size of the tmp component
@@ -128,6 +132,7 @@ public class GameUI : MonoBehaviour
 	{
 		gM = FindObjectOfType<GameManager>();
 		tM = FindObjectOfType<TimeManager>();
+		notifyTextAnimator = notifyText.GetComponent<Animator>();
 
 		//initialise menu values
 		pausePanelDefaultHeight = pausePanel.rect.height;
@@ -146,7 +151,7 @@ public class GameUI : MonoBehaviour
 		//find the blur manager
 		blurManager = GetComponent<BlurManager>();
 	}
-	
+
 	private void Update()
 	{
 		//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -177,8 +182,8 @@ public class GameUI : MonoBehaviour
 					screenOverlay.color = c;
 					blurManager.SetBlurAmount(maxBlurAmount * t);
 					//transition panel height using ease out quad
-					pausePanel.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical,t * pausePanelDefaultHeight);
-					
+					pausePanel.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, t * pausePanelDefaultHeight);
+
 
 					screenTransitionTimer += Time.unscaledDeltaTime;
 				}
@@ -267,7 +272,7 @@ public class GameUI : MonoBehaviour
 					//transition panel height using ease out quad
 					optionsPanel.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, (1 - (1 - t) * (1 - t)) * optionsPanelDefaultHeight);
 					pausePanel.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, (1 - t) * (1 - t) * pausePanelDefaultHeight);
-					
+
 					screenTransitionTimer += Time.unscaledDeltaTime;
 				}
 				break;
@@ -343,7 +348,7 @@ public class GameUI : MonoBehaviour
 				pointValueText.fontSize = defaultFontSize * (1 + scaleAddition);
 			else
 				//font size decrease is max 25%, otherwise it looks bad
-				pointValueText.fontSize = defaultFontSize * (pointBounceMagnitude - scaleAddition* 0.25f) / pointBounceMagnitude;
+				pointValueText.fontSize = defaultFontSize * (pointBounceMagnitude - scaleAddition * 0.25f) / pointBounceMagnitude;
 
 			//set text value (linear, finishes 1/3 of the way through)
 			if (pointTransitionTimer <= pointTransitionTime / 3)
@@ -361,7 +366,7 @@ public class GameUI : MonoBehaviour
 			{
 				pointsTransitioning = false;
 				pointValueText.fontSize = defaultFontSize;
-				completionBar.fillAmount = (float)pointTracker.GetPoints()/ pointTracker.GetMaxLimit();
+				completionBar.fillAmount = (float)pointTracker.GetPoints() / pointTracker.GetMaxLimit();
 			}
 
 			pointTransitionTimer += Time.deltaTime;
@@ -503,14 +508,14 @@ public class GameUI : MonoBehaviour
 				winPanel.gameObject.SetActive(false);
 				screenOverlay.gameObject.SetActive(false);
 				losePanel.gameObject.SetActive(false);
-				break;		
+				break;
 			case ScreenState.LOSE:
 				screenOverlay.gameObject.SetActive(true);
 				losePanel.gameObject.SetActive(true);
 				pausePanel.gameObject.SetActive(false);
 				optionsPanel.gameObject.SetActive(false);
 				winPanel.gameObject.SetActive(false);
-				break;		
+				break;
 		}
 	}
 
@@ -595,7 +600,7 @@ public class GameUI : MonoBehaviour
 		//pause time
 		tM.Pause();
 
-		screenTransitionTimer = 0;
+		screenTransitionTimer = 0; 
 
 		//set initial values for transition
 		pausePanel.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, 0);
@@ -604,9 +609,18 @@ public class GameUI : MonoBehaviour
 		screenOverlay.color = c;
 	}
 
-	public void EnableNotifyText(bool enabled)
+	public void EnableWinNotifyUI(bool enabled)
 	{
-		notifyText.enabled = enabled;
+#if UNITY_ANDROID
+		androidWinButton.SetActive(enabled);
+#else
+		windowsWinNotify.SetActive(enabled);
+#endif
+	}
+
+	public Animator GetNotifyAnimator()
+	{
+		return notifyTextAnimator;
 	}
 
 	public bool CheckIsPaused()

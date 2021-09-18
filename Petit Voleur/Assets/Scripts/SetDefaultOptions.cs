@@ -4,8 +4,11 @@ using UnityEngine;
 using UnityEngine.Audio;
 
 //Used to guarantee playerprefs has a value before options uses it
+[DefaultExecutionOrder(-1)]
 public class SetDefaultOptions : MonoBehaviour
 {
+	static bool openedBefore = false;
+
 	public CameraController cameraControllerPrefab = null;
 	public AudioMixer mixer;
 	public string masterParameterName = "Volume Master";
@@ -14,6 +17,13 @@ public class SetDefaultOptions : MonoBehaviour
 
 	private void Start()
 	{
+		if (openedBefore)
+			return;
+
+#if UNITY_EDITOR
+		PlayerPrefs.DeleteAll();
+#endif
+
 		//MASTER VOLUME
 		if (!PlayerPrefs.HasKey("MasterVolume")) 
 		{ 
@@ -35,12 +45,32 @@ public class SetDefaultOptions : MonoBehaviour
 		}
 
 		//FULLSCREEN
-		if (!PlayerPrefs.HasKey("isFullscreen"))
+		if (!PlayerPrefs.HasKey("IsFullscreen"))
 		{
 			//int val = Screen.fullScreen ? 1 : 0;
-			PlayerPrefs.SetInt("isFullscreen", 1);
+			PlayerPrefs.SetInt("IsFullscreen", 1);
 			PlayerPrefs.SetInt("DefaultIsFullscreen", 1);
 		}
+		
+		//INVERT
+		if (!PlayerPrefs.HasKey("IsInverted"))
+		{
+			int val = cameraControllerPrefab.inverted ? 1 : 2;
+			PlayerPrefs.SetInt("IsInverted", val);
+			PlayerPrefs.SetInt("DefaultIsInverted", val);
+		}
+
+		//QUALITY
+		if (!PlayerPrefs.HasKey("Quality"))
+		{
+			int val = QualitySettings.GetQualityLevel();
+			PlayerPrefs.SetInt("Quality", val);
+			PlayerPrefs.SetInt("DefaultQuality", val);
+		}
+
+		//RESOLUTION
+		PlayerPrefs.DeleteKey("Resolution");
+		
 
 		//CAMERA SENSITIVITY
 		if (!PlayerPrefs.HasKey("Sensitivity"))
@@ -51,11 +81,14 @@ public class SetDefaultOptions : MonoBehaviour
 		}
 
 		PlayerPrefs.Save();
+
 		if (oUI)
 		{
 			oUI.cameraController = FindObjectOfType<CameraController>();
 			oUI.SetUIValuesToPlayerPrefs();
 			oUI.SetGameValuesToUIValues();
 		}
+
+		openedBefore = true;
 	}
 }

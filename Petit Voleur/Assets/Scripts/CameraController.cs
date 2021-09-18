@@ -9,7 +9,7 @@ using UnityEngine.InputSystem;
 using UnityEngine.InputSystem.EnhancedTouch;
 using TMPro;
 
-[RequireComponent(typeof(Camera))]
+[RequireComponent(typeof(Camera)),DefaultExecutionOrder(-1)]
 public partial class CameraController : MonoBehaviour
 {
 	//INSPECTOR STUFF
@@ -34,10 +34,10 @@ public partial class CameraController : MonoBehaviour
 	[Range(-90, 90)] public float maximumUpRotation = 87;
 	[Tooltip("Up rotation cannot be less than this value.")]
 	[Range(-90, 90)] public float minimumUpRotation = -87;
-	//[Tooltip("Up rotation cannot be higher than this value (when climbing).")]
-	//[Range(-90, 90)] public float maximumUpRotationClimbing = 87;
-	//[Tooltip("Up rotation cannot be less than this value (when climbing).")]
-	//[Range(-90, 90)] public float minimumUpRotationClimbing = -87;
+	[Tooltip("Up rotation cannot be higher than this value (when climbing).")]
+	[Range(-90, 90)] public float maximumUpRotationClimbing = 87;
+	[Tooltip("Up rotation cannot be less than this value (when climbing).")]
+	[Range(-90, 90)] public float minimumUpRotationClimbing = -87;
 	[Tooltip("The minimum angle off of the wall the camera can have when climbing.")]
 	[Range(0, 10)] public float minAngleFromWallWhenClimbing = 0;
 	[Tooltip("The percent of the screen the camera takes input from on android")]
@@ -51,16 +51,19 @@ public partial class CameraController : MonoBehaviour
 	public float cameraAvoidFloorRotationPower = 15;
 	[Tooltip("The angular distance in which the camera avoids the floor.")]
 	public float cameraAvoidFloorRotationAngleRange = 30;
-	[Tooltip("The speed the camera zooms in. Setting this too low will cause clipping issues.")]
-	public float zoomInSpeed = 15;
 	[Tooltip("The speed the camera zooms out.")]
 	public float zoomOutSpeed = 15;
 	[Tooltip("Propertional to the speed camera shake deteriorates")]
 	public float shakeDeteriorateSpeed = 1;
 	[Tooltip("Affects the amount of random movement applied to the screen shake (multiplied by shake magnitude)."), Range(0,1)]
 	public float shakeNoiseMag = 0;
+	public float yOffsetStartDistance = 0;
+	public float yOffsetDistance = 3;
+	public float yOffsetMagnitude = 1;
+	public float yOffsetChangeSpeed = 1;
 	[Tooltip("If rotation should be smoothed.")]
 	public bool smoothCameraRotation = false;
+	
 	[Tooltip("Camera orbit speed.")]
 	[HideInInspector] public float rotateSpeed = 1;
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -82,6 +85,8 @@ public partial class CameraController : MonoBehaviour
 	Vector3 currentPivotPosition;
 	float xRotationAddition = 0;
 	float xRotationAdditionCurrent = 0;
+	float targetYOffset = 0;
+	float yOffset = 0;
 
 	//used to stop camera from clipping into walls
 	Vector3 cameraBoxHalfExtents;
@@ -144,7 +149,8 @@ public partial class CameraController : MonoBehaviour
 		SetOrbitDistance();
 		//set camera position
 		transform.position = currentPivotPosition + orbitVector;
-		//camera shake
+
+		//add camera shake
 		float m = UpdateCameraShake();
 		if (m > 0.001f)
 		{
@@ -153,6 +159,18 @@ public partial class CameraController : MonoBehaviour
 			{
 				transform.position += shakeVector;
 			}
+		}
+
+		//add y offset
+		if (Physics.BoxCast(transform.position, cameraBoxHalfExtents, Vector3.up, out RaycastHit hit, transform.rotation, yOffset * yOffsetMagnitude, obstructionLayers.value))
+		{
+			transform.position += Vector3.up * hit.distance;
+
+		}
+		else
+		{
+			transform.position += Vector3.up * (yOffset * yOffsetMagnitude);
+
 		}
 	}
 
@@ -177,46 +195,52 @@ public partial class CameraController : MonoBehaviour
 		input *= inverted ? -sensitivity : sensitivity;
 		rotation += new Vector2(input.y, input.x);
 
-		rotation.x = Mathf.Clamp(rotation.x, -maximumUpRotation, -minimumUpRotation);
-		//if (ferretController.upDirection == Vector3.up)
-		//{
-		//	//clamp up rotation
-		//	rotation.x = Mathf.Clamp(rotation.x, -maximumUpRotation, -minimumUpRotation);
-		
-		//}
-		//else
-		//{
-		//	//clamp up rotation
-		//	//rotation.x = Mathf.Clamp(rotation.x, -maximumUpRotationClimbing, -minimumUpRotationClimbing);
-		//	rotation.x = Mathf.Clamp(rotation.x, -87, 87);
+		//clamp x rotation
+		rotation.y = Mathf.Repeat(rotation.y, 360);
 
-		//	//cancel rotation that is going into climb surface
-		//	if (Vector3.Dot(Quaternion.Euler(rotation) * Vector3.forward, ferretController.upDirection) < 0)
-		//	{				
-		//	}
+		//if not climbing
+		if (ferretController.upDirection == Vector3.up)
+		{
+			rotation.x = Mathf.Clamp(rotation.x, -maximumUpRotation, -minimumUpRotation);
 
-		//	var yVec = Vector3.ProjectOnPlane(ferretController.upDirection, Vector3.up).normalized;
-		//	float yAngle = Mathf.Atan2(yVec.y, yVec.x) * Mathf.Rad2Deg;
+			//this is used to push camera away from floor when on ground so you can see more upward
+			float rotationFromMin = -(rotation.x - (minimumUpRotation));
+			if (rotationFromMin < cameraAvoidFloorRotationAngleRange)
+			{
+				xRotationAddition = cameraAvoidFloorRotationPower * (1 - rotationFromMin / cameraAvoidFloorRotationAngleRange);
+			}
+			else
+				xRotationAddition = 0;
+		}
+		else
+		{
+			xRotationAddition = 0;
+			//cancel x rotation
+			rotation.x = Mathf.Clamp(rotation.x, -maximumUpRotationClimbing, -minimumUpRotationClimbing);
+			
+			//clamp y rotation that is going into climb surface (when climbing)
+			Vector3 vecRep = Quaternion.Euler(rotation) * Vector3.forward;
+			//rotation needs to be clamped if negative
+			if (Vector3.Dot(vecRep, ferretController.upDirection) < 0)
+			{
+				//set rotation to be on the closest value on the ring of clamp values 
+				vecRep = Vector3.ProjectOnPlane(vecRep, ferretController.upDirection).normalized;
+				//convert back to euler rotation
+				var v = Quaternion.FromToRotation(Vector3.forward, vecRep).eulerAngles;
 
-		//	var xVec = Vector3.ProjectOnPlane(ferretController.upDirection, Vector3.right).normalized;
-		//	float xAngle = Mathf.Atan2(xVec.y, xVec.x) * Mathf.Rad2Deg;
+				rotation.y = v.y;
+				rotation.x = v.x;
 
-		//	//rotation.x = Mathf.Clamp(rotation.x, xAngle - 90, xAngle + 90);
-		//	//rotation.y = Mathf.Clamp(rotation.y, yAngle - 90, yAngle + 90);
-		//	Debug.Log("x: " + xAngle + ", y: " + yAngle);
-		//}
+				//since the x clamping used does not account for the circularness of rotations, ill just use this to make it work
+				if (rotation.x > 180)
+				{
+					rotation.x -= 360;
+				}
+			}
+		}
 
 		//set target quaternion
 		targetOrbit = Quaternion.Euler(rotation);
-
-		//this is used to push camera away from floor when on ground so you can see more upward
-		float rotationFromMin = -(rotation.x - (minimumUpRotation));
-		if (rotationFromMin < cameraAvoidFloorRotationAngleRange)
-		{
-			xRotationAddition = cameraAvoidFloorRotationPower * (1 - rotationFromMin / cameraAvoidFloorRotationAngleRange);
-		}
-		else
-			xRotationAddition = 0;
 
 		if (!smoothCameraRotation)
 		{
@@ -225,9 +249,6 @@ public partial class CameraController : MonoBehaviour
 			transform.forward = -orbitVector;
 			transform.Rotate(new Vector3(-xRotationAddition, 0, 0));
 		}
-
-		//clamp x rotation too
-		//rotation.x = Mathf.Repeat(rotation.x, 360);
 	}
 
 	public void OnUpdateClimb()
@@ -262,6 +283,10 @@ public partial class CameraController : MonoBehaviour
 		if (rotateSpeed < 0)
 			rotateSpeed = 0;
 		if (maximumUpRotation < minimumUpRotation)
+		{
+			maximumUpRotation = minimumUpRotation;
+		}
+		if (maximumUpRotationClimbing < minimumUpRotationClimbing)
 		{
 			maximumUpRotation = minimumUpRotation;
 		}
@@ -319,6 +344,19 @@ public partial class CameraController : MonoBehaviour
 		orbitVector.Normalize();
 		//now set orbit vec
 		orbitVector *= currentDistance;
+
+		//now set y offset based on distance
+		if (currentDistance < yOffsetStartDistance + yOffsetDistance)
+		{
+			float t = 1 - Mathf.Max(0, currentDistance - yOffsetStartDistance) / yOffsetDistance;
+			targetYOffset = t;
+		}
+		else
+		{
+			targetYOffset = 0;
+		}
+
+		yOffset = Mathf.MoveTowards(yOffset, targetYOffset, Time.deltaTime * yOffsetChangeSpeed * Mathf.Abs(targetYOffset - yOffset));
 	}
 
 	public void SetCameraShake(Vector2 screenSpaceDirection, float magnitude, float time)
@@ -334,7 +372,7 @@ public partial class CameraController : MonoBehaviour
 	float UpdateCameraShake()
 	{
 		float magnitude = cameraShake.magnitude;
-		cameraShake = Vector3.MoveTowards(cameraShake, Vector3.zero, magnitude * Time.deltaTime * shakeDeteriorateSpeed);
+		cameraShake = Vector3.MoveTowards(cameraShake, Vector3.zero, magnitude * Time.unscaledDeltaTime * shakeDeteriorateSpeed);
 		return magnitude;
 	}
 }

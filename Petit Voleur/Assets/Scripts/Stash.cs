@@ -23,4 +23,12 @@ public class Stash : MonoBehaviour
 			gameManager.OnEnterStash();
 		}
 	}
+	private void OnTriggerExit(Collider other)
+	{
+		if (((1 << other.gameObject.layer) & ferretLayer.value) > 0 && gameManager != null)
+		{
+			gameManager.OnExitStash();
+		}
+	}
+
 }

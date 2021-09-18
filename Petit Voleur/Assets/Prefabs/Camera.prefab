@@ -140,14 +140,20 @@ MonoBehaviour:
   inverted: 0
   maximumUpRotation: 40
   minimumUpRotation: 0
+  maximumUpRotationClimbing: 87
+  minimumUpRotationClimbing: -87
+  minAngleFromWallWhenClimbing: 0
   androidInputScreenPercentage: 0.7
   followSpeed: 60
   cameraAvoidFloorRotationPower: 10
   cameraAvoidFloorRotationAngleRange: 20
-  zoomInSpeed: 60
   zoomOutSpeed: 4
   shakeDeteriorateSpeed: 4
   shakeNoiseMag: 0.555
+  yOffsetStartDistance: 2
+  yOffsetDistance: 10
+  yOffsetMagnitude: 2
+  yOffsetChangeSpeed: 5
   smoothCameraRotation: 1
   rotateSpeed: 10
 --- !u!114 &3225189145465032137

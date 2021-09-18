@@ -116,7 +116,7 @@
                     "path": "<Gamepad>/leftStick",
                     "interactions": "",
                     "processors": "",
-                    "groups": "",
+                    "groups": "KBM",
                     "action": "MoveAxis",
                     "isComposite": false,
                     "isPartOfComposite": false
@@ -127,7 +127,7 @@
                     "path": "<Keyboard>/space",
                     "interactions": "",
                     "processors": "",
-                    "groups": "",
+                    "groups": "KBM",
                     "action": "Jump",
                     "isComposite": false,
                     "isPartOfComposite": false
@@ -224,6 +224,14 @@
                     "expectedControlType": "Vector2",
                     "processors": "",
                     "interactions": ""
+                },
+                {
+                    "name": "Win",
+                    "type": "Button",
+                    "id": "d619ef9f-74ea-4395-9ab3-5d403017bab7",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": ""
                 }
             ],
             "bindings": [
@@ -246,6 +254,17 @@
                     "processors": "",
                     "groups": "KBM",
                     "action": "Mouse Change",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "4d913321-e11e-45d9-a925-42f5b9c215e6",
+                    "path": "<Keyboard>/enter",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "KBM",
+                    "action": "Win",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

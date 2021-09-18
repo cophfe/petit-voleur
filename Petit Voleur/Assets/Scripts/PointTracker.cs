@@ -83,9 +83,9 @@ public class PointTracker : MonoBehaviour
     {
         if (index <= m_ScoreMaxLimit && index >= m_ScoreMinLimit)
         {
-            WatchScoreLimit();
             m_PlayerScore = index;
             m_Game.UpdatePointUI();
+            WatchScoreLimit();
         }
         else
         {
@@ -104,17 +104,17 @@ public class PointTracker : MonoBehaviour
         {
             if (!m_IsBonusPointsEnabled)
             {
-                WatchScoreLimit();
                 m_ScorePrevious = m_PlayerScore;
                 m_PlayerScore += index;
                 m_Game.UpdatePointUI();
+                WatchScoreLimit();
             }
             else
             {
-                WatchScoreLimit();
                 m_ScorePrevious = m_PlayerScore;
                 m_PlayerScore += index * m_BonusMultiplyAmount;
                 m_Game.UpdatePointUI();
+                WatchScoreLimit();
             }
         }
         else
@@ -132,9 +132,9 @@ public class PointTracker : MonoBehaviour
     {
         if (index > m_StampMin)
         {
-            WatchScoreLimit();
             m_PlayerScore -= index;
             m_Game.UpdatePointUI();
+            WatchScoreLimit();
         }
         else
         {
@@ -149,7 +149,6 @@ public class PointTracker : MonoBehaviour
     /// <param name="index"></param>
     public void SetMaxLimit(int index)
     {
-
         m_ScoreMaxLimit = index;
     }
 
