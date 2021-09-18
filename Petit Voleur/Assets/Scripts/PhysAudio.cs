@@ -31,8 +31,9 @@ public class PhysAudio : MonoBehaviour
         if (impactSpeed > minImpactSpeed)
         {
             float volume = Mathf.Lerp(minVolume, maxVolume, impactSpeed / maxImpactSpeed);
-            source.PlayOneShot(impactSound, volume);
-            print(impactSpeed);
+			source.clip = impactSound;
+			source.volume = volume;
+			source.Play();
         }
     }
 }
