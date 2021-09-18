@@ -1,9 +1,10 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
 [DefaultExecutionOrder(-1)]
-public class PlatformEnabler : MonoBehaviour
+public class PlatformDetector : MonoBehaviour
 {
 	public enum PlatformOverride
 	{
@@ -18,6 +19,8 @@ public class PlatformEnabler : MonoBehaviour
 
 	public GameObject[] androidExclusive = new GameObject[0];
 	public GameObject[] windowsExclusive = new GameObject[0];
+	public UnityEvent isAndroid = null;
+	public UnityEvent isWindows = null;
 
 	void Awake()
     {
@@ -32,6 +35,11 @@ public class PlatformEnabler : MonoBehaviour
     // Update is called once per frame
     void EnableWindows(bool enable)
     {
+		if (enable && isWindows != null)
+		{
+			isWindows.Invoke();
+		}
+
 		for (int i = 0; i < windowsExclusive.Length; i++)
 		{
 			windowsExclusive[i].SetActive(enable);
@@ -40,6 +48,11 @@ public class PlatformEnabler : MonoBehaviour
 
 	void EnableAndroid(bool enable)
 	{
+		if (enable && isAndroid != null)
+		{
+			isAndroid.Invoke();
+		}
+
 		for (int i = 0; i < androidExclusive.Length; i++)
 		{
 			androidExclusive[i].SetActive(enable);
