@@ -7,11 +7,11 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: Chef Outline
-  m_Shader: {fileID: 4800000, guid: 87a919d085a472447bb7b1a97e3c6b1b, type: 3}
+  m_Name: Beam 1
+  m_Shader: {fileID: -6465566751694194690, guid: 31035a37e96e81245a5c78e6fa7769e7, type: 3}
   m_ShaderKeywords: 
   m_LightmapFlags: 4
-  m_EnableInstancingVariants: 1
+  m_EnableInstancingVariants: 0
   m_DoubleSidedGI: 0
   m_CustomRenderQueue: -1
   stringTagMap: {}
@@ -20,7 +20,7 @@ Material:
     serializedVersion: 3
     m_TexEnvs:
     - _BaseMap:
-        m_Texture: {fileID: 0}
+        m_Texture: {fileID: 2800000, guid: 7ba67a0ca5ffb9a46b755c2dd0cf33f7, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _BumpMap:
@@ -36,7 +36,7 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _MainTex:
-        m_Texture: {fileID: 0}
+        m_Texture: {fileID: 2800000, guid: 7ba67a0ca5ffb9a46b755c2dd0cf33f7, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _MetallicGlossMap:
@@ -64,16 +64,16 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _Texture:
-        m_Texture: {fileID: 0}
+        m_Texture: {fileID: 2800000, guid: 7ba67a0ca5ffb9a46b755c2dd0cf33f7, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     m_Floats:
-    - Vector1_312CCD6C: 0
-    - Vector1_4446D061: 1
+    - Vector1_312CCD6C: 0.1
+    - Vector1_4446D061: 2
     - Vector1_5BFF93A0: 50
-    - Vector1_7643B0C8: 5
+    - Vector1_7643B0C8: 2
     - Vector1_9170DF6F: 500
-    - Vector1_F98BAC63: 0.5
+    - Vector1_F98BAC63: 1
     - _AlphaClip: 0
     - _Blend: 0
     - _BumpScale: 1
@@ -81,7 +81,6 @@ Material:
     - _Cutoff: 0.5
     - _DstBlend: 0
     - _EnvironmentReflections: 1
-    - _ExtrudeDistance: 0.002
     - _GlossMapScale: 0
     - _Glossiness: 0
     - _GlossyReflections: 0
@@ -89,10 +88,9 @@ Material:
     - _MetallicStrength: 0
     - _NormalStrength: 1
     - _OcclusionStrength: 1
-    - _OutlineSize: 0.1
     - _QueueOffset: 0
     - _ReceiveShadows: 1
-    - _Smoothness: 0.045
+    - _Smoothness: 0
     - _SmoothnessTextureChannel: 0
     - _SpecularHighlights: 1
     - _SrcBlend: 1
@@ -100,14 +98,14 @@ Material:
     - _WorkflowMode: 1
     - _ZWrite: 1
     m_Colors:
-    - _BaseColor: {r: 1, g: 1, b: 1, a: 1}
-    - _Color: {r: 0, g: 0, b: 0, a: 1}
+    - _BaseColor: {r: 0.8207547, g: 0.8207547, b: 0.8207547, a: 1}
+    - _Color: {r: 0.81960785, g: 0.81960785, b: 0.81960785, a: 1}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
     - _Offset: {r: 0, g: 0, b: 0, a: 0}
     - _SpecColor: {r: 0.19999996, g: 0.19999996, b: 0.19999996, a: 1}
     - _Tiling: {r: 1, g: 1, b: 0, a: 0}
   m_BuildTextureStacks: []
---- !u!114 &8270541738945331964
+--- !u!114 &8475208894357217960
 MonoBehaviour:
   m_ObjectHideFlags: 11
   m_CorrespondingSourceObject: {fileID: 0}
