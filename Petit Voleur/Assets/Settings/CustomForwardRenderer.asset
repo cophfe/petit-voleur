@@ -53,11 +53,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_RendererFeatures:
   - {fileID: 6275692414225307188}
-  - {fileID: 8534701858657806666}
-  - {fileID: 8970522981842051057}
   - {fileID: 5442460356159288629}
+  - {fileID: 8534701858657806666}
   - {fileID: -8897400566484130187}
-  m_RendererFeatureMap: 3456832d00bd17574a292a251f5a7176f15f2cc61fb37d7c353505c9db80874b75a65a4253158684
+  - {fileID: 8970522981842051057}
+  m_RendererFeatureMap: 3456832d00bd1757353505c9db80874b4a292a251f5a717675a65a4253158684f15f2cc61fb37d7c
   postProcessData: {fileID: 11400000, guid: 41439944d30ece34e96484bdb6645b55, type: 2}
   shaders:
     blitPS: {fileID: 4800000, guid: c17132b1f77d20942aa75f8429c0f8bc, type: 3}
@@ -220,9 +220,9 @@ MonoBehaviour:
       PassNames: []
     overrideMaterial: {fileID: 2100000, guid: a042b41ecfc2a794b9224e0c872e3789, type: 2}
     overrideMaterialPassIndex: 0
-    overrideDepthState: 0
+    overrideDepthState: 1
     depthCompareFunction: 4
-    enableWrite: 1
+    enableWrite: 0
     stencilSettings:
       overrideStencilState: 1
       stencilReference: 10
