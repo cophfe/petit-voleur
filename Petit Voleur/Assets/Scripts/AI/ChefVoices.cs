@@ -24,6 +24,8 @@ public class ChefVoices : MonoBehaviour
 		{
 			sumWeights[i] = SumWeights(voicePack.voiceSets[i]);
 		}
+
+		chefAI.chefVoices = this;
 	}
 
 	// Update is called once per frame

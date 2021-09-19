@@ -30,6 +30,7 @@ public class ChefAI : MonoBehaviour
 	public GameObject[] throwablePrefabs;
 	public Rigidbody currentThrowable;
 	public Transform throwPoint;
+	public AudioClip throwSound;
 	public float throwRange = 10.0f;
 	public float throwDelay = 4.0f;
 	public float throwSpeed;
@@ -50,6 +51,8 @@ public class ChefAI : MonoBehaviour
 	public AnimationCurve distanceToViewAlertCurve;
 
 	private Transform targetTransform;
+	[HideInInspector]
+	public ChefVoices chefVoices;
 	public float inspectingTimer;
 	[HideInInspector]
 	public float alertedTimer;
@@ -230,7 +233,7 @@ public class ChefAI : MonoBehaviour
 		if (playerVisible)
 		{
 			//Count up start alert timer
-			ferretStartAlertTimer += Time.deltaTime * distanceToViewAlertCurve.Evaluate(distance / viewDistance);
+			ferretStartAlertTimer += Time.deltaTime * distanceToViewAlertCurve.Evaluate(Mathf.Clamp01(distance / viewDistance));
 			//Reset alert visibility timer
 			ferretAlertVisibleTimer = ferretVisibleDuration;
 		}
@@ -244,8 +247,14 @@ public class ChefAI : MonoBehaviour
 		}
 
 		//Player was seen for long enough, start the hunt!
-		if (ferretStartAlertTimer >= alertedBeginDuration)
-			alertedTimer = alertedDuration;
+		if (alertedTimer <= 0)
+		{
+			if (ferretStartAlertTimer >= alertedBeginDuration)
+			{
+				print("jeeves");
+				alertedTimer = alertedDuration;
+			}
+		}
 	}
 
 	/// <summary>
@@ -368,6 +377,7 @@ public class ChefAI : MonoBehaviour
 			{
 				throwTimer = throwDelay;
 				PlayThrowAnim();
+				chefVoices.source.PlayOneShot(throwSound, 0.3f);
 			}
 		}
 		else

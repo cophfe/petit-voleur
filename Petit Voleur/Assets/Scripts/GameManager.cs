@@ -41,7 +41,8 @@ public class GameManager : MonoBehaviour
 	public void UpdatePointUI()
 	{
 		UI.UpdatePointUI();
-		audioSrc.PlayOneShot(pointGet);
+		audioSrc.clip = pointGet;
+		audioSrc.Play();
 	}
 
 	public void OnReachedPointThreshold()
