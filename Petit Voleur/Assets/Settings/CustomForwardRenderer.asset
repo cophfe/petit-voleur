@@ -55,8 +55,9 @@ MonoBehaviour:
   - {fileID: 6275692414225307188}
   - {fileID: 8534701858657806666}
   - {fileID: 8970522981842051057}
+  - {fileID: 5442460356159288629}
   - {fileID: -8897400566484130187}
-  m_RendererFeatureMap: 3456832d00bd17574a292a251f5a7176f15f2cc61fb37d7c75a65a4253158684
+  m_RendererFeatureMap: 3456832d00bd17574a292a251f5a7176f15f2cc61fb37d7c353505c9db80874b75a65a4253158684
   postProcessData: {fileID: 11400000, guid: 41439944d30ece34e96484bdb6645b55, type: 2}
   shaders:
     blitPS: {fileID: 4800000, guid: c17132b1f77d20942aa75f8429c0f8bc, type: 3}
@@ -78,6 +79,45 @@ MonoBehaviour:
     failOperation: 0
     zFailOperation: 0
   m_ShadowTransparentReceive: 1
+--- !u!114 &5442460356159288629
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6b3d386ba5cd94485973aee1479b272e, type: 3}
+  m_Name: ChefSilhouette
+  m_EditorClassIdentifier: 
+  m_Active: 0
+  settings:
+    passTag: ChefSilhouette
+    Event: 300
+    filterSettings:
+      RenderQueueType: 0
+      LayerMask:
+        serializedVersion: 2
+        m_Bits: 32768
+      PassNames: []
+    overrideMaterial: {fileID: 2100000, guid: 82cc5a30e7125504d9ad82017ccb7604, type: 2}
+    overrideMaterialPassIndex: 0
+    overrideDepthState: 1
+    depthCompareFunction: 5
+    enableWrite: 0
+    stencilSettings:
+      overrideStencilState: 0
+      stencilReference: 0
+      stencilCompareFunction: 8
+      passOperation: 0
+      failOperation: 0
+      zFailOperation: 0
+    cameraSettings:
+      overrideCamera: 0
+      restoreCamera: 1
+      offset: {x: 0, y: 0, z: 0, w: 0}
+      cameraFieldOfView: 60
 --- !u!114 &6275692414225307188
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -98,7 +138,7 @@ MonoBehaviour:
       RenderQueueType: 0
       LayerMask:
         serializedVersion: 2
-        m_Bits: 33024
+        m_Bits: 256
       PassNames: []
     overrideMaterial: {fileID: 2100000, guid: efd780828ef70a34f97ac5db38e1fbb8, type: 2}
     overrideMaterialPassIndex: 0
