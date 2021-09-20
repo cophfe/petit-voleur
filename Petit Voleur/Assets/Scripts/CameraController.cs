@@ -270,7 +270,7 @@ public partial class CameraController : MonoBehaviour
 
 			Vector2 input = finger.currentTouch.screenPosition - finger.touchHistory[1].screenPosition;
 
-			InputMove(input);
+			InputMove(2 * input);
 		}
 		
 	}
