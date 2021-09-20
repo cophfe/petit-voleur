@@ -1,4 +1,10 @@
-﻿using System.Collections;
+﻿/*----------------------------------------------------------------------------------
+			** Created by Rahul J **
+			------------------------
+			2021
+================================================================================*/
+
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using EaseIt;
@@ -46,7 +52,7 @@ public class ItemShard : MonoBehaviour
 			//Timer has reached the point to start going smol
 			if (timer < fadePoint)
 			{
-				//Lerp the scale
+				//Lerp the scale as it scales out
 				transform.localScale = Vector3.Lerp(Vector3.zero, Vector3.one, Easing.SmoothStart4(timer / fadePoint));
 			}
 		}

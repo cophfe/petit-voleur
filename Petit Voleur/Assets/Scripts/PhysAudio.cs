@@ -1,4 +1,12 @@
-﻿using System.Collections;
+﻿/*----------------------------------------------------------------------------------
+			** Created by Rahul J **
+			------------------------
+			2021
+			`````````````````````````
+			Makes a noise on collision
+================================================================================*/
+
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
