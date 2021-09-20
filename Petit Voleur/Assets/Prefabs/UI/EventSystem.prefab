@@ -110,7 +110,7 @@ MonoBehaviour:
   defaultSnapshot: {fileID: 24500006, guid: 3c03042c2931a8e43ac41147a5988e4f, type: 2}
   deadSnapshot: {fileID: -2042440098229788112, guid: 3c03042c2931a8e43ac41147a5988e4f, type: 2}
   winSnapshot: {fileID: 2136819024622744402, guid: 3c03042c2931a8e43ac41147a5988e4f, type: 2}
-  youWin: {fileID: 8300000, guid: d8bb1482049d3d04380201bd45dc5969, type: 3}
+  youWin: {fileID: 8300000, guid: f5681ae56e9cd9f438e5f0eba959e747, type: 3}
   pointGet: {fileID: 8300000, guid: b3aff8ff1118d684c83e4c246e9bb9fd, type: 3}
   audioSrc: {fileID: 8704353159728101818}
   snapshotTransitionTime: 2

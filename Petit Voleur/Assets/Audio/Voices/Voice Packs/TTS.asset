@@ -24,6 +24,8 @@ MonoBehaviour:
       weight: 10
     - clip: {fileID: 8300000, guid: 17bdb5041ee0d7a4aa1bdc17013fca44, type: 3}
       weight: 5
+    - clip: {fileID: 8300000, guid: 2a0df7cdac0281d48b9adf65edefcef1, type: 3}
+      weight: 1
     delayPerPlay: 10
   - clips:
     - clip: {fileID: 8300000, guid: 8c8a88ae12a98414c881756283a56e4c, type: 3}
@@ -34,7 +36,7 @@ MonoBehaviour:
   - clips:
     - clip: {fileID: 8300000, guid: fe2a7ef5f8cb0c6489e798c3f78c3e9c, type: 3}
       weight: 10
-    - clip: {fileID: 8300000, guid: 1f4468a43266b8c4c94395ac2f163f0f, type: 3}
+    - clip: {fileID: 8300000, guid: 16ac467666c4d5146abc2da13c161979, type: 3}
       weight: 10
     - clip: {fileID: 8300000, guid: ddeca36da3521d349a964288867e9365, type: 3}
       weight: 10

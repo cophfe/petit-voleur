@@ -20,7 +20,7 @@ RenderSettings:
   m_FogDensity: 0.01
   m_LinearFogStart: 60
   m_LinearFogEnd: 300
-  m_AmbientSkyColor: {r: 0.6415094, g: 0.6415094, b: 0.6415094, a: 1}
+  m_AmbientSkyColor: {r: 0.7264151, g: 0.7264151, b: 0.7264151, a: 1}
   m_AmbientEquatorColor: {r: 0.114, g: 0.125, b: 0.133, a: 1}
   m_AmbientGroundColor: {r: 0.047, g: 0.043, b: 0.035, a: 1}
   m_AmbientIntensity: 1
@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 1383347721}
-  m_IndirectSpecularColor: {r: 0.642812, g: 0.79834837, b: 0.76414096, a: 1}
+  m_IndirectSpecularColor: {r: 0.642812, g: 0.7983483, b: 0.76414096, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -3724,7 +3724,7 @@ GameObject:
   - component: {fileID: 274775985}
   - component: {fileID: 274775984}
   - component: {fileID: 274775983}
-  m_Layer: 12
+  m_Layer: 0
   m_Name: Sticky man
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -5454,7 +5454,7 @@ GameObject:
   - component: {fileID: 371420573}
   - component: {fileID: 371420572}
   - component: {fileID: 371420571}
-  m_Layer: 12
+  m_Layer: 0
   m_Name: Sticky man
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -7632,76 +7632,6 @@ PrefabInstance:
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 812e4b63fdd4b7548aefaa111b209840, type: 3}
   m_PrefabInstance: {fileID: 579225326}
-  m_PrefabAsset: {fileID: 0}
---- !u!1001 &588655096
-PrefabInstance:
-  m_ObjectHideFlags: 0
-  serializedVersion: 2
-  m_Modification:
-    m_TransformParent: {fileID: 1798889361}
-    m_Modifications:
-    - target: {fileID: 2199246713966307621, guid: d7e458ac0a73b7241a8805168e2ac445, type: 3}
-      propertyPath: m_LocalPosition.x
-      value: 92.54
-      objectReference: {fileID: 0}
-    - target: {fileID: 2199246713966307621, guid: d7e458ac0a73b7241a8805168e2ac445, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 25.08
-      objectReference: {fileID: 0}
-    - target: {fileID: 2199246713966307621, guid: d7e458ac0a73b7241a8805168e2ac445, type: 3}
-      propertyPath: m_LocalPosition.z
-      value: -77.4
-      objectReference: {fileID: 0}
-    - target: {fileID: 2199246713966307621, guid: d7e458ac0a73b7241a8805168e2ac445, type: 3}
-      propertyPath: m_LocalRotation.x
-      value: -0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2199246713966307621, guid: d7e458ac0a73b7241a8805168e2ac445, type: 3}
-      propertyPath: m_LocalRotation.y
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 2199246713966307621, guid: d7e458ac0a73b7241a8805168e2ac445, type: 3}
-      propertyPath: m_LocalRotation.z
-      value: -0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2199246713966307621, guid: d7e458ac0a73b7241a8805168e2ac445, type: 3}
-      propertyPath: m_LocalRotation.w
-      value: -0.00000035762784
-      objectReference: {fileID: 0}
-    - target: {fileID: 2199246713966307621, guid: d7e458ac0a73b7241a8805168e2ac445, type: 3}
-      propertyPath: m_RootOrder
-      value: 3
-      objectReference: {fileID: 0}
-    - target: {fileID: 2199246713966307621, guid: d7e458ac0a73b7241a8805168e2ac445, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2199246713966307621, guid: d7e458ac0a73b7241a8805168e2ac445, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.y
-      value: 180
-      objectReference: {fileID: 0}
-    - target: {fileID: 2199246713966307621, guid: d7e458ac0a73b7241a8805168e2ac445, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2199246713966307621, guid: d7e458ac0a73b7241a8805168e2ac445, type: 3}
-      propertyPath: m_LocalScale.x
-      value: 5.990027
-      objectReference: {fileID: 0}
-    - target: {fileID: 2199246713966307622, guid: d7e458ac0a73b7241a8805168e2ac445, type: 3}
-      propertyPath: m_Name
-      value: Climb Surface (4)
-      objectReference: {fileID: 0}
-    - target: {fileID: 2199246713966307643, guid: d7e458ac0a73b7241a8805168e2ac445, type: 3}
-      propertyPath: m_Materials.Array.data[0]
-      value: 
-      objectReference: {fileID: 2100000, guid: 049b6bb80acf6e44cae8d4bb65cabba2, type: 2}
-    m_RemovedComponents: []
-  m_SourcePrefab: {fileID: 100100000, guid: d7e458ac0a73b7241a8805168e2ac445, type: 3}
---- !u!4 &588655097 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 2199246713966307621, guid: d7e458ac0a73b7241a8805168e2ac445, type: 3}
-  m_PrefabInstance: {fileID: 588655096}
   m_PrefabAsset: {fileID: 0}
 --- !u!1001 &591169276
 PrefabInstance:
@@ -15487,7 +15417,7 @@ GameObject:
   - component: {fileID: 1172372139}
   - component: {fileID: 1172372138}
   - component: {fileID: 1172372137}
-  m_Layer: 12
+  m_Layer: 0
   m_Name: Sticky man
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -17231,7 +17161,7 @@ Light:
   m_Type: 1
   m_Shape: 0
   m_Color: {r: 1, g: 0.95686275, b: 0.8392157, a: 1}
-  m_Intensity: 1.85
+  m_Intensity: 2
   m_Range: 10
   m_SpotAngle: 30
   m_InnerSpotAngle: 21.80208
@@ -17273,13 +17203,13 @@ Light:
   m_Lightmapping: 1
   m_LightShadowCasterMode: 0
   m_AreaSize: {x: 1, y: 1}
-  m_BounceIntensity: 1
+  m_BounceIntensity: 1.2
   m_ColorTemperature: 6570
   m_UseColorTemperature: 0
   m_BoundingSphereOverride: {x: 0, y: 0, z: 0, w: 0}
   m_UseBoundingSphereOverride: 0
   m_ShadowRadius: 0
-  m_ShadowAngle: 1.2
+  m_ShadowAngle: 35.5
 --- !u!1001 &1389528601
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -19709,7 +19639,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2199246713966307621, guid: d7e458ac0a73b7241a8805168e2ac445, type: 3}
       propertyPath: m_RootOrder
-      value: 4
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 2199246713966307621, guid: d7e458ac0a73b7241a8805168e2ac445, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
@@ -22092,6 +22022,10 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 8704353159728101818, guid: ae4e6d43ee428f741899759d462ca05d, type: 3}
+      propertyPath: OutputAudioMixerGroup
+      value: 
+      objectReference: {fileID: 5233063776069876069, guid: 3c03042c2931a8e43ac41147a5988e4f, type: 2}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: ae4e6d43ee428f741899759d462ca05d, type: 3}
 --- !u!114 &1761492419 stripped
@@ -23530,7 +23464,6 @@ Transform:
   - {fileID: 996183758}
   - {fileID: 208444885}
   - {fileID: 1789181308}
-  - {fileID: 588655097}
   - {fileID: 1596306756}
   m_Father: {fileID: 0}
   m_RootOrder: 5
@@ -29358,6 +29291,10 @@ PrefabInstance:
       propertyPath: kickCooldown
       value: 4
       objectReference: {fileID: 0}
+    - target: {fileID: 6354315351796493653, guid: 84ffc813f6d7cb34a8c276f02ca14f4a, type: 3}
+      propertyPath: throwSound
+      value: 
+      objectReference: {fileID: 8300000, guid: 1f26ffaa769690f439b989702c1fc06e, type: 3}
     - target: {fileID: 6354315351796493658, guid: 84ffc813f6d7cb34a8c276f02ca14f4a, type: 3}
       propertyPath: m_Name
       value: Chef
