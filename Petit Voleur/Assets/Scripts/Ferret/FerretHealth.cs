@@ -13,6 +13,9 @@ public class FerretHealth : MonoBehaviour
 	int currentHealth;
 	bool dead = false;
 
+	/// <summary>
+	/// the current health
+	/// </summary>
 	public int CurrentHealth
 	{
 		get
@@ -32,6 +35,9 @@ public class FerretHealth : MonoBehaviour
 		UI.InitializeHealthUI(maxHealth);
 	}
 
+	/// <summary>
+	/// Set health to value
+	/// </summary>
     public void SetHealth(int health)
 	{
 		currentHealth = Mathf.Min(health, maxHealth);
@@ -41,6 +47,9 @@ public class FerretHealth : MonoBehaviour
 		UI.SetHealthUI(currentHealth);
 	}
 
+	/// <summary>
+	/// Remove health
+	/// </summary>
 	public void Damage(int damageAmount = 1)
 	{
 		currentHealth -= damageAmount;
@@ -57,6 +66,9 @@ public class FerretHealth : MonoBehaviour
 
 	}
 
+	/// <summary>
+	/// Add health
+	/// </summary>
 	public void Heal(int healAmount = 1)
 	{
 		currentHealth = Mathf.Min(currentHealth + healAmount, maxHealth);
