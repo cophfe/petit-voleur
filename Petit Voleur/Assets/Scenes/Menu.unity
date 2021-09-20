@@ -2481,6 +2481,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Exit
       objectReference: {fileID: 0}
+    - target: {fileID: 1555455613802574809, guid: cb04043da0efc5743ad8dbae35a8c627, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 1555455613802574810, guid: cb04043da0efc5743ad8dbae35a8c627, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.size
       value: 2
@@ -3712,6 +3716,7 @@ GameObject:
   - component: {fileID: 8533943690099982438}
   - component: {fileID: 8533943690099982437}
   - component: {fileID: 8533943690099982439}
+  - component: {fileID: 8533943690099982440}
   m_Layer: 5
   m_Name: Canvas
   m_TagString: Untagged
@@ -3812,6 +3817,43 @@ MonoBehaviour:
   masterParameterName: Volume Master
   musicParameterName: Volume Music
   oUI: {fileID: 614984535}
+--- !u!114 &8533943690099982440
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8533943690099982435}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d5cb8d5cf31c80444b4cd8a69a30f950, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  platformOverride: 4
+  androidExclusive: []
+  windowsExclusive: []
+  webExclusive: []
+  isAndroid:
+    m_PersistentCalls:
+      m_Calls: []
+  isWindows:
+    m_PersistentCalls:
+      m_Calls: []
+  isWeb:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 1411514259}
+        m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
+        m_MethodName: SetActive
+        m_Mode: 6
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!223 &8533943690099982446
 Canvas:
   m_ObjectHideFlags: 0

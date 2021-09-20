@@ -19,7 +19,8 @@ public class PlatformDetector : MonoBehaviour
 		NONE,
 		WINDOWS,
 		ANDROID,
-		BOTH
+		WEB,
+		ALL
 	}
 
 	[Tooltip("Overrides the detected platform with this value")] 
@@ -29,19 +30,26 @@ public class PlatformDetector : MonoBehaviour
 	public GameObject[] androidExclusive = new GameObject[0];
 	[Tooltip("A list of gameobjects enabled only on windows")] 
 	public GameObject[] windowsExclusive = new GameObject[0];
-	[Tooltip("A unity event invoked on awake if the game is running on android")] 
-	public UnityEvent isAndroid = null;
-	[Tooltip("A unity event invoked on awake if the game is running on windows")] 
-	public UnityEvent isWindows = null;
+	[Tooltip("A list of gameobjects enabled only on windows")] 
+	public GameObject[] webExclusive = new GameObject[0];
 
-	void Awake()
+	[Tooltip("A unity event invoked on start if the game is running on android")] 
+	public UnityEvent isAndroid = null;
+	[Tooltip("A unity event invoked on start if the game is running on windows")] 
+	public UnityEvent isWindows = null;
+	[Tooltip("A unity event invoked on start if the game is running on webgl")] 
+	public UnityEvent isWeb = null;
+
+	void Update()
     {
 		RuntimePlatform platform = Application.platform;
 		
 		EnableWindows(platformOverride != PlatformOverride.NONE
-			&& (platformOverride == PlatformOverride.BOTH || platformOverride == PlatformOverride.WINDOWS || (platformOverride == PlatformOverride.NULL && (platform == RuntimePlatform.WindowsPlayer || platform == RuntimePlatform.WindowsEditor))));
+			&& (platformOverride == PlatformOverride.ALL || platformOverride == PlatformOverride.WINDOWS || (platformOverride == PlatformOverride.NULL && (platform == RuntimePlatform.WindowsPlayer || platform == RuntimePlatform.WindowsEditor))));
 		EnableAndroid(platformOverride != PlatformOverride.NONE
-			&& (platformOverride == PlatformOverride.BOTH || platformOverride == PlatformOverride.ANDROID || (platformOverride == PlatformOverride.NULL && (platform == RuntimePlatform.Android))));
+			&& (platformOverride == PlatformOverride.ALL || platformOverride == PlatformOverride.ANDROID || (platformOverride == PlatformOverride.NULL && (platform == RuntimePlatform.Android))));
+		EnableWeb(platformOverride != PlatformOverride.NONE
+			&& (platformOverride == PlatformOverride.ALL || platformOverride == PlatformOverride.WEB || (platformOverride == PlatformOverride.NULL && (platform == RuntimePlatform.WebGLPlayer))));
 	}
 
     /// <summary>
@@ -62,9 +70,9 @@ public class PlatformDetector : MonoBehaviour
     }
 
 	/// <summary>
-	/// Invokes windows event and enables windows exclusives
+	/// Invokes android event and enables android exclusives
 	/// </summary>
-	/// <param name="enable">whether it is windows or not</param>
+	/// <param name="enable">whether it is android or not</param>
 	void EnableAndroid(bool enable)
 	{
 		if (enable && isAndroid != null)
@@ -75,6 +83,23 @@ public class PlatformDetector : MonoBehaviour
 		for (int i = 0; i < androidExclusive.Length; i++)
 		{
 			androidExclusive[i].SetActive(enable);
+		}
+	}
+
+	/// <summary>
+	/// Invokes web event and enables web exclusives
+	/// </summary>
+	/// <param name="enable">whether it is web or not</param>
+	void EnableWeb(bool enable)
+	{
+		if (enable && isWeb != null)
+		{
+			isWeb.Invoke();
+		}
+
+		for (int i = 0; i < webExclusive.Length; i++)
+		{
+			webExclusive[i].SetActive(enable);
 		}
 	}
 }

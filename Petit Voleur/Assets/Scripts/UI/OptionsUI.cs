@@ -62,16 +62,25 @@ public class OptionsUI : MonoBehaviour
 		SetUIValuesToPlayerPrefs();
 	}
 
+	/// <summary>
+	/// Tells script that an options value has been changed
+	/// </summary>
 	public void OnResolutionChange()
 	{
 		IsChanged = true;
 	}
 
+	/// <summary>
+	/// Tells script that an options value has been changed
+	/// </summary>
 	public void OnValueChange()
 	{
 		IsChanged = true;
 	}
 
+	/// <summary>
+	/// Applies changes to options
+	/// </summary>
 	public void OnApply()
 	{
 		IsChanged = false;
@@ -88,6 +97,9 @@ public class OptionsUI : MonoBehaviour
 		SetGameValuesToUIValues();
 	}
 
+	/// <summary>
+	/// Set ui values to current player prefs
+	/// </summary>
 	public void SetUIValuesToPlayerPrefs()
 	{
 		sensitivitySlider.value = PlayerPrefs.GetFloat("Sensitivity");
@@ -107,6 +119,9 @@ public class OptionsUI : MonoBehaviour
 		IsChanged = false;
 	}
 
+	/// <summary>
+	/// Applies ui values to game
+	/// </summary>
 	public void SetGameValuesToUIValues()
 	{
 		mixer.SetFloat(masterParameterName, LinearToDecibels(masterVolumeSlider.value));
@@ -127,6 +142,9 @@ public class OptionsUI : MonoBehaviour
 		Screen.fullScreenMode = fullscreenToggle.isOn ? FullScreenMode.FullScreenWindow : FullScreenMode.Windowed;
 	}
 
+	/// <summary>
+	/// Restores default ui values
+	/// </summary>
 	public void OnRestoreDefaults()
 	{
 		masterVolumeSlider.value = PlayerPrefs.GetFloat("DefaultMasterVolume");
@@ -137,11 +155,21 @@ public class OptionsUI : MonoBehaviour
 		//do not reset screen
 	}
 
+	/// <summary>
+	/// Converts linear value to decibels
+	/// </summary>
+	/// <param name="linear">A value between 0 and 1 (cannot be 0)</param>
+	/// <returns>A decibel value</returns>
 	public static float LinearToDecibels(float linear)
 	{
 		return 20.0f * Mathf.Log10(linear);
 	}
 
+	/// <summary>
+	/// Converts decibels value to linear
+	/// </summary>
+	/// <param name="db">A decibel value</param>
+	/// <returns>A linear value between 0 and 1</returns>
 	public static float DecibelsToLinear(float db)
 	{
 		return Mathf.Pow(10.0f, db / 20.0f);

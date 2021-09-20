@@ -56,6 +56,9 @@ public class GameUI : MonoBehaviour
 	public GameObject windowsWinNotify;
 
 	//private variables
+	/// <summary>
+	/// all different screen states.
+	/// </summary>
 	enum ScreenState
 	{
 		TPAUSEIN,
@@ -72,6 +75,7 @@ public class GameUI : MonoBehaviour
 		LOSE,
 		NOTHING
 	}
+
 	//default heights for panels (used for transitions)
 	float pausePanelDefaultHeight;
 	float winPanelDefaultHeight;
@@ -378,6 +382,9 @@ public class GameUI : MonoBehaviour
 		//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 	}
 
+	/// <summary>
+	/// Updates the point UI based on the current point value
+	/// </summary>
 	public void UpdatePointUI()
 	{
 		try
@@ -394,6 +401,9 @@ public class GameUI : MonoBehaviour
 		}
 	}
 
+	/// <summary>
+	/// Resumes the game
+	/// </summary>
 	public void Resume()
 	{
 		if (screenState == ScreenState.PAUSE)
@@ -402,6 +412,9 @@ public class GameUI : MonoBehaviour
 		}
 	}
 
+	/// <summary>
+	/// Toggles menu state based on current state
+	/// </summary>
 	public void ToggleMenu()
 	{
 		switch (screenState)
