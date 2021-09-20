@@ -12,6 +12,7 @@ public class ValuableItem : MonoBehaviour
 	public int pointValue = 1;
 
 	bool stashed = false;
+	bool stashable = false;
 	PointTracker pointTracker = null;
 
 	private void Start()
@@ -21,12 +22,27 @@ public class ValuableItem : MonoBehaviour
 
 	private void OnTriggerEnter(Collider other)
 	{
-		if (!stashed && other.gameObject.tag == "Stash")
+		stashable = true;
+		
+	}
+
+	private void OnTriggerExit(Collider other)
+	{
+		stashable = false;
+	}
+
+	/// <summary>
+	/// Attempt to stash this item. This will fail if the item isn't inside the stash.
+	/// </summary>
+	public void TryStash()
+	{
+		if (!stashed && stashable)
 		{
 			pointTracker.AddPoints(pointValue);
 			GetComponent<Item>().pickupable = false;
 			stashed = true;
 		}
+
 	}
 
 }
