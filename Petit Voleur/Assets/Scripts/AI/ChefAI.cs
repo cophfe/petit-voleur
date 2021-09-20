@@ -257,7 +257,6 @@ public class ChefAI : MonoBehaviour
 		{
 			if (ferretStartAlertTimer >= alertedBeginDuration)
 			{
-				print("jeeves");
 				alertedTimer = alertedDuration;
 			}
 		}
