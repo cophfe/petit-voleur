@@ -439,6 +439,11 @@ public class GameUI : MonoBehaviour
 		}
 	}
 
+	/// <summary>
+	/// Pauses/unpauses menu
+	/// </summary>
+	/// <param name="pause">whether to pause or unpause</param>
+	/// <returns>if the pause was a success or not</returns>
 	public bool Pause(bool pause)
 	{
 		switch (screenState)
@@ -494,6 +499,10 @@ public class GameUI : MonoBehaviour
 		}
 	}
 
+	/// <summary>
+	/// Sets what UI objects are active based on a screentype
+	/// </summary>
+	/// <param name="screenType">the screen type to enable (transition screens will not work)</param>
 	void EnableScreen(ScreenState screenType)
 	{
 		switch (screenType)
@@ -536,6 +545,9 @@ public class GameUI : MonoBehaviour
 		}
 	}
 
+	/// <summary>
+	/// Opens the options menu
+	/// </summary>
 	public void OpenOptions()
 	{
 		if (screenState == ScreenState.PAUSE)
@@ -547,6 +559,9 @@ public class GameUI : MonoBehaviour
 		}
 	}
 
+	/// <summary>
+	/// Closes the options menu
+	/// </summary>
 	public void CloseOptions()
 	{
 		if (screenState == ScreenState.OPTIONS)
@@ -557,11 +572,17 @@ public class GameUI : MonoBehaviour
 		}
 	}
 
+	/// <summary>
+	/// Starts transitioning to the exit screen
+	/// </summary>
 	public void TransitionToExit()
 	{
 		StartCoroutine(ExitGame());
 	}
 
+	/// <summary>
+	/// Exits the scene after a leave animation
+	/// </summary>
 	IEnumerator ExitGame()
 	{
 		sceneTransitionAnimator.SetTrigger("Leave");
@@ -580,11 +601,17 @@ public class GameUI : MonoBehaviour
 		}
 	}
 
+	/// <summary>
+	/// Starts restarting
+	/// </summary>
 	public void TransitionToRestart()
 	{
 		StartCoroutine(RestartGame());
 	}
 
+	/// <summary>
+	/// Exits the scene after a leave animation
+	/// </summary>
 	IEnumerator RestartGame()
 	{
 		sceneTransitionAnimator.SetTrigger("Leave");
@@ -603,7 +630,9 @@ public class GameUI : MonoBehaviour
 		}
 	}
 
-
+	/// <summary>
+	/// Opens the win ui
+	/// </summary>
 	public void OpenWinUI()
 	{
 		EnableScreen(ScreenState.WIN);
@@ -626,30 +655,57 @@ public class GameUI : MonoBehaviour
 		screenOverlay.color = c;
 	}
 
+	/// <summary>
+	/// Enables win UI based on current platform
+	/// </summary>
 	public void EnableWinNotifyUI(bool enabled)
 	{
-#if UNITY_ANDROID
-		androidWinButton.SetActive(enabled);
-#else
-		windowsWinNotify.SetActive(enabled);
-#endif
+		switch (Application.platform)
+		{
+			case RuntimePlatform.Android:
+			{
+				androidWinButton.SetActive(enabled);
+				break;
+			}
+			default:
+			{
+				windowsWinNotify.SetActive(enabled);
+				break;
+			}
+		}
+		
 	}
 
+	/// <summary>
+	/// Gets the animator for the notify text
+	/// </summary>
+	/// <returns></returns>
 	public Animator GetNotifyAnimator()
 	{
 		return notifyTextAnimator;
 	}
 
+	/// <summary>
+	/// tells gamemanager to try to win
+	/// </summary>
 	public void OnWinButtonClicked()
 	{
 		gM.OnWin();
 	}
 
+	/// <summary>
+	/// Checks if game is paused
+	/// </summary>
+	/// <returns>pause value</returns>
 	public bool CheckIsPaused()
 	{
 		return screenState == ScreenState.PAUSE;
 	}	
 
+	/// <summary>
+	/// Sets initial value of health ui
+	/// </summary>
+	/// <param name="maxHealth"></param>
 	public void InitializeHealthUI(int maxHealth)
 	{
 		//if health UI has already been initialized
@@ -669,6 +725,9 @@ public class GameUI : MonoBehaviour
 		}
 	}
 
+	/// <summary>
+	/// Sets current health UI to correct amount of hearts
+	/// </summary>
 	public void SetHealthUI(int currentHealth)
 	{
 		if (healthChildren == null)
@@ -685,12 +744,19 @@ public class GameUI : MonoBehaviour
 				hitAnimator.SetTrigger("Hit");
 		}
 	}
-
+	
+	/// <summary>
+	/// Transitions to the lose game state
+	/// </summary>
 	public void TransitionToLose()
 	{
 		StartCoroutine(LoseGame());
 	}
 
+	/// <summary>
+	/// Opens up lose UI
+	/// </summary>
+	/// <returns></returns>
 	IEnumerator LoseGame()
 	{
 		yield return new WaitForSecondsRealtime(deathTransitionTime);

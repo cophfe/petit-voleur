@@ -83,7 +83,7 @@ public class FloatUI : MonoBehaviour
 		if (timer > characterStartTime)
 		{
 			//make characters follow sine wave
-			float tX = ExponentialDampeningSineWave(characterWobbleMag, characterWobbleSpeed, wobbleBaseValue, timer - characterStartTime);
+			float tX = ExponentialDampeningCosineWave(characterWobbleMag, characterWobbleSpeed, wobbleBaseValue, timer - characterStartTime);
 
 			//Make characters randomly float around
 			chef.transform.localRotation = Quaternion.Euler(0, 0, tX + characterWobbleNoiseMag * (Mathf.PerlinNoise(characterNoiseSpeed * timer, 0) - 0.5f));
@@ -101,11 +101,17 @@ public class FloatUI : MonoBehaviour
 
 	}
 
-	float ExponentialDampeningSineWave(float magnitude, float speed, float baseVal, float x)
+	/// <summary>
+	/// cosine(x) multiplied by e^-x
+	/// </summary>
+	float ExponentialDampeningCosineWave(float magnitude, float speed, float baseVal, float x)
 	{
 		return magnitude * Mathf.Pow(baseVal, -speed * x) * Mathf.Cos(2 * speed * Mathf.PI * x);
 	}
 
+	/// <summary>
+	/// rotate items around
+	/// </summary>
 	public void OnMouseChange(InputValue value)
 	{
 		Vector2 input = value.Get<Vector2>();

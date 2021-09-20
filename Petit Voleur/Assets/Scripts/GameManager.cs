@@ -38,6 +38,9 @@ public class GameManager : MonoBehaviour
 		inputs = FindObjectsOfType<PlayerInput>(false);
 	}
 
+	/// <summary>
+	/// updates point ui and plays point sound effect
+	/// </summary>
 	public void UpdatePointUI()
 	{
 		UI.UpdatePointUI();
@@ -45,6 +48,9 @@ public class GameManager : MonoBehaviour
 		audioSrc.Play();
 	}
 
+	/// <summary>
+	/// Lets the player win
+	/// </summary>
 	public void OnReachedPointThreshold()
 	{
 		canWin = true;
@@ -55,6 +61,9 @@ public class GameManager : MonoBehaviour
 		UI.GetNotifyAnimator().SetBool("CanWin", true);
 	}
 
+	/// <summary>
+	/// Notifies player that they can win
+	/// </summary>
 	public void OnEnterStash()
 	{
 		inStash = true;
@@ -64,6 +73,9 @@ public class GameManager : MonoBehaviour
 		}
 	}
 
+	/// <summary>
+	/// Unnotifies the player that they can win
+	/// </summary>
 	public void OnExitStash()
 	{
 		inStash = false;
@@ -71,6 +83,9 @@ public class GameManager : MonoBehaviour
 
 	}
 
+	/// <summary>
+	/// Transitions to win state
+	/// </summary>
 	public void OnWin()
 	{
 		if (inStash && canWin && !currentlyWinning)
@@ -81,6 +96,9 @@ public class GameManager : MonoBehaviour
 		}
 	}
 
+	/// <summary>
+	/// Wins the game
+	/// </summary>
 	IEnumerator YouWinPlayer()
 	{
 		GameInputEnabled = false;
@@ -90,6 +108,9 @@ public class GameManager : MonoBehaviour
 		UI.OpenWinUI();
 	}
 
+	/// <summary>
+	/// Toggles menus
+	/// </summary>
 	public void OnToggleMenu()
 	{
 		if (enableMenuToggle)
@@ -99,6 +120,9 @@ public class GameManager : MonoBehaviour
 		}
 	}
 
+	/// <summary>
+	/// cursor lock state
+	/// </summary>
 	public bool CursorLocked
 	{
 		get
@@ -120,6 +144,9 @@ public class GameManager : MonoBehaviour
 		}
 	}
 
+	/// <summary>
+	/// game input enable state
+	/// </summary>
 	public bool GameInputEnabled
 	{
 		get
@@ -146,6 +173,9 @@ public class GameManager : MonoBehaviour
 		}
 	}
 
+	/// <summary>
+	/// Transitions to losing
+	/// </summary>
 	public void OnDeath()
 	{
 		UI.TransitionToLose();
