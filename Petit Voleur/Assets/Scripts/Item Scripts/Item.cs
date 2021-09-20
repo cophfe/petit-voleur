@@ -15,14 +15,17 @@ public class Item : MonoBehaviour
 	public static int itemLayer = 10;
 	public static int heldItemLayer = 13;
 
+
 	public bool pickupable = true;
 	[HideInInspector]
 	public Rigidbody rbody;
 	public GameObject col;
+	private ValuableItem valuableItem;
 
 	void Awake()
 	{
 		rbody = GetComponent<Rigidbody>();
+		valuableItem = GetComponent<ValuableItem>();
 	}
 
 	/// <summary>
@@ -43,6 +46,9 @@ public class Item : MonoBehaviour
 		SetLayerRecursively(gameObject, itemLayer);
 		rbody.velocity = velocity;
 		rbody.useGravity = true;
+
+		if (valuableItem)
+			valuableItem.TryStash();
 	}
 
 	/// <summary>
