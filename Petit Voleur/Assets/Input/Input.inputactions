@@ -248,6 +248,17 @@
                 },
                 {
                     "name": "",
+                    "id": "01c553a0-388f-4296-ac83-67b47f3860d2",
+                    "path": "<Keyboard>/p",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "KBM",
+                    "action": "Toggle Menu",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
                     "id": "c4555601-f11a-4104-8a30-bb149e995019",
                     "path": "<Mouse>/position",
                     "interactions": "",

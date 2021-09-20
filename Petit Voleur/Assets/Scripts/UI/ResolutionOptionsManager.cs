@@ -72,5 +72,9 @@ public class ResolutionOptionsManager : MonoBehaviour
 #endif
 	}
 
+	/// <summary>
+	/// gets current index
+	/// </summary>
+	/// <returns>returns current index</returns>
 	public int GetCurrentIndex() { return currentIndex; }
 }
