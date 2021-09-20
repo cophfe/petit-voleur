@@ -240,6 +240,7 @@ public class ChefAI : MonoBehaviour
 		{
 			//Count up start alert timer
 			ferretStartAlertTimer += Time.deltaTime * distanceToViewAlertCurve.Evaluate(Mathf.Clamp01(distance / viewDistance));
+			ferretStartAlertTimer = Mathf.Min(ferretStartAlertTimer, alertedBeginDuration);
 			//Reset alert visibility timer
 			ferretAlertVisibleTimer = ferretVisibleDuration;
 		}
