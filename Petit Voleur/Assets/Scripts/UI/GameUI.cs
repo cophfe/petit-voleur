@@ -48,8 +48,11 @@ public class GameUI : MonoBehaviour
 	public float maxBlurAmount = 0.02f;
 	[Tooltip("The Hit Overlay Animator")]
 	public Animator hitAnimator = null;
+	[Tooltip("An event that is invoked when closing the menu")]
 	public UnityEvent onLeaveMenu = null;
+	[Tooltip("The button used on android to win the game")]
 	public GameObject androidWinButton;
+	[Tooltip("The gameobject used to notify users on how to win on pc")]
 	public GameObject windowsWinNotify;
 
 	//private variables
@@ -124,6 +127,7 @@ public class GameUI : MonoBehaviour
 	public GameObject healthPrefab = null;
 	[Tooltip("The object that holds the health unit objects. Should have a horizontal or vertical layout group attached.")]
 	public RectTransform healthParent = null;
+
 	//private variables
 	List<Animator> healthChildren = null;
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

@@ -128,6 +128,10 @@ public partial class CameraController : MonoBehaviour
 		currentDistance = targetDistance;
 		transform.position = currentPivotPosition + orbitVector;
 		transform.forward = -orbitVector;
+
+		//set camera box extents, used for obstruction checking
+		float yExtend = Mathf.Tan(cam.fieldOfView * Mathf.Deg2Rad) * cam.nearClipPlane;
+		cameraBoxHalfExtents = new Vector3(yExtend * cam.aspect, yExtend, cam.nearClipPlane) / 2;
 	}
 
 	void LateUpdate()
@@ -170,7 +174,6 @@ public partial class CameraController : MonoBehaviour
 		else
 		{
 			transform.position += Vector3.up * (yOffset * yOffsetMagnitude);
-
 		}
 	}
 
@@ -181,6 +184,10 @@ public partial class CameraController : MonoBehaviour
 	}
 
 	//Called through unity input system
+	/// <summary>
+	/// Updates input based on a 2d input vector
+	/// </summary>
+	/// <param name="value">Information describing the input event</param>
 	public void OnLook(InputValue value)
 	{
 		Vector2 input = value.Get<Vector2>();
@@ -188,6 +195,10 @@ public partial class CameraController : MonoBehaviour
 		InputMove(input);
 	}
 
+	/// <summary>
+	/// Updates the camera movement based on an input vector
+	/// </summary>
+	/// <param name="input">A 2d vector representing a rotational movement on the x and y axis</param>
 	void InputMove(Vector2 input)
 	{
 		if (!enableInput) return;
@@ -242,6 +253,7 @@ public partial class CameraController : MonoBehaviour
 		//set target quaternion
 		targetOrbit = Quaternion.Euler(rotation);
 
+		//do everything here if not smoothing rotation
 		if (!smoothCameraRotation)
 		{
 			currentOrbit = targetOrbit;
@@ -251,11 +263,18 @@ public partial class CameraController : MonoBehaviour
 		}
 	}
 
+	/// <summary>
+	/// Updates the input (in order to take into account whether the ferret is climbing or not)
+	/// </summary>
 	public void OnUpdateClimb()
 	{
 		InputMove(Vector2.zero);
 	}
 
+	/// <summary>
+	/// Updates input based on finger movement
+	/// </summary>
+	/// <param name="finger">Information describing the input event</param>
 	void OnFingerLook(Finger finger)
 	{
 		if (!enableInput) return;
@@ -292,13 +311,13 @@ public partial class CameraController : MonoBehaviour
 		}
 	}
 
-	//Sets the orbitVector's magnitude to the correct value (checks obstructions)
 	//requires orbitVector to be normalised first
+	/// <summary>
+	/// Sets the orbitVector's magnitude to the correct value, taking into account obstructions
+	/// </summary>
 	void SetOrbitDistance()
 	{		
-		float yExtend = Mathf.Tan(cam.fieldOfView * Mathf.Deg2Rad) * cam.nearClipPlane;
-		//regenerated every frame because it could change, could maybe optimise by only calling on camera change
-		cameraBoxHalfExtents = new Vector3(yExtend * cam.aspect, yExtend, cam.nearClipPlane) / 2;
+		
 
 		//check if camera is obstructed
 
@@ -359,16 +378,19 @@ public partial class CameraController : MonoBehaviour
 		yOffset = Mathf.MoveTowards(yOffset, targetYOffset, Time.deltaTime * yOffsetChangeSpeed * Mathf.Abs(targetYOffset - yOffset));
 	}
 
-	public void SetCameraShake(Vector2 screenSpaceDirection, float magnitude, float time)
-	{
-	}
-
+	/// <summary>
+	/// Adds a vector to the camera shake vector
+	/// </summary>
+	/// <param name="shake">A world space displacement for the camera</param>
 	public void AddCameraShake(Vector3 shake)
 	{
 		cameraShake += shake;
 	}
 
-	//returns magnitude of camera shake
+	/// <summary>
+	/// updates the camera shake vector using delta time 
+	/// </summary>
+	/// <returns>returns the magnitude of camera shake</returns>
 	float UpdateCameraShake()
 	{
 		float magnitude = cameraShake.magnitude;
