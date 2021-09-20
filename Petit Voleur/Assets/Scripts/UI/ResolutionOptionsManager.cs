@@ -1,4 +1,8 @@
-﻿using System.Collections;
+﻿/*==================================================
+	Programmer: Connor Fettes
+==================================================*/
+
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -10,6 +14,8 @@ public class ResolutionOptionsManager : MonoBehaviour
 	public TMP_Dropdown resolutionOptions;
 	Resolution[] resolutions;
 	List<Vector2Int> validResolutions;
+	int initialIndex = 0;
+	int currentIndex = 0;
 
 	void Start()
     {
@@ -19,7 +25,6 @@ public class ResolutionOptionsManager : MonoBehaviour
 		Resolution currentRes = Screen.currentResolution;
 
 		//GET VALID RESOLUTIONS
-		int currentIndex = 0;
 		validResolutions.Add(new Vector2Int(resolutions[0].width, resolutions[0].height));
 
 		for (int i = 1; i < resolutions.Length; i++)
@@ -31,7 +36,7 @@ public class ResolutionOptionsManager : MonoBehaviour
 
 			if (currentRes.width == resolutions[i].width && currentRes.height == resolutions[i].height)
 			{
-				currentIndex = validResolutions.Count - 1;
+				initialIndex = validResolutions.Count - 1;
 			}
 		}
 
@@ -45,15 +50,27 @@ public class ResolutionOptionsManager : MonoBehaviour
 
 		//ADD AS OPTIONS
 		resolutionOptions.AddOptions(resolutionStrings);
-		resolutionOptions.value = resolutionStrings.Count - 1 - currentIndex;
+		resolutionOptions.value = resolutionStrings.Count - 1 - initialIndex;
+
+		currentIndex = resolutionStrings.Count - 1 - initialIndex;
+
+		PlayerPrefs.SetInt("Resolution", currentIndex);
 #endif
 	}
 
+	/// <summary>
+	/// Sets the screen resolution to a value, by index
+	/// </summary>
+	/// <param name="index">An index of the resolution dropdown</param>
+	/// <param name="fullscreen">whether or not the game is fullscreen</param>
 	public void SetResolutionFromIndex(int index, bool fullscreen) 
 	{
 #if !UNITY_ANDROID
 		Vector2Int r = validResolutions[validResolutions.Count - 1 - index];
+		currentIndex = index;
 		Screen.SetResolution(r.x, r.y, fullscreen);
 #endif
 	}
+
+	public int GetCurrentIndex() { return currentIndex; }
 }

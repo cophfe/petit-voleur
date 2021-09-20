@@ -37,10 +37,13 @@ public class OptionsUI : MonoBehaviour
 	public string masterParameterName = "Volume Master";
 	[Tooltip("The exposed paramater on the mixer that controls music volume.")]
 	public string musicParameterName = "Volume Music";
-
+	[Tooltip("The camera controller.")]
 	public CameraController cameraController = null;
-	bool isChanged = false;
 
+	bool isChanged = false;
+	/// <summary>
+	/// If values have been changed since opening the options menu
+	/// </summary>
 	bool IsChanged
 	{
 		get
@@ -95,6 +98,7 @@ public class OptionsUI : MonoBehaviour
 
 		if (PlayerPrefs.HasKey("Resolution"))
 		{
+			Debug.Log(PlayerPrefs.GetInt("Resolution"));
 			resolutionDropdown.value = PlayerPrefs.GetInt("Resolution");
 		}
 
@@ -117,7 +121,7 @@ public class OptionsUI : MonoBehaviour
 		if (qualityDropdown.value != QualitySettings.GetQualityLevel())
 			QualitySettings.SetQualityLevel(qualityDropdown.value, true);
 
-		if (PlayerPrefs.HasKey("Resolution"))
+		if (PlayerPrefs.HasKey("Resolution") && rOM.GetCurrentIndex() != resolutionDropdown.value)
 			rOM.SetResolutionFromIndex(resolutionDropdown.value, fullscreenToggle.isOn);
 
 		Screen.fullScreenMode = fullscreenToggle.isOn ? FullScreenMode.FullScreenWindow : FullScreenMode.Windowed;
@@ -131,7 +135,6 @@ public class OptionsUI : MonoBehaviour
 		invertToggle.isOn = PlayerPrefs.GetInt("DefaultIsInverted") == 1;
 		qualityDropdown.value = PlayerPrefs.GetInt("DefaultQuality");
 		//do not reset screen
-		//fullscreenToggle.isOn = PlayerPrefs.GetInt("DefaultIsFullscreen") == 1;
 	}
 
 	public static float LinearToDecibels(float linear)
