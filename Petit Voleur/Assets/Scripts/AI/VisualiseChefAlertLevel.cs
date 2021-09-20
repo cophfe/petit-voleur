@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-
+//Redundant
 public class VisualiseChefAlertLevel : MonoBehaviour
 {
 	public ChefAI chefAI;

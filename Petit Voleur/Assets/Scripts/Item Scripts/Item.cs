@@ -1,4 +1,10 @@
-﻿using System.Collections;
+﻿/*----------------------------------------------------------------------------------
+			** Created by Rahul J **
+			------------------------
+			2021
+================================================================================*/
+
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -39,6 +45,11 @@ public class Item : MonoBehaviour
 		rbody.useGravity = true;
 	}
 
+	/// <summary>
+	/// Sets layer of object and all child objects
+	/// </summary>
+	/// <param name="obj"></param>
+	/// <param name="newLayer"></param>
 	public static void SetLayerRecursively(GameObject obj, int newLayer)
 	{
 		obj.layer = newLayer;

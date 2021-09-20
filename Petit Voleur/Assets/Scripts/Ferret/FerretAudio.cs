@@ -1,4 +1,10 @@
-﻿using System.Collections;
+﻿/*----------------------------------------------------------------------------------
+			** Created by Rahul J **
+			------------------------
+			2021
+================================================================================*/
+
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -33,20 +39,26 @@ public class FerretAudio : MonoBehaviour
 		source.PlayOneShot(clip, volume);
 	}
 
-	// ====================================================== //
-	// =========== These are all self explanatory =========== //
-	// ============VVVVVVVVVVVVVVVVVVVVVVVVVVVVVV============ //
-
+	/// <summary>
+	/// Mutes running audio
+	/// </summary>
 	public void PauseRunning()
 	{
 		runSource.volume = 0.0f;
 	}
 
+	/// <summary>
+	/// Unmutes running audio
+	/// </summary>
 	public void PlayRunning()
 	{
 		runSource.volume = 1.0f;
 
 	}
+
+	// ====================================================== //
+	// =========== These are all self explanatory =========== //
+	// ============VVVVVVVVVVVVVVVVVVVVVVVVVVVVVV============ //
 
 	public void PlayWallImpact()
 	{
