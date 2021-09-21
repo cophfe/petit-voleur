@@ -110,6 +110,9 @@ public class FerretController : MonoBehaviour
 	private bool isDead = false;
 	private float jumpBufferTimer;
 	private float coyoteJumpTimer;
+	//jump particles
+	public ParticleSystem jumpParticle;
+	public ParticleSystem dashParticle;
 
     // Start is called before the first frame update
     void Start()
@@ -472,6 +475,7 @@ public class FerretController : MonoBehaviour
 				dashTimer = dashDuration;
 				isDashing = true;
 
+				dashParticle.Play();
 				ferretAudio.PlayFerretDash();
 				animator.SetTrigger("m_FerretDash");
 			}
@@ -486,6 +490,7 @@ public class FerretController : MonoBehaviour
 		isDashing = false;
 		dashTimer = 0;
 		dashCDTimer = dashCooldown;
+		dashParticle.Stop();
 	}
 
 	/// <summary>
@@ -543,6 +548,8 @@ public class FerretController : MonoBehaviour
 	{
 		//Change gravity value based on the jump arc
 		//Removes the vertical component of velocity and adds an impulse based on jump arc
+		if (isDashing)
+			return;
 
 		velocity -= upDirection * Vector3.Dot(velocity, upDirection);
 
@@ -559,6 +566,7 @@ public class FerretController : MonoBehaviour
 		}
 		isJumping = true;
 
+		jumpParticle.Play();
 		ferretAudio.PlayFerretJump();
 		animator.SetTrigger("m_FerretJump");
 

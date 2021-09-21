@@ -16,6 +16,7 @@ public class BlurManager : MonoBehaviour
 
 	int blurAmountId;
 	UniversalAdditionalCameraData data = null;
+
 	private void Start()
 	{
 		blurAmountId = Shader.PropertyToID("_BlurAmount");
@@ -25,18 +26,27 @@ public class BlurManager : MonoBehaviour
 		data = Camera.main.GetUniversalAdditionalCameraData();
 	}
 
+	/// <summary>
+	/// Enables blur
+	/// </summary>
 	public void EnableBlur()
 	{
 		if (data && enableBlur)
 			data.SetRenderer(blurRendererIndex);
 	}
 
+	/// <summary>
+	/// Disables blur
+	/// </summary>
 	public void DisableBlur()
 	{
 		if (data && enableBlur)
 			data.SetRenderer(defaultRendererIndex);
 	}
 
+	/// <summary>
+	/// Sets the amount of blur
+	/// </summary>
 	public void SetBlurAmount(float amount)
 	{
 		if (blurMaterial && enableBlur)
