@@ -30,7 +30,7 @@ MonoBehaviour:
   - clips:
     - clip: {fileID: 8300000, guid: 8c8a88ae12a98414c881756283a56e4c, type: 3}
       weight: 1
-    - clip: {fileID: 8300000, guid: 1f4468a43266b8c4c94395ac2f163f0f, type: 3}
+    - clip: {fileID: 8300000, guid: b317154a574feb24dabf512ccbe1f9db, type: 3}
       weight: 1
     delayPerPlay: 5
   - clips:
