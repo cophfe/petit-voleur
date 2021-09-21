@@ -9853,7 +9853,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 851381096229921112, guid: b1730f21cc1a07a4f84e255366027754, type: 3}
       propertyPath: m_AnchorMin.y
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 851381096229921112, guid: b1730f21cc1a07a4f84e255366027754, type: 3}
       propertyPath: m_SizeDelta.x
@@ -9861,15 +9861,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 851381096229921112, guid: b1730f21cc1a07a4f84e255366027754, type: 3}
       propertyPath: m_AnchorMax.y
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 851381096229921112, guid: b1730f21cc1a07a4f84e255366027754, type: 3}
       propertyPath: m_SizeDelta.y
-      value: 137.00034
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 851381096229921112, guid: b1730f21cc1a07a4f84e255366027754, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -276.11066
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 975933129120808539, guid: b1730f21cc1a07a4f84e255366027754, type: 3}
       propertyPath: m_AnchoredPosition.x
@@ -9877,7 +9877,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 975933129120808539, guid: b1730f21cc1a07a4f84e255366027754, type: 3}
       propertyPath: m_AnchorMin.y
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 975933129120808539, guid: b1730f21cc1a07a4f84e255366027754, type: 3}
       propertyPath: m_SizeDelta.x
@@ -9885,15 +9885,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 975933129120808539, guid: b1730f21cc1a07a4f84e255366027754, type: 3}
       propertyPath: m_AnchorMax.y
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 975933129120808539, guid: b1730f21cc1a07a4f84e255366027754, type: 3}
       propertyPath: m_SizeDelta.y
-      value: 137.00034
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 975933129120808539, guid: b1730f21cc1a07a4f84e255366027754, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -137.00034
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3077930081511723921, guid: b1730f21cc1a07a4f84e255366027754, type: 3}
       propertyPath: m_AnchoredPosition.x
@@ -9901,7 +9901,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3077930081511723921, guid: b1730f21cc1a07a4f84e255366027754, type: 3}
       propertyPath: m_AnchorMin.y
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3077930081511723921, guid: b1730f21cc1a07a4f84e255366027754, type: 3}
       propertyPath: m_SizeDelta.x
@@ -9909,15 +9909,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3077930081511723921, guid: b1730f21cc1a07a4f84e255366027754, type: 3}
       propertyPath: m_AnchorMax.y
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3077930081511723921, guid: b1730f21cc1a07a4f84e255366027754, type: 3}
       propertyPath: m_SizeDelta.y
-      value: 174.00034
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3077930081511723921, guid: b1730f21cc1a07a4f84e255366027754, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -452.221
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4143135717129204539, guid: b1730f21cc1a07a4f84e255366027754, type: 3}
       propertyPath: m_AnchorMin.y
@@ -10073,7 +10073,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7088374508513618094, guid: b1730f21cc1a07a4f84e255366027754, type: 3}
       propertyPath: isAndroid.m_PersistentCalls.m_Calls.Array.size
-      value: 1
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 7088374508513618094, guid: b1730f21cc1a07a4f84e255366027754, type: 3}
       propertyPath: isAndroid.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
@@ -10097,6 +10097,54 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7088374508513618094, guid: b1730f21cc1a07a4f84e255366027754, type: 3}
       propertyPath: isAndroid.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: UnityEngine.Object, UnityEngine
+      objectReference: {fileID: 0}
+    - target: {fileID: 7088374508513618094, guid: b1730f21cc1a07a4f84e255366027754, type: 3}
+      propertyPath: isAndroid.m_PersistentCalls.m_Calls.Array.data[1].m_TargetAssemblyTypeName
+      value: UnityEngine.GameObject, UnityEngine
+      objectReference: {fileID: 0}
+    - target: {fileID: 7088374508513618094, guid: b1730f21cc1a07a4f84e255366027754, type: 3}
+      propertyPath: isAndroid.m_PersistentCalls.m_Calls.Array.data[1].m_Mode
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 7088374508513618094, guid: b1730f21cc1a07a4f84e255366027754, type: 3}
+      propertyPath: isAndroid.m_PersistentCalls.m_Calls.Array.data[1].m_CallState
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 7088374508513618094, guid: b1730f21cc1a07a4f84e255366027754, type: 3}
+      propertyPath: isAndroid.m_PersistentCalls.m_Calls.Array.data[1].m_Target
+      value: 
+      objectReference: {fileID: 892305017}
+    - target: {fileID: 7088374508513618094, guid: b1730f21cc1a07a4f84e255366027754, type: 3}
+      propertyPath: isAndroid.m_PersistentCalls.m_Calls.Array.data[1].m_MethodName
+      value: SetActive
+      objectReference: {fileID: 0}
+    - target: {fileID: 7088374508513618094, guid: b1730f21cc1a07a4f84e255366027754, type: 3}
+      propertyPath: isAndroid.m_PersistentCalls.m_Calls.Array.data[1].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: UnityEngine.Object, UnityEngine
+      objectReference: {fileID: 0}
+    - target: {fileID: 7088374508513618094, guid: b1730f21cc1a07a4f84e255366027754, type: 3}
+      propertyPath: isAndroid.m_PersistentCalls.m_Calls.Array.data[2].m_TargetAssemblyTypeName
+      value: UnityEngine.GameObject, UnityEngine
+      objectReference: {fileID: 0}
+    - target: {fileID: 7088374508513618094, guid: b1730f21cc1a07a4f84e255366027754, type: 3}
+      propertyPath: isAndroid.m_PersistentCalls.m_Calls.Array.data[2].m_Mode
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 7088374508513618094, guid: b1730f21cc1a07a4f84e255366027754, type: 3}
+      propertyPath: isAndroid.m_PersistentCalls.m_Calls.Array.data[2].m_CallState
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 7088374508513618094, guid: b1730f21cc1a07a4f84e255366027754, type: 3}
+      propertyPath: isAndroid.m_PersistentCalls.m_Calls.Array.data[2].m_Target
+      value: 
+      objectReference: {fileID: 1212602454}
+    - target: {fileID: 7088374508513618094, guid: b1730f21cc1a07a4f84e255366027754, type: 3}
+      propertyPath: isAndroid.m_PersistentCalls.m_Calls.Array.data[2].m_MethodName
+      value: SetActive
+      objectReference: {fileID: 0}
+    - target: {fileID: 7088374508513618094, guid: b1730f21cc1a07a4f84e255366027754, type: 3}
+      propertyPath: isAndroid.m_PersistentCalls.m_Calls.Array.data[2].m_Arguments.m_ObjectArgumentAssemblyTypeName
       value: UnityEngine.Object, UnityEngine
       objectReference: {fileID: 0}
     - target: {fileID: 7236923058224560686, guid: b1730f21cc1a07a4f84e255366027754, type: 3}
@@ -26636,6 +26684,11 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 0.6009811, y: 0.18182187, z: 1}
   m_Center: {x: 0.00035959482, y: 0.12935293, z: -0.0000000028134508}
+--- !u!1 &892305017 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1049724364, guid: c588ce2a75014da48a5257fefbe567ad, type: 3}
+  m_PrefabInstance: {fileID: 3325050861806063173}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &895504339
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -30614,6 +30667,11 @@ PrefabInstance:
 Transform:
   m_CorrespondingSourceObject: {fileID: 626409004471200697, guid: 1b9c2a07f52314446954d65aa84c6839, type: 3}
   m_PrefabInstance: {fileID: 1200602675}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &1212602454 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1118284905, guid: c588ce2a75014da48a5257fefbe567ad, type: 3}
+  m_PrefabInstance: {fileID: 3325050861806063173}
   m_PrefabAsset: {fileID: 0}
 --- !u!1 &1222482270
 GameObject:
@@ -43060,6 +43118,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1118284905, guid: c588ce2a75014da48a5257fefbe567ad, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 3325050860681079624, guid: c588ce2a75014da48a5257fefbe567ad, type: 3}
       propertyPath: m_Name
       value: Ferret
