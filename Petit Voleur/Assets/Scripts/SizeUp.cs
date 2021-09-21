@@ -11,10 +11,17 @@ public class SizeUp : MonoBehaviour
 
     void OnTriggerEnter (Collider other)
     {
-        if (other.CompareTag("Player"))
-        {
-            Pickup(other);
-        }
+		Pickup(other);
+
+		if (other.attachedRigidbody)
+		{
+			ValuableItem valuableItem = other.attachedRigidbody.GetComponent<ValuableItem>();
+
+			if (valuableItem)
+			{
+				valuableItem.pointValue = (int)(valuableItem.pointValue * multiplier);
+			}
+		}
     }
 
     void Pickup(Collider player)
